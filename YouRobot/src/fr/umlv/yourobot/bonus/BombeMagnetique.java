@@ -1,8 +1,15 @@
 package fr.umlv.yourobot.bonus;
 
 import fr.umlv.yourobot.field.*;
+import java.awt.image.BufferedImage;
 
-public class BombeMagnetique implements Bonus {
+public class BombeMagnetique extends Bonus {
 
-    protected ElementBase element;
+    protected final TypeElementBase element;
+
+    public BombeMagnetique(TypeElementBase element, TypeElementBase typeElement, BufferedImage texture) {
+        super(typeElement, texture);
+        this.element = element;
+    }
+    
 }

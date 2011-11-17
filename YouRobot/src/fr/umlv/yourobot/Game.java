@@ -3,13 +3,8 @@ package fr.umlv.yourobot;
 import fr.umlv.yourobot.field.*;
 import fr.umlv.zen.*;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.util.LinkedList;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Manage the logic of the application.
@@ -45,13 +40,44 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         for (;;) {
             final KeyboardEvent event = context.pollKeyboard();
             if (event == null) {
-                // Nothing to do, redrawing.
                 context.render(this);
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
                 }
                 continue;
+            }
+
+            // Managing player keybindings.
+            for (Player p : players) {
+                if (p == null) {
+                    continue;
+                }
+
+                // TODO, là c'est bof.
+                p.getRobot().setIsBoosting(false);
+                p.getRobot().setIsBraking(false);
+                
+                RobotKeyAction action = p.getKeyBinding(event.getKey());
+                if (action != null) { // if null, the key is not associated to an action.
+                    switch (action) {
+                        case Boost:
+                            p.getRobot().setIsBoosting(true);
+                            break;
+                        case Brake:
+                            p.getRobot().setIsBraking(true);
+                            break;
+                        case Take:
+                            // TODO
+                            break;
+                        case Turn_Left:
+                            // TODO
+                            break;
+                        case Turn_Right:
+                            // TODO
+                            break;
+                    }
+                }
             }
 
             switch (event.getKey()) {
@@ -71,5 +97,11 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     @Override
     public void render(Graphics2D gd) {
         world.render(gd);
+        for (Player p : players) {
+            if (p == null) {
+                continue;
+            }
+            p.getRobot().render(gd);
+        }
     }
 }

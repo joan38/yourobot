@@ -1,6 +1,13 @@
 package fr.umlv.yourobot;
 
+import fr.umlv.yourobot.field.Element;
+import fr.umlv.yourobot.field.SampleWorldFactory;
+import fr.umlv.yourobot.field.TextureLoader;
+import fr.umlv.yourobot.field.TypeElementBase;
+import fr.umlv.yourobot.field.Wall;
 import fr.umlv.yourobot.field.World;
+import fr.umlv.yourobot.players.Robot;
+import fr.umlv.yourobot.players.RobotPlayer;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -15,6 +22,7 @@ import javax.imageio.ImageIO;
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
 public class YouRobot {
+
     public final static int versionMajor = 0;
     public final static int versionMinor = 1;
 
@@ -22,7 +30,7 @@ public class YouRobot {
         // Constant.
         final int WIDTH = 800;
         final int HEIGHT = 600;
-        final int SIZE = 30;
+        final int SIZE = 40;
         final int STRIDE = 100;
 
         // Banner
@@ -31,20 +39,27 @@ public class YouRobot {
 
         // Setting YouRobot settings.
         YouRobotSetting.setYouRobotSetting(WIDTH, HEIGHT, SIZE, STRIDE);
-        
+
         // Creation of a dummy world.
         World[] worldList = new World[1];
-        World dummyWorld = new World();
+        World dummyWorld = SampleWorldFactory.getDummyWorld1();
+        worldList[0] = dummyWorld;
+
+        // Creation of a robot and player.
+        Robot robot;
         try {
-            dummyWorld.setBackgroundPattern(ImageIO.read(new File("src/textures/metal_floor.jpg")));
+            robot = new RobotPlayer(50, null, TextureLoader.loadTexture("src/textures/robot_human_normal.png"),
+                    TextureLoader.loadTexture("src/textures/robot_human_boost.png"),
+                    TextureLoader.loadTexture("src/textures/robot_human_brake.png"));
         } catch (IOException ex) {
-            System.err.println("Texture not found. "+ ex.getMessage());
+            System.out.println(ex);
             return;
         }
-        worldList[0] = dummyWorld;
-        
-        // Launching the application manager.
-        Manager manager = new Manager(worldList, new Player[2]);
+
+        Player player = new Player(robot); // Launching the application manager.
+        Player[] players = new Player[2];
+        players[0] = player;
+        Manager manager = new Manager(worldList, players);
         manager.run();
     }
 }

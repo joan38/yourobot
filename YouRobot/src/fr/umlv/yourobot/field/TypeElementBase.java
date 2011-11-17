@@ -1,7 +1,16 @@
 package fr.umlv.yourobot.field;
-public enum TypeElementBase{
-	Bois,
-	Pierre,
-	Glace
-}
 
+/**
+ * Available elements.
+ * 
+ * @copyright GNU Public license v3.
+ * @author Damien Girard <dgirard@nativesoft.fr>
+ * @author Joan Goyeau <joan.goyeau@gmail.com>
+ */
+public enum TypeElementBase {
+    Unasigned,
+    Wood,
+    Stone,
+    Ice,
+    Robot
+}
