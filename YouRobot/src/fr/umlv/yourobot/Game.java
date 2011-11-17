@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Manage the logic of the application.
@@ -17,24 +19,18 @@ import java.util.Objects;
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
 public class Game implements ApplicationCode, ApplicationRenderCode {
-    private final int width;
-    private final int height;
+
     private final Player[] players;
-    
     private final World world; // World of the game.
 
-    public Game(int width, int height, World world, Player[] players) {
-        Objects.requireNonNull(players[0]);
+    public Game(World world, Player[] players) {
+        //Objects.requireNonNull(players[0]);
         Objects.requireNonNull(world);
-        if (width < 0 || height < 0)
-            throw new IllegalArgumentException("Invalid width or height.");
-        
-        this.width = width;
-        this.height = height;
+
         this.world = world;
         this.players = players;
     }
-    
+
     /**
      * Game logic here.
      * 
@@ -42,7 +38,30 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
      */
     @Override
     public void run(ApplicationContext context) {
-        
+        // Drawing the menu.
+        context.render(this);
+
+        // Managing the menu.
+        for (;;) {
+            final KeyboardEvent event = context.pollKeyboard();
+            if (event == null) {
+                // Nothing to do, redrawing.
+                context.render(this);
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException ex) {
+                }
+                continue;
+            }
+
+            switch (event.getKey()) {
+                case W:
+                    System.out.println("Fin du jeu.");
+                    return;
+            }
+
+            context.render(this);
+        }
     }
 
     /**
@@ -51,9 +70,6 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
      */
     @Override
     public void render(Graphics2D gd) {
-        
-        
+        world.render(gd);
     }
-    
-    
 }

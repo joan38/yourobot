@@ -19,13 +19,9 @@ import java.util.Objects;
  */
 public class Menu implements ApplicationCode, ApplicationRenderCode {
 
-    private final int width;
-    private final int height;
     private final Manager manager;
 
-    public Menu(int width, int height, Manager manager) {
-        this.width = width;
-        this.height = height;
+    public Menu(Manager manager) {
         this.manager = manager;
     }
 
@@ -40,11 +36,17 @@ public class Menu implements ApplicationCode, ApplicationRenderCode {
             if (event == null) {
                 return;
             }
-            
-            if (event.getKey() == KeyboardKey.Q)
-            {
-                System.out.println("Good bye Jedi Master !");
-                return;
+
+            switch (event.getKey()) {
+                case N:
+                    System.out.println("New game.");
+                    // TODO
+                    // List all worlds and let the user select one.
+                    // Currently I take the first world and launch it.
+                    
+                    manager.newGame(manager.getMaps()[0], 1).run(context);
+                    break;
+
             }
 
             System.out.println("Key pressed in menu " + event.toString());
@@ -52,11 +54,9 @@ public class Menu implements ApplicationCode, ApplicationRenderCode {
             context.render(this);
         }
     }
-    
     private final Font fontTitle = new Font("arial", Font.BOLD, 30);
     private final Color colorTitle = new Color(0, 0, 0, 180);
     private final Color backColor = new Color(89, 125, 181);
-    
     private final Font menuFont = new Font("arial", Font.BOLD, 20);
     private final Color menuColor = new Color(0, 0, 0);
 
@@ -64,12 +64,12 @@ public class Menu implements ApplicationCode, ApplicationRenderCode {
     public void render(Graphics2D gd) {
         // Drawing the background.
         gd.setColor(backColor);
-        gd.fillRect(0, 0, width, height);
+        gd.fillRect(0, 0, YouRobotSetting.getWidth(), YouRobotSetting.getHeight());
 
         // Drawing the title.
         gd.setPaint(colorTitle);
         gd.setFont(fontTitle);
-        
+
         gd.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gd.drawString("YouRobot version " + YouRobot.versionMajor + "." + YouRobot.versionMinor, 10, 50);
 

@@ -17,10 +17,8 @@ import java.util.Objects;
  */
 public class Manager {
 
-    private World maps;
+    private World[] worlds;
     private final Player[] players;
-    private final int width;
-    private final int height;
     private Game renderGame;
     private final Menu renderMenu;
     //private final ApplicationRenderCode renderPauseMenu; TODO
@@ -37,13 +35,11 @@ public class Manager {
         Pause
     }
 
-    public Manager(World maps, Player[] players, int width, int height) {
-        this.maps = maps;
+    public Manager(World[] worlds, Player[] players) {
+        this.worlds = worlds;
         this.players = players;
-        this.width = width;
-        this.height = height;
 
-        renderMenu = new Menu(width, height, this);
+        renderMenu = new Menu(this);
         // TODO init of the pause menu.
     }
 
@@ -54,7 +50,7 @@ public class Manager {
      * @param height Height of the window of the game.
      */
     public void run() {
-        Application.run("YouRobot", width, height, new MainManager());
+        Application.run("YouRobot", YouRobotSetting.getWidth(), YouRobotSetting.getHeight(), new MainManager());
     }
 
     /**
@@ -63,8 +59,14 @@ public class Manager {
      * @param map The map to start the game on.
      * @param numberOfHumanPlayer Number of Human player.
      */
-    public void newGame(World map, int numberOfHumanPlayer) {
+    public Game newGame(World map, int numberOfHumanPlayer) {
         // Create a game.
+        renderGame = new Game(map, players);
+        return renderGame;
+    }
+
+    public World[] getMaps() {
+        return worlds;
     }
 
     private class MainManager implements ApplicationCode {
