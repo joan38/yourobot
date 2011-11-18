@@ -5,6 +5,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.World;
 
 /**
  * Represent an element.
@@ -20,6 +25,7 @@ public abstract class Element {
     // Positions
     private int x = 0;
     private int y = 0;
+    private int orientation = 0;
     // Affinetransform for the texture.
     private AffineTransform textureTransformer = new AffineTransform();
     private AffineTransformOp bufferedTextureTransformerOp;
@@ -48,9 +54,11 @@ public abstract class Element {
      * This method simply draw the texture.
      * 
      * @param gd Graphic to draw on.
+     * 
+     * @note You can override the position function getX() and getY(). The rendering will be made on the overriden method.
      */
     public void render(Graphics2D gd) {
-        gd.drawImage(texture, bufferedTextureTransformerOp, x, y);
+        gd.drawImage(texture, bufferedTextureTransformerOp, getX(), getY());
     }
 
     /**
@@ -59,8 +67,17 @@ public abstract class Element {
      * @param degree Orientation to set in degree. 
      */
     public void setOrientation(int degree) {
+        orientation = degree;
         textureTransformer.rotate(Math.toRadians(degree), texture.getWidth() / 2.0, texture.getHeight() / 2.0);
         this.bufferedTextureTransformerOp = new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR);
+    }
+
+    /**
+     * Get the orientation of the element.
+     * @return The orientation of the element.
+     */
+    public int getOrientation() {
+        return orientation;
     }
 
     /**
@@ -88,10 +105,22 @@ public abstract class Element {
         this.y = y;
     }
 
-    
     protected AffineTransformOp getBufferedTextureTransformerOp() {
         return bufferedTextureTransformerOp;
     }
+    
+    // JBox2D
+    /**
+     * Init the body with JBox2D.
+     * @param w JBox2D World.
+     */
+    public abstract void jboxBodyInit(org.jbox2d.dynamics.World w);
+    
+    /**
+     * Remove the body from JBox2D.
+     * @param w JBox2D World
+     */
+    public abstract void jboxBodyDestroy(org.jbox2d.dynamics.World w);
     
     
 }
