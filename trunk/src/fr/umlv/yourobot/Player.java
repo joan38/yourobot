@@ -3,7 +3,6 @@ package fr.umlv.yourobot;
 import fr.umlv.yourobot.players.*;
 import fr.umlv.zen.KeyboardKey;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -17,7 +16,7 @@ public class Player {
 
     private Robot robot;
     private EnumMap<RobotKeyAction, KeyboardKey> controls = new EnumMap<RobotKeyAction, KeyboardKey>(RobotKeyAction.class);
-    private HashMap<KeyboardKey, RobotKeyAction> controls_inverted;
+    private EnumMap<KeyboardKey, RobotKeyAction> controls_inverted;
 
     public Player(Robot robot) {
         this.robot = robot;
@@ -31,7 +30,7 @@ public class Player {
     }
 
     private void generateInvertedControlHashMap() {
-        controls_inverted = new HashMap<KeyboardKey, RobotKeyAction>();
+        controls_inverted = new EnumMap<KeyboardKey, RobotKeyAction>(KeyboardKey.class);
         for (RobotKeyAction robotKeyAction : controls.keySet()) {
             controls_inverted.put(controls.get(robotKeyAction), robotKeyAction);
         }

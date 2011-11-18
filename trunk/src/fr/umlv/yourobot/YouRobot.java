@@ -1,18 +1,11 @@
 package fr.umlv.yourobot;
 
-import fr.umlv.yourobot.field.Element;
 import fr.umlv.yourobot.field.SampleWorldFactory;
 import fr.umlv.yourobot.field.TextureLoader;
-import fr.umlv.yourobot.field.TypeElementBase;
-import fr.umlv.yourobot.field.Wall;
 import fr.umlv.yourobot.field.World;
 import fr.umlv.yourobot.players.Robot;
 import fr.umlv.yourobot.players.RobotPlayer;
-import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 
 /**
  * Entry point of the application.

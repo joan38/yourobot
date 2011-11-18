@@ -4,7 +4,6 @@ import fr.umlv.yourobot.field.*;
 import fr.umlv.zen.*;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
@@ -27,8 +26,13 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
         this.world = world;
         this.players = players;
-        
+
         this.bi = new BufferedImage(YouRobotSetting.getWidth(), YouRobotSetting.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+        this.world.addElement(players[0].getRobot());
+        if (players[1] != null) {
+            this.world.addElement(players[1].getRobot());
+        }
     }
 
     /**
@@ -38,18 +42,28 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
      */
     @Override
     public void run(ApplicationContext context) {
+        // JBox2D.
+        final float timeStep = 1.0f / 60.0f;
+        final int velocityIteration = 8;
+        final int positioniteration = 3;
+
         // Drawing the menu.
         context.render(this);
 
         // Managing the menu.
         for (;;) {
+            // A little sleep.
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException ex) {
+            }
+            // JBox2D Iteration.
+            world.getjbox2DWorld().step(timeStep, velocityIteration, positioniteration);
+
+            // Managing keyboard.
             final KeyboardEvent event = context.pollKeyboard();
             if (event == null) {
                 context.render(this);
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException ex) {
-                }
                 continue;
             }
 
@@ -76,7 +90,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                             // TODO
                             break;
                         case Turn_Left:
-                            // TODO
+                            p.getRobot().setOrientation(p.getRobot().getOrientation() + 10);
                             break;
                         case Turn_Right:
                             // TODO
@@ -94,7 +108,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             context.render(this);
         }
     }
-    
+
     /**
      * Game rendering here.
      * @param gd Graphic context.
@@ -105,12 +119,12 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         Graphics2D g2bi = (Graphics2D) bi.getGraphics();
 
         world.render(g2bi);
-        for (Player p : players) {
-            if (p == null) {
-                continue;
-            }
-            p.getRobot().render(g2bi);
+        /*for (Player p : players) {
+        if (p == null) {
+        continue;
         }
+        p.getRobot().render(g2bi);
+        }*/
 
         gd.drawImage(bi, 0, 0, null);
     }

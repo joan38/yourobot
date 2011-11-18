@@ -6,6 +6,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Objects;
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
 
 /**
  * Manage the logic of the application.
@@ -20,7 +24,12 @@ public class World {
     private Area endArea;
     private final LinkedList<Element> elements; // Elements of the game.
     private BufferedImage backgroundPattern;
-
+    // JBox2D
+    private final org.jbox2d.dynamics.World jWorld;
+    private final BodyDef jGroundBodyDef;
+    private final Body jGroundBody;
+    private final PolygonShape jGroundBox;
+    
     /**
      * Empty world.
      */
@@ -29,6 +38,15 @@ public class World {
         
         elements = new LinkedList<Element>();
         this.backgroundPattern = backgroundPattern;
+        
+        // Creation of the world in JBox2D.
+        this.jWorld = new org.jbox2d.dynamics.World(new Vec2(0.0f, 0.0f), true);
+        this.jGroundBodyDef = new BodyDef();
+        jGroundBodyDef.position.set(0.0f, -10.0f);
+        this.jGroundBody = jWorld.createBody(jGroundBodyDef);
+        this.jGroundBox = new PolygonShape();
+        jGroundBox.setAsBox(50.0f, 10.0f);
+        jGroundBody.createFixture(jGroundBox, 0.0f);   
     }
 
     /**
@@ -73,6 +91,9 @@ public class World {
      */
     public void addElement(Element e) {
         elements.add(e);
+        
+        // Adding the element to the physical world.
+        e.jboxBodyInit(jWorld);
     }
 
     /**
@@ -82,6 +103,9 @@ public class World {
      */
     public void removeElement(Element e) {
         elements.remove(e);
+        
+        // Removing the lement from the physical world.
+        e.jboxBodyDestroy(jWorld);
     }
 
     /**
@@ -113,4 +137,9 @@ public class World {
             w.addElement(new Barres(TypeElementBase.Unasigned, tubeTexture, i, lowerPos));
         }
     }
+
+    public org.jbox2d.dynamics.World getjbox2DWorld() {
+        return jWorld;
+    }
+    
 }
