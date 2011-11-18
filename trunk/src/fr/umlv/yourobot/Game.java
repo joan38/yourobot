@@ -4,6 +4,8 @@ import fr.umlv.yourobot.field.*;
 import fr.umlv.zen.*;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 /**
@@ -17,6 +19,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
     private final Player[] players;
     private final World world; // World of the game.
+    private BufferedImage bi; // Double buffer.
 
     public Game(World world, Player[] players) {
         //Objects.requireNonNull(players[0]);
@@ -24,6 +27,8 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
         this.world = world;
         this.players = players;
+        
+        this.bi = new BufferedImage(YouRobotSetting.getWidth(), YouRobotSetting.getHeight(), BufferedImage.TYPE_INT_RGB);
     }
 
     /**
@@ -57,7 +62,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 // TODO, là c'est bof.
                 p.getRobot().setIsBoosting(false);
                 p.getRobot().setIsBraking(false);
-                
+
                 RobotKeyAction action = p.getKeyBinding(event.getKey());
                 if (action != null) { // if null, the key is not associated to an action.
                     switch (action) {
@@ -89,19 +94,24 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             context.render(this);
         }
     }
-
+    
     /**
      * Game rendering here.
      * @param gd Graphic context.
      */
     @Override
     public void render(Graphics2D gd) {
-        world.render(gd);
+        // Double buffer.
+        Graphics2D g2bi = (Graphics2D) bi.getGraphics();
+
+        world.render(g2bi);
         for (Player p : players) {
             if (p == null) {
                 continue;
             }
-            p.getRobot().render(gd);
+            p.getRobot().render(g2bi);
         }
+
+        gd.drawImage(bi, 0, 0, null);
     }
 }
