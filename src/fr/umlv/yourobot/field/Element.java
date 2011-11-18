@@ -15,14 +15,14 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Element {
 
-    protected final TypeElementBase typeElement; // Type of the element.
-    protected BufferedImage texture; // Texture of the element.
+    private final TypeElementBase typeElement; // Type of the element.
+    private BufferedImage texture; // Texture of the element.
     // Positions
-    protected int x = 0;
-    protected int y = 0;
+    private int x = 0;
+    private int y = 0;
     // Affinetransform for the texture.
-    protected AffineTransform textureTransformer = new AffineTransform();
-    protected AffineTransformOp bufferedTextureTransformerOp;
+    private AffineTransform textureTransformer = new AffineTransform();
+    private AffineTransformOp bufferedTextureTransformerOp;
 
     public Element(TypeElementBase typeElement, BufferedImage texture) {
         this.typeElement = typeElement;
@@ -87,4 +87,11 @@ public abstract class Element {
     public void setY(int y) {
         this.y = y;
     }
+
+    
+    protected AffineTransformOp getBufferedTextureTransformerOp() {
+        return bufferedTextureTransformerOp;
+    }
+    
+    
 }

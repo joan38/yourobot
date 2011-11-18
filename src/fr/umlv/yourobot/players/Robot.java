@@ -6,10 +6,10 @@ import java.awt.image.BufferedImage;
 
 public abstract class Robot extends Element {
 
-    protected boolean isBoosting = false;
-    protected boolean isBraking = false;
-    protected BufferedImage textureBoost;
-    protected BufferedImage textureBrake;
+    private boolean isBoosting = false;
+    private boolean isBraking = false;
+    private BufferedImage textureBoost;
+    private BufferedImage textureBrake;
 
     public Robot(BufferedImage texture, BufferedImage textureBoost, BufferedImage textureBrake) {
         super(TypeElementBase.Robot, texture);
@@ -27,11 +27,11 @@ public abstract class Robot extends Element {
     @Override
     public void render(Graphics2D gd) {
         if (isBoosting == true) {
-            gd.drawImage(textureBoost, bufferedTextureTransformerOp, x, y);
+            gd.drawImage(textureBoost, super.getBufferedTextureTransformerOp(), getX(), getY());
         } else if (isBraking == true) {
-            gd.drawImage(textureBrake, bufferedTextureTransformerOp, x, y);
+            gd.drawImage(textureBrake, super.getBufferedTextureTransformerOp(), getX(), getY());
         } else {
-            gd.drawImage(texture, bufferedTextureTransformerOp, x, y);
+            super.render(gd);
         }
     }
 
