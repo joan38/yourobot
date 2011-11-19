@@ -2,14 +2,16 @@ package fr.umlv.yourobot.field;
 
 import fr.umlv.yourobot.YouRobotSetting;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.FixtureDef;
 
 /**
  * Represent an element.
@@ -23,30 +25,32 @@ public abstract class Element {
     private final TypeElementBase typeElement; // Type of the element.
     private BufferedImage texture; // Texture of the element.
     // Positions
-    private int x = 0;
-    private int y = 0;
     private int orientation = 0;
     // Affinetransform for the texture.
+    protected final double scale;
     private AffineTransform textureTransformer = new AffineTransform();
     private AffineTransformOp bufferedTextureTransformerOp;
+    // JBox2D
+    private Body body;
+    private final BodyDef bodyDef;
+    private final FixtureDef fixtureDef;
 
-    public Element(TypeElementBase typeElement, BufferedImage texture) {
+    public Element(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
         this.typeElement = typeElement;
         this.texture = texture;
 
         this.textureTransformer = new AffineTransform();
         this.textureTransformer.setToIdentity();
         // Setting up the scaling down of the texture.
-        double scale = (double) YouRobotSetting.getSize() / (double) texture.getHeight();
+        scale = (double) YouRobotSetting.getSize() / (double) texture.getHeight();
         this.textureTransformer.setToScale(scale, scale);
-        this.bufferedTextureTransformerOp = new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR);
-    }
 
-    public Element(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
-        this(typeElement, texture);
+        // JBox2D.
+        this.bodyDef = new BodyDef();
+        this.fixtureDef = new FixtureDef();
 
-        this.x = x;
-        this.y = y;
+        // Initial position.
+        this.bodyDef.position = new Vec2(x, y);
     }
 
     /**
@@ -58,7 +62,16 @@ public abstract class Element {
      * @note You can override the position function getX() and getY(). The rendering will be made on the overriden method.
      */
     public void render(Graphics2D gd) {
-        gd.drawImage(texture, bufferedTextureTransformerOp, getX(), getY());
+        this.textureTransformer.setToIdentity();
+        this.textureTransformer.setToScale(scale, scale);
+        if (body != null) {
+            textureTransformer.rotate(body.getAngle(), texture.getWidth() / 2.0, texture.getHeight() / 2.0);
+        } else {
+            textureTransformer.rotate(Math.toRadians(orientation), texture.getWidth() / 2.0, texture.getHeight() / 2.0);
+        }
+
+        //gd.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        gd.drawImage(texture, new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR), getX(), getY());
     }
 
     /**
@@ -68,8 +81,9 @@ public abstract class Element {
      */
     public void setOrientation(int degree) {
         orientation = degree;
-        textureTransformer.rotate(Math.toRadians(degree), texture.getWidth() / 2.0, texture.getHeight() / 2.0);
-        this.bufferedTextureTransformerOp = new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR);
+        if (body != null) {
+            body.setTransform(body.getPosition(), (float) Math.toRadians(degree));
+        }
     }
 
     /**
@@ -89,38 +103,97 @@ public abstract class Element {
         return typeElement;
     }
 
+    /**
+     * Get the position of the element.
+     * @return The actual position of the element.
+     */
     public int getX() {
-        return x;
+        if (body == null) {
+            return (int) bodyDef.position.x;
+        } else {
+            return (int) body.getPosition().x;
+        }
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
+    /**
+     * Get the position of the element.
+     * @return The actual position of the element.
+     */
     public int getY() {
-        return y;
+        if (body == null) {
+            return (int) bodyDef.position.y;
+        } else {
+            return (int) body.getPosition().y;
+        }
     }
 
+    /**
+     * Force the position.
+     * @note Break all the physics. (Apply a transform, do not use)
+     * @param x New x.
+     */
+    public void setX(int x) {
+        if (body == null) {
+            bodyDef.position.x = x;
+        } else {
+            body.setTransform(new Vec2(x, getY()), body.getAngle());
+        }
+    }
+
+    /**
+     * Force the position.
+     * @note Break all the physics. (Apply a transform, do not use)
+     * @param y New y.
+     */
     public void setY(int y) {
-        this.y = y;
+        if (body == null) {
+            bodyDef.position.y = y;
+        } else {
+            body.setTransform(new Vec2(getX(), y), body.getAngle());
+        }
     }
 
     protected AffineTransformOp getBufferedTextureTransformerOp() {
         return bufferedTextureTransformerOp;
     }
-    
-    // JBox2D
+
+    // JBox2D Register and Unregister
+    //
     /**
-     * Init the body with JBox2D.
+     * Attach the element with the JBox2D World w.
      * @param w JBox2D World.
      */
-    public abstract void jboxBodyInit(org.jbox2d.dynamics.World w);
-    
+    public void attachToWorld(org.jbox2d.dynamics.World w) {
+        body = w.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+
+        setOrientation(orientation);
+    }
+
     /**
-     * Remove the body from JBox2D.
+     * Remove the body from JBox2D world w.
      * @param w JBox2D World
      */
-    public abstract void jboxBodyDestroy(org.jbox2d.dynamics.World w);
-    
-    
+    public void detachFromWorld(org.jbox2d.dynamics.World w) {
+        w.destroyBody(body);
+        body = null;
+    }
+
+    // JBox2D Elements.
+    //
+    protected Body getBody() {
+        return body;
+    }
+
+    protected BodyDef getBodyDef() {
+        return bodyDef;
+    }
+
+    protected FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
+
+    protected BufferedImage getTexture() {
+        return texture;
+    }
 }

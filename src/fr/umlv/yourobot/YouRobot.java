@@ -23,7 +23,7 @@ public class YouRobot {
         // Constant.
         final int WIDTH = 800;
         final int HEIGHT = 600;
-        final int SIZE = 40;
+        final int SIZE = 30;
         final int STRIDE = 100;
 
         // Banner
@@ -43,7 +43,7 @@ public class YouRobot {
         try {
             robot = new RobotPlayer(50, null, TextureLoader.loadTexture("src/textures/robot_human_normal.png"),
                     TextureLoader.loadTexture("src/textures/robot_human_boost.png"),
-                    TextureLoader.loadTexture("src/textures/robot_human_brake.png"));
+                    TextureLoader.loadTexture("src/textures/robot_human_brake.png"), 50, 50);
         } catch (IOException ex) {
             System.out.println(ex);
             return;

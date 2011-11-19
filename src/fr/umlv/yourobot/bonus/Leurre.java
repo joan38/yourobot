@@ -7,8 +7,10 @@ public class Leurre extends Bonus {
 
     private final Duree duree;
 
-    public Leurre(Duree duree, TypeElementBase typeElement, BufferedImage texture) {
-        super(typeElement, texture);
+    public Leurre(Duree duree, TypeElementBase typeElement, BufferedImage texture, int x, int y) {
+        super(typeElement, texture, x, y);
         this.duree = duree;
     }
+
+
 }
