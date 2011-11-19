@@ -93,7 +93,7 @@ public class World {
         elements.add(e);
         
         // Adding the element to the physical world.
-        e.jboxBodyInit(jWorld);
+        e.attachToWorld(jWorld);
     }
 
     /**
@@ -105,7 +105,7 @@ public class World {
         elements.remove(e);
         
         // Removing the lement from the physical world.
-        e.jboxBodyDestroy(jWorld);
+        e.detachFromWorld(jWorld);
     }
 
     /**

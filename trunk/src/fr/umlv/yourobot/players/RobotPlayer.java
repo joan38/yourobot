@@ -9,9 +9,11 @@ public class RobotPlayer extends Robot {
     protected int health;
     protected Bonus listBonus;
 
-    public RobotPlayer(int health, Bonus listBonus, BufferedImage texture, BufferedImage textureBoost, BufferedImage textureBrake) {
-        super(texture, textureBoost, textureBrake);
+    public RobotPlayer(int health, Bonus listBonus, BufferedImage texture, BufferedImage textureBoost, BufferedImage textureBrake, int x, int y) {
+        super(texture, textureBoost, textureBrake, x, y);
         this.health = health;
         this.listBonus = listBonus;
     }
+
+ 
 }

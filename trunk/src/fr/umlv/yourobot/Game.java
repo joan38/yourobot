@@ -54,7 +54,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         for (;;) {
             // A little sleep.
             try {
-                Thread.sleep(20);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {
             }
             // JBox2D Iteration.
@@ -82,18 +82,22 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                     switch (action) {
                         case Boost:
                             p.getRobot().setIsBoosting(true);
+                            System.out.println("Boost");
                             break;
                         case Brake:
                             p.getRobot().setIsBraking(true);
+                            System.out.println("Brake");
                             break;
                         case Take:
                             // TODO
                             break;
                         case Turn_Left:
-                            p.getRobot().setOrientation(p.getRobot().getOrientation() + 10);
+                            p.getRobot().turnLeft();
+                            System.out.println("Left");
                             break;
                         case Turn_Right:
-                            // TODO
+                            p.getRobot().turnRight();
+                            System.out.println("Right");
                             break;
                     }
                 }
