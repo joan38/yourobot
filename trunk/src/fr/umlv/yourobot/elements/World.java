@@ -20,8 +20,7 @@ import org.jbox2d.dynamics.BodyDef;
  */
 public class World {
 
-    private Area startArea;
-    private Area endArea;
+    private Area[] areas;
     private final LinkedList<Element> elements; // Elements of the game.
     private BufferedImage backgroundPattern;
     // JBox2D
@@ -29,16 +28,25 @@ public class World {
     private final BodyDef jGroundBodyDef;
     private final Body jGroundBody;
     private final PolygonShape jGroundBox;
-    
+
     /**
      * Empty world.
+     * 
+     * @param backgroundPattern Texture pattern for the background.
+     * @param area area[0] = endArea, area[1] = startArea Player 1, area[2] = startArea Player 2.
      */
-    public World(BufferedImage backgroundPattern) {
+    public World(BufferedImage backgroundPattern, Area[] areas) {
         Objects.requireNonNull(backgroundPattern);
-        
+        Objects.requireNonNull(areas);
+
         elements = new LinkedList<Element>();
         this.backgroundPattern = backgroundPattern;
-        
+
+        if (areas.length != 3) {
+            throw new IllegalArgumentException("A world must contain 3 area.");
+        }
+        this.areas = areas;
+
         // Creation of the world in JBox2D.
         this.jWorld = new org.jbox2d.dynamics.World(new Vec2(0.0f, 0.0f), true);
         this.jGroundBodyDef = new BodyDef();
@@ -46,7 +54,7 @@ public class World {
         this.jGroundBody = jWorld.createBody(jGroundBodyDef);
         this.jGroundBox = new PolygonShape();
         jGroundBox.setAsBox(50.0f, 10.0f);
-        jGroundBody.createFixture(jGroundBox, 0.0f);   
+        jGroundBody.createFixture(jGroundBox, 0.0f);
     }
 
     /**
@@ -67,6 +75,10 @@ public class World {
             // Draw static background.
         }
 
+        // Drawing start/end area
+        for (GameElement e : areas) {
+            e.render(gd);
+        }
 
         // Drawing elements.
         for (Element e : elements) {
@@ -91,7 +103,7 @@ public class World {
      */
     public void addElement(Element e) {
         elements.add(e);
-        
+
         // Adding the element to the physical world.
         e.attachToWorld(jWorld);
     }
@@ -103,7 +115,7 @@ public class World {
      */
     public void removeElement(Element e) {
         elements.remove(e);
-        
+
         // Removing the lement from the physical world.
         e.detachFromWorld(jWorld);
     }
@@ -141,5 +153,4 @@ public class World {
     public org.jbox2d.dynamics.World getjbox2DWorld() {
         return jWorld;
     }
-    
 }

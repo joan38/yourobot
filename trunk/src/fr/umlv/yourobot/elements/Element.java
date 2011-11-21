@@ -16,7 +16,7 @@ import org.jbox2d.dynamics.FixtureDef;
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public abstract class Element {
+public abstract class Element implements GameElement{
 
     final TypeElementBase typeElement; // Type of the element.
     BufferedImage texture; // Texture of the element.
