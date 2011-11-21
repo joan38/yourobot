@@ -1,6 +1,7 @@
 package fr.umlv.yourobot.elements;
 
 import fr.umlv.yourobot.YouRobotSetting;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -26,6 +27,7 @@ public class SimpleArea implements Area {
 
     @Override
     public void render(Graphics2D gd) {
+        gd.setStroke(new BasicStroke(2.0f));
         gd.setPaint(color);
         gd.drawOval(x, y, YouRobotSetting.getSize(), YouRobotSetting.getSize() - (YouRobotSetting.getSize() / 4));
     }
