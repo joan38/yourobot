@@ -1,6 +1,6 @@
 package fr.umlv.yourobot;
 
-import fr.umlv.yourobot.field.*;
+import fr.umlv.yourobot.elements.*;
 import fr.umlv.zen.*;
 
 import java.awt.Graphics2D;
@@ -44,27 +44,42 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     public void run(ApplicationContext context) {
         // JBox2D.
         final float timeStep = 1.0f / 60.0f;
-        final int velocityIteration = 8;
-        final int positioniteration = 3;
+        final int velocityIteration = 6;
+        final int positioniteration = 2;
+        int counter = 0;
 
         // Drawing the menu.
         context.render(this);
 
         // Managing the menu.
         for (;;) {
+            // JBox2D Iteration.
+            world.getjbox2DWorld().step(timeStep, velocityIteration, positioniteration);
+            context.render(this);
             // A little sleep.
             try {
                 Thread.sleep(10);
             } catch (InterruptedException ex) {
             }
-            // JBox2D Iteration.
-            world.getjbox2DWorld().step(timeStep, velocityIteration, positioniteration);
-
+            
             // Managing keyboard.
             final KeyboardEvent event = context.pollKeyboard();
             if (event == null) {
-                context.render(this);
+                counter = (counter + 1) % 2;
+                if (counter == 0) {
+                    for (Player p : players) {
+                        if (p == null) {
+                            continue;
+                        }
+                        p.getRobot().setIsBoosting(false);
+                        p.getRobot().setIsBraking(false);
+                    }
+                }
                 continue;
+            }
+            else
+            {
+                counter = 0;
             }
 
             // Managing player keybindings.
@@ -73,31 +88,27 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                     continue;
                 }
 
-                // TODO, là c'est bof.
-                p.getRobot().setIsBoosting(false);
-                p.getRobot().setIsBraking(false);
-
                 RobotKeyAction action = p.getKeyBinding(event.getKey());
                 if (action != null) { // if null, the key is not associated to an action.
                     switch (action) {
                         case Boost:
                             p.getRobot().setIsBoosting(true);
-                            System.out.println("Boost");
+                            //System.out.println("Boost");
                             break;
                         case Brake:
                             p.getRobot().setIsBraking(true);
-                            System.out.println("Brake");
+                            //System.out.println("Brake");
                             break;
                         case Take:
                             // TODO
                             break;
                         case Turn_Left:
                             p.getRobot().turnLeft();
-                            System.out.println("Left");
+                            //System.out.println("Left");
                             break;
                         case Turn_Right:
                             p.getRobot().turnRight();
-                            System.out.println("Right");
+                            //System.out.println("Right");
                             break;
                     }
                 }
@@ -108,8 +119,6 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                     System.out.println("Fin du jeu.");
                     return;
             }
-
-            context.render(this);
         }
     }
 

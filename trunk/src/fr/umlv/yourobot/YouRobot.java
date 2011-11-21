@@ -1,10 +1,10 @@
 package fr.umlv.yourobot;
 
-import fr.umlv.yourobot.field.SampleWorldFactory;
-import fr.umlv.yourobot.field.TextureLoader;
-import fr.umlv.yourobot.field.World;
-import fr.umlv.yourobot.players.Robot;
-import fr.umlv.yourobot.players.RobotPlayer;
+import fr.umlv.yourobot.elements.SampleWorldFactory;
+import fr.umlv.yourobot.elements.TextureLoader;
+import fr.umlv.yourobot.elements.World;
+import fr.umlv.yourobot.elements.Robot;
+import fr.umlv.yourobot.elements.RobotPlayer;
 import java.io.IOException;
 
 /**
@@ -23,7 +23,7 @@ public class YouRobot {
         // Constant.
         final int WIDTH = 800;
         final int HEIGHT = 600;
-        final int SIZE = 30;
+        final int SIZE = 40;
         final int STRIDE = 100;
 
         // Banner
@@ -41,9 +41,9 @@ public class YouRobot {
         // Creation of a robot and player.
         Robot robot;
         try {
-            robot = new RobotPlayer(50, null, TextureLoader.loadTexture("src/textures/robot_human_normal.png"),
-                    TextureLoader.loadTexture("src/textures/robot_human_boost.png"),
-                    TextureLoader.loadTexture("src/textures/robot_human_brake.png"), 50, 50);
+            robot = new RobotPlayer(50, null, TextureLoader.loadTexture("src/textures/robot_human_normal.png", true),
+                    TextureLoader.loadTexture("src/textures/robot_human_boost.png", true),
+                    TextureLoader.loadTexture("src/textures/robot_human_brake.png", true), 50, 50);
         } catch (IOException ex) {
             System.out.println(ex);
             return;

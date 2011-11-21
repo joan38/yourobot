@@ -1,6 +1,6 @@
 package fr.umlv.yourobot;
 
-import fr.umlv.yourobot.players.*;
+import fr.umlv.yourobot.elements.Robot;
 import fr.umlv.zen.KeyboardKey;
 import java.util.EnumMap;
 import java.util.Objects;

@@ -1,6 +1,6 @@
 package fr.umlv.yourobot;
 
-import fr.umlv.yourobot.field.*;
+import fr.umlv.yourobot.elements.*;
 import fr.umlv.zen.*;
 
 import java.awt.Color;

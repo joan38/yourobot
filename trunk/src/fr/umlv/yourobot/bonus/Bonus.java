@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.bonus;
 
-import fr.umlv.yourobot.field.*;
+import fr.umlv.yourobot.elements.*;
 import java.awt.image.BufferedImage;
 
 /**
