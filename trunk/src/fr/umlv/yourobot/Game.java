@@ -102,7 +102,8 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                             //System.out.println("Boost");
                             break;
                         case Brake:
-                            p.getRobot().setIsBraking(true);
+                            // Currently unsuported.
+                            //p.getRobot().setIsBraking(true);
                             //System.out.println("Brake");
                             break;
                         case Take:
