@@ -4,6 +4,7 @@ import fr.umlv.yourobot.elements.*;
 import fr.umlv.zen.*;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
@@ -61,24 +62,29 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 Thread.sleep(10);
             } catch (InterruptedException ex) {
             }
-            
+
             // Managing keyboard.
             final KeyboardEvent event = context.pollKeyboard();
             if (event == null) {
-                counter = (counter + 1) % 2;
-                if (counter == 0) {
-                    for (Player p : players) {
-                        if (p == null) {
-                            continue;
-                        }
-                        p.getRobot().setIsBoosting(false);
-                        p.getRobot().setIsBraking(false);
+                for (Player p : players) {
+                    if (p == null) {
+                        continue;
                     }
+                    // Applying the boost.
+                    p.getRobot().setIsBoosting(p.getRobot().isIsBoosting());
                 }
+                /*counter = (counter + 1) % 2;
+                if (counter == 0) {
+                for (Player p : players) {
+                if (p == null) {
                 continue;
-            }
-            else
-            {
+                }
+                p.getRobot().setIsBoosting(false);
+                p.getRobot().setIsBraking(false);
+                }
+                }*/
+                continue;
+            } else {
                 counter = 0;
             }
 
@@ -92,7 +98,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 if (action != null) { // if null, the key is not associated to an action.
                     switch (action) {
                         case Boost:
-                            p.getRobot().setIsBoosting(true);
+                            p.getRobot().setIsBoosting(!p.getRobot().isIsBoosting());
                             //System.out.println("Boost");
                             break;
                         case Brake:
@@ -130,6 +136,8 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     public void render(Graphics2D gd) {
         // Double buffer.
         Graphics2D g2bi = (Graphics2D) bi.getGraphics();
+        g2bi.setRenderingHint(RenderingHints.KEY_ANTIALIASING, // Anti-alias!
+        RenderingHints.VALUE_ANTIALIAS_ON);
 
         world.render(g2bi);
         /*for (Player p : players) {

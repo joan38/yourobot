@@ -1,7 +1,6 @@
 package fr.umlv.yourobot.elements;
 
 import fr.umlv.yourobot.bonus.*;
-import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.image.BufferedImage;
 
 public class RobotPlayer extends Robot {
@@ -13,7 +12,5 @@ public class RobotPlayer extends Robot {
         super(texture, textureBoost, textureBrake, x, y);
         this.health = health;
         this.listBonus = listBonus;
-    }
-
- 
+    } 
 }
