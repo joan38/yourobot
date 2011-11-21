@@ -12,6 +12,13 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Bonus extends Element {
 
+    /**
+     * 
+     * @param typeElement
+     * @param texture
+     * @param x
+     * @param y 
+     */
     public Bonus(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
         super(typeElement, texture, x, y);
     }

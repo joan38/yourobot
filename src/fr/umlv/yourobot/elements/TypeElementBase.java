@@ -12,5 +12,6 @@ public enum TypeElementBase {
     Wood,
     Stone,
     Ice,
-    Robot
+    Robot,
+    Bonus
 }
