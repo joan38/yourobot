@@ -1,15 +1,22 @@
 package fr.umlv.yourobot.elements;
 
 import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.bonus.Bonus;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Objects;
+import org.jbox2d.callbacks.ContactImpulse;
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.collision.WorldManifold;
+import org.jbox2d.common.MathUtils;
+import org.jbox2d.dynamics.contacts.Contact;
 
 /**
  * Manage the logic of the application.
@@ -55,6 +62,8 @@ public class World {
         this.jGroundBox = new PolygonShape();
         jGroundBox.setAsBox(50.0f, 10.0f);
         jGroundBody.createFixture(jGroundBox, 0.0f);
+
+        this.jWorld.setContactListener(new RobotContactListener());
     }
 
     /**
@@ -152,5 +161,48 @@ public class World {
 
     public org.jbox2d.dynamics.World getjbox2DWorld() {
         return jWorld;
+    }
+
+    /**
+     * Manage contact with a robot.
+     */
+    private static class RobotContactListener implements ContactListener {
+
+        @Override
+        public void beginContact(Contact contact) {
+        }
+
+        @Override
+        public void endContact(Contact contact) {
+        }
+
+        @Override
+        public void preSolve(Contact contact, Manifold oldManifold) {
+            Body bodyA = contact.getFixtureA().getBody();
+            Body bodyB = contact.getFixtureB().getBody();
+
+            // Getting the velocity of the impact
+            WorldManifold worldManifold = new WorldManifold();
+            contact.getWorldManifold(worldManifold);
+
+            Vec2 point = worldManifold.points[0];
+            Vec2 vA = bodyA.getLinearVelocityFromWorldPoint(point);
+            Vec2 vB = bodyB.getLinearVelocityFromWorldPoint(point);
+            float approachVelocity = Vec2.dot(vB.sub(vA), worldManifold.normal);
+            
+            // Ok, I have got the velocity. Managing the collision.
+            if (bodyA.getUserData() instanceof Robot) {
+                // Something hitted the robot.
+                System.out.println("Something hitted the robot; Velocity: "+ approachVelocity);
+            }
+            if (bodyB.getUserData() instanceof Robot) {
+                // The robot hitted something.
+                System.out.println("The robot hitted something.  Velocity: "+ approachVelocity);
+            }
+        }
+
+        @Override
+        public void postSolve(Contact contact, ContactImpulse impulse) {
+        }
     }
 }
