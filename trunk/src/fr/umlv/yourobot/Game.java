@@ -7,6 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
+import org.jbox2d.callbacks.ContactImpulse;
+import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.collision.Manifold;
+import org.jbox2d.collision.WorldManifold;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.contacts.Contact;
 
 /**
  * Manage the logic of the application.
@@ -34,6 +41,9 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         if (players[1] != null) {
             this.world.addElement(players[1].getRobot());
         }
+        
+        // Contact management.
+        this.world.getjbox2DWorld().setContactListener(new RobotContactListener());
     }
 
     /**
@@ -138,7 +148,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         // Double buffer.
         Graphics2D g2bi = (Graphics2D) bi.getGraphics();
         g2bi.setRenderingHint(RenderingHints.KEY_ANTIALIASING, // Anti-alias!
-        RenderingHints.VALUE_ANTIALIAS_ON);
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         world.render(g2bi);
         /*for (Player p : players) {
@@ -149,5 +159,53 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         }*/
 
         gd.drawImage(bi, 0, 0, null);
+    }
+
+    /**
+     * Manage contact with a robot.
+     */
+    private class RobotContactListener implements ContactListener {
+
+        @Override
+        public void beginContact(Contact contact) {
+        }
+
+        @Override
+        public void endContact(Contact contact) {
+        }
+
+        @Override
+        public void preSolve(Contact contact, Manifold oldManifold) {
+            Body bodyA = contact.getFixtureA().getBody();
+            Body bodyB = contact.getFixtureB().getBody();
+
+            // Getting the velocity of the impact
+            WorldManifold worldManifold = new WorldManifold();
+            contact.getWorldManifold(worldManifold);
+
+            Vec2 point = worldManifold.points[0];
+            Vec2 vA = bodyA.getLinearVelocityFromWorldPoint(point);
+            Vec2 vB = bodyB.getLinearVelocityFromWorldPoint(point);
+            float approachVelocity = Vec2.dot(vB.sub(vA), worldManifold.normal);
+
+            // Ok, I have got the velocity. Managing the collision.
+            if (bodyA.getUserData() instanceof Robot) {
+                // Something hitted the robot.
+                System.out.println("Something hitted the robot; Velocity: " + approachVelocity);
+            }
+            if (bodyB.getUserData() instanceof Robot) {
+                // The robot hitted something.
+                System.out.println("The robot hitted something.  Velocity: " + approachVelocity);
+
+                if (bodyA.getUserData() == world.getAreas()[0]) {
+                    // Victory!
+                    System.out.println("Victory of Player " + (bodyA.getUserData() == players[0].getRobot()?0:1));
+                }
+            }
+        }
+
+        @Override
+        public void postSolve(Contact contact, ContactImpulse impulse) {
+        }
     }
 }

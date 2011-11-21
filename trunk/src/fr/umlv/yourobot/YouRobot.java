@@ -24,7 +24,7 @@ public class YouRobot {
         // Constant.
         final int WIDTH = 800;
         final int HEIGHT = 600;
-        final int SIZE = 30;
+        final int SIZE = 20;
         final int STRIDE = 100;
 
         // Banner
