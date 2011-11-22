@@ -53,8 +53,11 @@ public class TextureLoader {
             Graphics2D gd = (Graphics2D) scaledDownImage.getGraphics();
             gd.drawImage(texture, new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR), 0, 0);
 
+            textures.put(path, scaledDownImage);
+            
             return scaledDownImage;
         } else {
+            textures.put(path, texture);
             return texture;
         }
     }
