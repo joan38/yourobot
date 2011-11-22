@@ -86,10 +86,12 @@ public abstract class Robot extends Element {
     }
 
     public void turnLeft() {
-        body.setAngularVelocity(-10.0f);
+        body.setAngularVelocity(-6.0f);
     }
 
     public void turnRight() {
-        body.setAngularVelocity(10.0f);
+        body.setAngularVelocity(6.0f);
     }
+    
+    
 }

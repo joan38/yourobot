@@ -54,6 +54,7 @@ public abstract class Element implements GameElement{
      * 
      * @note You can override the position function getX() and getY(). The rendering will be made on the overriden method.
      */
+    @Override
     public void render(Graphics2D gd) {
         this.textureTransformer.setToIdentity();
         if (body != null) {
@@ -169,5 +170,15 @@ public abstract class Element implements GameElement{
     public void detachFromWorld(org.jbox2d.dynamics.World w) {
         w.destroyBody(body);
         body = null;
+    }
+
+    /**
+     * Get the JBox2D body of the robot.
+     * Useful to read position and angle.
+     * 
+     * @note Do not modify to not break the physics!
+     */
+    Body getBody() {
+        return body;
     }
 }
