@@ -41,7 +41,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         if (players[1] != null) {
             this.world.addElement(players[1].getRobot());
         }
-        
+
         // Contact management.
         this.world.getjbox2DWorld().setContactListener(new RobotContactListener());
     }
@@ -197,9 +197,18 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 // The robot hitted something.
                 System.out.println("The robot hitted something.  Velocity: " + approachVelocity);
 
+
+                // The collision is only an information for an area.
+                if (bodyA.getUserData() instanceof Area || bodyA.getUserData() instanceof Bonus) {
+                    contact.setEnabled(false);
+                } else if (!(bodyA.getUserData() instanceof Robot)) {
+                    // If it is not another robot, I disable the booster.
+                    ((Robot) bodyB.getUserData()).setIsBoosting(false);
+                }
+                // Victory ? area[0] is the end area.
                 if (bodyA.getUserData() == world.getAreas()[0]) {
                     // Victory!
-                    System.out.println("Victory of Player " + (bodyA.getUserData() == players[0].getRobot()?0:1));
+                    System.out.println("Victory of Player " + (bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1));
                 }
             }
         }

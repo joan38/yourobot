@@ -4,12 +4,8 @@ import fr.umlv.yourobot.YouRobotSetting;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Paint;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.FixtureDef;
 
 /**
  * Represent an area.
@@ -18,37 +14,32 @@ import org.jbox2d.dynamics.FixtureDef;
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public class SimpleArea implements Area {
+public class SimpleArea extends Area {
 
-    private final int x;
-    private final int y;
     private final Color color;
-    // JBox2D
-    private Body body;
-    private final BodyDef bodyDef;
-    private final FixtureDef fixtureDef;
+    // JBox2D.
+    private final CircleShape dynamicCircle;
 
     public SimpleArea(int x, int y, Color color) {
-        this.x = x;
-        this.y = y;
+        super(TypeElementBase.Unasigned, null, x, y);
+
         this.color = color;
 
-        // JBox2D.
-        this.bodyDef = new BodyDef();
-        this.fixtureDef = new FixtureDef();
-
-        // Initial position.
-        this.bodyDef.position = new Vec2(x, y);
-        this.bodyDef.userData = (Object) this; // Associating this object with the body.
-        
+        // Init of JBox2D.
         bodyDef.type = BodyType.STATIC; // An area is static.
-        
+
+        this.dynamicCircle = new CircleShape();
+        this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
+
+        fixtureDef.shape = dynamicCircle;
     }
 
     @Override
     public void render(Graphics2D gd) {
         gd.setStroke(new BasicStroke(2.0f));
         gd.setPaint(color);
-        gd.drawOval(x, y, YouRobotSetting.getSize(), YouRobotSetting.getSize() - (YouRobotSetting.getSize() / 4));
+        if (body != null) {
+            gd.drawOval((int) body.getPosition().x, (int) body.getPosition().y, YouRobotSetting.getSize(), YouRobotSetting.getSize());
+        }
     }
 }

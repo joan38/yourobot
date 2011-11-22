@@ -1,22 +1,15 @@
 package fr.umlv.yourobot.elements;
 
 import fr.umlv.yourobot.YouRobotSetting;
-import fr.umlv.yourobot.bonus.Bonus;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Objects;
-import org.jbox2d.callbacks.ContactImpulse;
-import org.jbox2d.collision.Manifold;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.callbacks.ContactListener;
-import org.jbox2d.collision.WorldManifold;
-import org.jbox2d.common.MathUtils;
-import org.jbox2d.dynamics.contacts.Contact;
 
 /**
  * Manage the logic of the application.
@@ -62,6 +55,11 @@ public class World {
         this.jGroundBox = new PolygonShape();
         jGroundBox.setAsBox(50.0f, 10.0f);
         jGroundBody.createFixture(jGroundBox, 0.0f);
+
+        // Registering areas in Jbox2d
+        for (Area a : areas) {
+            a.attachToWorld(jWorld);
+        }
     }
 
     /**
@@ -164,5 +162,4 @@ public class World {
     public Area[] getAreas() {
         return areas;
     }
-    
 }

@@ -62,6 +62,10 @@ public class SampleWorldFactory {
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
             }
+            
+            Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 90, 90);
+            w.addElement(b);
+            
 
             return w;
         } catch (IOException ex) {
