@@ -15,6 +15,13 @@ public class YouRobotSetting {
     private static int size;
     private static int stride;
 
+    /**
+     * 
+     * @param width
+     * @param height
+     * @param size
+     * @param stride 
+     */
     public static void setYouRobotSetting(int width, int height, int size, int stride) {
         YouRobotSetting.height = height;
         YouRobotSetting.size = size;
@@ -30,6 +37,10 @@ public class YouRobotSetting {
         return size;
     }
 
+    /**
+     * Size of a bonus.
+     * @return 
+     */
     public static int getStride() {
         return stride;
     }

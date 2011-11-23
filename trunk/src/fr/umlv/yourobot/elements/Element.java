@@ -175,7 +175,7 @@ public abstract class Element {
      * Get the body of the superclass.
      * @return The body. Can be null if the element is not registered with a world.
      */
-    protected Body getBody() {
+    public Body getBody() {
         return body;
     }
 
