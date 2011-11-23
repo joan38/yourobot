@@ -1,5 +1,7 @@
-package fr.umlv.yourobot.elements;
+package fr.umlv.yourobot.elements.area;
 
+import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.image.BufferedImage;
 
 /**

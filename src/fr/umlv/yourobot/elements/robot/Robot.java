@@ -1,6 +1,8 @@
-package fr.umlv.yourobot.elements;
+package fr.umlv.yourobot.elements.robot;
 
 import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -25,21 +27,21 @@ public abstract class Robot extends Element {
         this.textureBrake = textureBrake;
 
         // Init of JBox2D.
-        bodyDef.type = BodyType.DYNAMIC; // A robot is dynamic.
+        getBodyDef().type = BodyType.DYNAMIC; // A robot is dynamic.
 
         this.dynamicCircle = new CircleShape();
         this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
 
-        fixtureDef.shape = dynamicCircle;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.1f;
-        fixtureDef.restitution = 0.3f;
+        getFixtureDef().shape = dynamicCircle;
+        getFixtureDef().density = 1.0f;
+        getFixtureDef().friction = 0.1f;
+        getFixtureDef().restitution = 0.3f;
 
-        bodyDef.linearDamping = 1.0f;
-        bodyDef.linearVelocity = new Vec2(0.1f, 0.1f);
-        
-        bodyDef.angularDamping = 8.0f;
-        bodyDef.angularVelocity = 2.0f;
+        getBodyDef().linearDamping = 1.0f;
+        getBodyDef().linearVelocity = new Vec2(0.1f, 0.1f);
+
+        getBodyDef().angularDamping = 8.0f;
+        getBodyDef().angularVelocity = 2.0f;
     }
     /**
      * Render the element on the graphic gd.
@@ -51,15 +53,18 @@ public abstract class Robot extends Element {
 
     @Override
     public void render(Graphics2D gd) {
+        if (getBody() == null) { // No JBox2D body, no drawing so.
+            return;
+        }
         textTureTransform.setToIdentity();
-        this.textTureTransform.rotate(body.getAngle(), texture.getWidth() / 2.0, texture.getHeight() / 2.0);
+        this.textTureTransform.rotate(getBody().getAngle(), getTexture().getWidth() / 2.0, getTexture().getHeight() / 2.0);
 
         if (isBoosting == true) {
             gd.drawImage(textureBoost, new AffineTransformOp(textTureTransform, AffineTransformOp.TYPE_BILINEAR), getX(), getY());
         } else if (isBraking == true) {
             gd.drawImage(textureBrake, new AffineTransformOp(textTureTransform, AffineTransformOp.TYPE_BILINEAR), getX(), getY());
         } else {
-            gd.drawImage(texture, new AffineTransformOp(textTureTransform, AffineTransformOp.TYPE_BILINEAR), getX(), getY());
+            gd.drawImage(getTexture(), new AffineTransformOp(textTureTransform, AffineTransformOp.TYPE_BILINEAR), getX(), getY());
         }
     }
 
@@ -69,11 +74,11 @@ public abstract class Robot extends Element {
 
     public void setIsBoosting(boolean isBoosting) {
         this.isBoosting = isBoosting;
-        if (isBoosting == true && body != null) {
-            float forceX = (float)(1000000 * Math.sin(body.getAngle()));
-            float forceY = (float)(-1000000 * Math.cos(body.getAngle()));
-            
-            body.applyForce(new Vec2(forceX, forceY), body.getWorldCenter());
+        if (isBoosting == true && getBody() != null) {
+            float forceX = (float) (1000000 * Math.sin(getBody().getAngle()));
+            float forceY = (float) (-1000000 * Math.cos(getBody().getAngle()));
+
+            getBody().applyForce(new Vec2(forceX, forceY), getBody().getWorldCenter());
         }
     }
 
@@ -86,12 +91,10 @@ public abstract class Robot extends Element {
     }
 
     public void turnLeft() {
-        body.setAngularVelocity(-6.0f);
+        getBody().setAngularVelocity(-6.0f);
     }
 
     public void turnRight() {
-        body.setAngularVelocity(6.0f);
+        getBody().setAngularVelocity(6.0f);
     }
-    
-    
 }

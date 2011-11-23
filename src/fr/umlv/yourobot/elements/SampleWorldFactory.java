@@ -4,6 +4,11 @@
  */
 package fr.umlv.yourobot.elements;
 
+import fr.umlv.yourobot.elements.wall.Wall;
+import fr.umlv.yourobot.elements.area.SimpleArea;
+import fr.umlv.yourobot.elements.area.Area;
+import fr.umlv.yourobot.elements.bonus.BombeMagnetique;
+import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.YouRobotSetting;
 import java.awt.Color;
 import java.io.IOException;

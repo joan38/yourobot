@@ -16,19 +16,18 @@ import org.jbox2d.dynamics.FixtureDef;
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public abstract class Element implements GameElement{
+public abstract class Element {
 
-    final TypeElementBase typeElement; // Type of the element.
-    BufferedImage texture; // Texture of the element.
+    private final TypeElementBase typeElement; // Type of the element.
+    private BufferedImage texture; // Texture of the element.
     // Positions
     private int orientation = 0;
     // Affinetransform for the texture (rotation)
-    AffineTransform textureTransformer = new AffineTransform();
-    AffineTransformOp bufferedTextureTransformerOp;
+    private AffineTransform textureTransformer = new AffineTransform();
     // JBox2D
-    Body body;
-    final BodyDef bodyDef;
-    final FixtureDef fixtureDef;
+    private Body body;
+    private final BodyDef bodyDef;
+    private final FixtureDef fixtureDef;
 
     public Element(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
         this.typeElement = typeElement;
@@ -43,7 +42,6 @@ public abstract class Element implements GameElement{
 
         // Initial position.
         this.bodyDef.position = new Vec2(x, y);
-        this.bodyDef.userData = (Object)this; // Associating this object with the body.
     }
 
     /**
@@ -54,7 +52,6 @@ public abstract class Element implements GameElement{
      * 
      * @note You can override the position function getX() and getY(). The rendering will be made on the overriden method.
      */
-    @Override
     public void render(Graphics2D gd) {
         this.textureTransformer.setToIdentity();
         if (body != null) {
@@ -63,7 +60,6 @@ public abstract class Element implements GameElement{
             textureTransformer.rotate(Math.toRadians(orientation), texture.getWidth() / 2.0, texture.getHeight() / 2.0);
         }
 
-        //gd.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         gd.drawImage(texture, new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR), getX(), getY());
     }
 
@@ -146,10 +142,6 @@ public abstract class Element implements GameElement{
         }
     }
 
-    protected AffineTransformOp getBufferedTextureTransformerOp() {
-        return bufferedTextureTransformerOp;
-    }
-
     // JBox2D Register and Unregister
     //
     /**
@@ -157,6 +149,10 @@ public abstract class Element implements GameElement{
      * @param w JBox2D World.
      */
     public void attachToWorld(org.jbox2d.dynamics.World w) {
+        // Associating this object with the body.
+        // This is made here and not in the constructor to prevent a constructor this leak.
+        this.bodyDef.userData = (Object) this; 
+        
         body = w.createBody(bodyDef);
         body.createFixture(fixtureDef);
 
@@ -172,13 +168,42 @@ public abstract class Element implements GameElement{
         body = null;
     }
 
+    // Getters.
+    // Only for the subclasses.
+    //
     /**
-     * Get the JBox2D body of the robot.
-     * Useful to read position and angle.
-     * 
-     * @note Do not modify to not break the physics!
+     * Get the body of the superclass.
+     * @return The body. Can be null if the element is not registered with a world.
      */
-    Body getBody() {
+    protected Body getBody() {
         return body;
+    }
+
+    /**
+     * Get the texture of the element.
+     * @return The texture of the element.
+     */
+    protected BufferedImage getTexture() {
+        return texture;
+    }
+
+    /**
+     * Get the definition of the body.
+     * @return The definition of the body.
+     * 
+     * @note Once the element is registered, the definition is ignored. Use only inside the constructor.
+     */
+    protected BodyDef getBodyDef() {
+        return bodyDef;
+    }
+
+    /**
+     * The fixtureDefinition of the element.
+     * @return The fixturedefinition of element.
+     * 
+     * @note Once the element is registered, the definition is ignored. Use only inside the constructor.
+     */
+    protected FixtureDef getFixtureDef() {
+        return fixtureDef;
     }
 }

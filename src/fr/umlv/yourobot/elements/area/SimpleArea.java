@@ -1,6 +1,7 @@
-package fr.umlv.yourobot.elements;
+package fr.umlv.yourobot.elements.area;
 
 import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -26,20 +27,20 @@ public class SimpleArea extends Area {
         this.color = color;
 
         // Init of JBox2D.
-        bodyDef.type = BodyType.STATIC; // An area is static.
+        getBodyDef().type = BodyType.STATIC; // An area is static.
 
         this.dynamicCircle = new CircleShape();
         this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
 
-        fixtureDef.shape = dynamicCircle;
+        getFixtureDef().shape = dynamicCircle;
     }
 
     @Override
     public void render(Graphics2D gd) {
         gd.setStroke(new BasicStroke(2.0f));
         gd.setPaint(color);
-        if (body != null) {
-            gd.drawOval((int) body.getPosition().x, (int) body.getPosition().y, YouRobotSetting.getSize(), YouRobotSetting.getSize());
+        if (getBody() != null) {
+            gd.drawOval((int) getBody().getPosition().x, (int) getBody().getPosition().y, YouRobotSetting.getSize(), YouRobotSetting.getSize());
         }
     }
 }

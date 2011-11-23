@@ -1,5 +1,11 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.context;
 
+import fr.umlv.yourobot.Player;
+import fr.umlv.yourobot.RobotKeyAction;
+import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.elements.robot.Robot;
+import fr.umlv.yourobot.elements.area.Area;
+import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.zen.*;
 
@@ -197,7 +203,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 // The robot hitted something.
                 System.out.println("The robot hitted something.  Velocity: " + approachVelocity);
 
-
+                
                 // The collision is only an information for an area.
                 if (bodyA.getUserData() instanceof Area || bodyA.getUserData() instanceof Bonus) {
                     contact.setEnabled(false);

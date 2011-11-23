@@ -1,6 +1,10 @@
-package fr.umlv.yourobot.elements;
+package fr.umlv.yourobot.elements.bonus;
 
 import fr.umlv.yourobot.elements.*;
+import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.robot.Robot;
+import fr.umlv.yourobot.elements.TypeElementBase;
+import fr.umlv.yourobot.elements.World;
 import java.awt.image.BufferedImage;
 
 /**

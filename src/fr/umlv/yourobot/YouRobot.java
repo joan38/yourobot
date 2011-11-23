@@ -3,8 +3,8 @@ package fr.umlv.yourobot;
 import fr.umlv.yourobot.elements.SampleWorldFactory;
 import fr.umlv.yourobot.elements.TextureLoader;
 import fr.umlv.yourobot.elements.World;
-import fr.umlv.yourobot.elements.Robot;
-import fr.umlv.yourobot.elements.RobotPlayer;
+import fr.umlv.yourobot.elements.robot.Robot;
+import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import fr.umlv.zen.KeyboardKey;
 import java.io.IOException;
 
