@@ -1,5 +1,7 @@
 package fr.umlv.yourobot;
 
+import fr.umlv.yourobot.context.Game;
+import fr.umlv.yourobot.context.Menu;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.zen.*;
 

@@ -1,5 +1,6 @@
-package fr.umlv.yourobot.elements;
+package fr.umlv.yourobot.elements.robot;
 
+import fr.umlv.yourobot.elements.bonus.Bonus;
 import java.awt.image.BufferedImage;
 
 public class RobotPlayer extends Robot {

@@ -1,5 +1,7 @@
 package fr.umlv.yourobot.elements;
 
+import fr.umlv.yourobot.elements.wall.Barres;
+import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.YouRobotSetting;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -81,7 +83,7 @@ public class World {
         }
 
         // Drawing start/end area
-        for (GameElement e : areas) {
+        for (Element e : areas) {
             e.render(gd);
         }
 

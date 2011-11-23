@@ -1,4 +1,4 @@
-package fr.umlv.yourobot.elements;
+package fr.umlv.yourobot.elements.robot;
 
 import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.image.BufferedImage;

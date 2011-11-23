@@ -1,6 +1,9 @@
-package fr.umlv.yourobot.elements;
+package fr.umlv.yourobot.elements.bonus;
 
+import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.TypeElementBase;
+import fr.umlv.yourobot.elements.TypeElementBase;
+import fr.umlv.yourobot.elements.World;
 import java.awt.image.BufferedImage;
 
 public class Leurre extends Bonus {

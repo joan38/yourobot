@@ -1,5 +1,8 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.context;
 
+import fr.umlv.yourobot.Manager;
+import fr.umlv.yourobot.YouRobot;
+import fr.umlv.yourobot.YouRobotSetting;
 import fr.umlv.zen.*;
 
 import java.awt.Color;
