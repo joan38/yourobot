@@ -25,10 +25,10 @@ public class Wall extends Element {
 
         // Setting JBox2D.
         getBodyDef().type = BodyType.DYNAMIC; // A wall is static. Becomes dynamic with bonus.
-        getBodyDef().linearDamping = 1.0f;
+        getBodyDef().linearDamping = 2.0f;
         getBodyDef().linearVelocity = new Vec2(1.0f, 1.0f);
-        getBodyDef().angularDamping = 1.0f;
-        getBodyDef().angularVelocity = 1.0f;
+        getBodyDef().angularDamping = 2.0f;
+        getBodyDef().angularVelocity = 0.0f;
 
         this.dynamicBox = new PolygonShape();
         this.dynamicBox.setAsBox(YouRobotSetting.getSize() / 2.0f, YouRobotSetting.getSize() / 2.0f);

@@ -13,6 +13,7 @@ import fr.umlv.yourobot.YouRobotSetting;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Random;
+import sun.nio.cs.ext.ISO2022_CN;
 
 /**
  * Factory that create sampleworlds.
@@ -33,8 +34,8 @@ public class SampleWorldFactory {
             areas[0] = new SimpleArea(YouRobotSetting.getSize() * 18, YouRobotSetting.getSize() * 3, Color.GREEN); // EndArea
             areas[1] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 3, Color.yellow); // StartArea P1
             areas[2] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 8, Color.blue); // StartArea P2
-            
-            
+
+
             World w = new World(TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
 
             World.fillBorder(w, "src/textures/tube_texture.png");
@@ -46,31 +47,33 @@ public class SampleWorldFactory {
 
             // Generating 15 random walls.
             Random random = new Random(); // Seed set to prevent random :)
-            for (int i = 0; i < 5; i++) {
-                e = new Wall(TypeElementBase.Ice, TextureLoader.loadTexture("src/textures/texture-glace.jpg", true),
-                        random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                        random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+            for (int i = 0; i < 100; i++) {
+                do {
+                    e = new Wall(TypeElementBase.Ice, TextureLoader.loadTexture("src/textures/texture-glace.jpg", true),
+                            random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
+                            random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
-            }
-            for (int i = 0; i < 5; i++) {
-                e = new Wall(TypeElementBase.Wood, TextureLoader.loadTexture("src/textures/texture-bois-bleu.jpg", true),
-                        random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                        random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                do {
+                    e = new Wall(TypeElementBase.Wood, TextureLoader.loadTexture("src/textures/texture-bois-bleu.jpg", true),
+                            random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
+                            random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
-            }
-            for (int i = 0; i < 5; i++) {
-                e = new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true),
-                        random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                        random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                do {
+                    e = new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true),
+                            random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
+                            random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
+
             }
-            
+
             Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 90, 90);
             w.addElement(b);
-            
 
             return w;
         } catch (IOException ex) {
