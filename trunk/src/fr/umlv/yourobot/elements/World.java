@@ -8,10 +8,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Objects;
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.Fixture;
 
 /**
  * Manage the logic of the application.
@@ -51,6 +54,7 @@ public class World {
 
         // Creation of the world in JBox2D.
         this.jWorld = new org.jbox2d.dynamics.World(new Vec2(0.0f, 0.0f), true);
+        this.jWorld.setContinuousPhysics(true);
         this.jGroundBodyDef = new BodyDef();
         jGroundBodyDef.position.set(0.0f, -10.0f);
         this.jGroundBody = jWorld.createBody(jGroundBodyDef);
@@ -108,11 +112,11 @@ public class World {
      * 
      * @param e Element to add.
      */
-    public void addElement(Element e) {
-        elements.add(e);
+    public void addElement(Element element) {
+        elements.add(element);
 
         // Adding the element to the physical world.
-        e.attachToWorld(jWorld);
+        element.attachToWorld(jWorld);
     }
 
     /**
@@ -163,5 +167,32 @@ public class World {
 
     public Area[] getAreas() {
         return areas;
+    }
+
+    /**
+     * Returns true if the element will overlap another element.
+     * 
+     * @param x X position.
+     * @param y Y position.
+     * @param width Width of the element.
+     * @param height Height of the element.
+     * @return True if there is an overlap, false otherwise.
+     */
+    public boolean isOverlap(int x, int y, int width, int height) {
+        // Preventing the overlapping.
+        final Boolean[] isOverlapping = new Boolean[1];
+        isOverlapping[0] = false;
+        
+        jWorld.queryAABB(new QueryCallback() {
+
+            @Override
+            public boolean reportFixture(Fixture fixture) {
+                // Gosh, an overlap !
+                isOverlapping[0] = true;
+                return false; // Returning false to exit the reportFixture callback.
+            }
+        }, new AABB(new Vec2(x - (width / 2), y - (height / 2)), new Vec2(x + (width / 2), y + (height / 2))));
+
+        return isOverlapping[0];
     }
 }

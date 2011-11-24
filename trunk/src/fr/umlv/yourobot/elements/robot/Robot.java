@@ -33,7 +33,7 @@ public abstract class Robot extends Element {
         this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
 
         getFixtureDef().shape = dynamicCircle;
-        getFixtureDef().density = 1.0f;
+        getFixtureDef().density = 0.0001f;
         getFixtureDef().friction = 0.1f;
         getFixtureDef().restitution = 0.3f;
 
@@ -75,8 +75,8 @@ public abstract class Robot extends Element {
     public void setIsBoosting(boolean isBoosting) {
         this.isBoosting = isBoosting;
         if (isBoosting == true && getBody() != null) {
-            float forceX = (float) (1000000 * Math.sin(getBody().getAngle()));
-            float forceY = (float) (-1000000 * Math.cos(getBody().getAngle()));
+            float forceX = (float) (100 * Math.sin(getBody().getAngle()));
+            float forceY = (float) (-100 * Math.cos(getBody().getAngle()));
 
             getBody().applyForce(new Vec2(forceX, forceY), getBody().getWorldCenter());
         }

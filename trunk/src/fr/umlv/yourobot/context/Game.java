@@ -14,6 +14,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,8 +39,13 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     private final Player[] players;
     private final World world; // World of the game.
     private BufferedImage bi; // Double buffer.
+    
+    // Game Logic variables.
+    private final int numberOfBonus;
+    private final int delayBeforeCreateABonus; // Seconds.
+    private final ArrayList<Bonus> listBonus = new ArrayList<Bonus>();
 
-    public Game(World world, Player[] players) {
+    public Game(World world, Player[] players, int numberOfBonus, int delayBeforeCreateABonus) {
         //Objects.requireNonNull(players[0]);
         Objects.requireNonNull(world);
 
@@ -51,6 +58,10 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         if (players[1] != null) {
             this.world.addElement(players[1].getRobot());
         }
+        
+        // Bonus management.
+        this.numberOfBonus = numberOfBonus;
+        this.delayBeforeCreateABonus = delayBeforeCreateABonus;
 
         // Contact management.
         this.world.getjbox2DWorld().setContactListener(new RobotContactListener());
@@ -209,11 +220,11 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             // Ok, I have got the velocity. Managing the collision.
             if (bodyA.getUserData() instanceof Robot) {
                 // Something hitted the robot.
-                System.out.println("Something hitted the robot; Velocity: " + approachVelocity);
+                //System.out.println("Something hitted the robot; Velocity: " + approachVelocity);
             }
             if (bodyB.getUserData() instanceof Robot) {
                 // The robot hitted something.
-                System.out.println("The robot hitted something.  Velocity: " + approachVelocity);
+                //System.out.println("The robot hitted something.  Velocity: " + approachVelocity);
 
 
                 // The collision is only an information for an area.

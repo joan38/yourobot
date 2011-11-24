@@ -26,6 +26,9 @@ public abstract class Bonus extends Element {
      */
     public Bonus(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
         super(typeElement, texture, x, y);
+        
+        // A bonus do not rotate.
+        getBodyDef().fixedRotation = true;
     }
 
     /**
