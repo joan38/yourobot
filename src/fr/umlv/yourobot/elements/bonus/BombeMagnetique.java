@@ -24,8 +24,8 @@ public class BombeMagnetique extends Bonus {
     // JBox2D.
     private final CircleShape dynamicCircle;
 
-    public BombeMagnetique(TypeElementBase element, BufferedImage texture, int x, int y) {
-        super(element, texture, x, y);
+    public BombeMagnetique(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
+        super(typeElement, texture, 0, x, y);
 
         this.dynamicCircle = new CircleShape();
         this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
@@ -34,7 +34,7 @@ public class BombeMagnetique extends Bonus {
     }
 
     @Override
-    public void activateBonus(final Robot robot, final World world) {
+    public boolean stepBonus() {
         // BombeMagnetiqueEffect
         AABB area = new AABB(new Vec2(robot.getX() - YouRobotSetting.getStride(), robot.getY() - YouRobotSetting.getStride()),
                 new Vec2(robot.getX() + YouRobotSetting.getStride(), robot.getY() + YouRobotSetting.getStride()));
@@ -61,6 +61,8 @@ public class BombeMagnetique extends Bonus {
                 return true;
             }
         }, area);
-
+        
+        return false;
     }
+    
 }

@@ -14,19 +14,17 @@ import java.awt.image.BufferedImage;
  */
 public class Leurre extends Bonus {
 
-    private final Duree duree;
-
-    public Leurre(Duree duree, TypeElementBase typeElement, BufferedImage texture, int x, int y) {
-        super(typeElement, texture, x, y);
-        this.duree = duree;
+    public Leurre(TypeElementBase typeElement, BufferedImage texture, int durationOfBonusInSeconds, int x, int y) {
+        super(typeElement, texture,durationOfBonusInSeconds, x, y);
     }
 
     @Override
     public void activateBonus(Robot robot, World world) {
         
     }
-    
-    
 
-
+    @Override
+    public boolean stepBonus() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

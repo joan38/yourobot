@@ -8,6 +8,7 @@ import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.bonus.BombeMagnetique;
+import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.zen.*;
 
 import java.awt.Graphics2D;
@@ -15,7 +16,6 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -141,7 +141,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                             try {
                                 // TODO
                                 System.out.println("Bomb!");
-                                Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 90, 90);
+                                Bonus b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true),3, 90, 90);
                                 b.activateBonus(p.getRobot(), world);
                             } catch (IOException ex) {
                                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
