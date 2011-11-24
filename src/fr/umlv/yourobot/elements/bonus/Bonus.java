@@ -9,11 +9,13 @@ import fr.umlv.yourobot.elements.World;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represent a bonus.
@@ -26,8 +28,8 @@ public abstract class Bonus extends Element {
 
     Robot robot;
     World world;
-    Date bonusActivationDate;
-    private final Integer durationOfBonusInSeconds;
+    long bonusActivationDate;
+    final Integer durationOfBonusInSeconds;
 
     /**
      * A Bonus.
@@ -55,7 +57,7 @@ public abstract class Bonus extends Element {
     public void activateBonus(Robot robot, World world) {
         this.robot = robot;
         this.world = world;
-        bonusActivationDate = Calendar.getInstance().getTime();
+        bonusActivationDate = Calendar.getInstance().getTimeInMillis();
 
         stepBonus();
     }
@@ -74,21 +76,79 @@ public abstract class Bonus extends Element {
         super.render(gd);
 
         // Render the duration.
+        String duration = "";
         if (durationOfBonusInSeconds != 0) {
-            gd.setPaint(Color.yellow.darker());
-            if (robot == null) {
-                int x = (int) (this.getX() + YouRobotSetting.getSize());
-                int y = (int) (this.getY());
-
-                // Drawing the text.
-                gd.setFont(new Font("Arial", Font.BOLD, 12));
-                gd.drawString(durationOfBonusInSeconds.toString(), x, y);
-            } else {
-                int x = (int) (robot.getX() + YouRobotSetting.getSize());
-                int y = (int) (robot.getY());
-
-                // Todo
-            }
+            duration = " "+ durationOfBonusInSeconds.toString();
         }
+
+        gd.setFont(new Font("Arial", Font.BOLD, 12));
+        gd.setPaint(Color.yellow.darker());
+        if (robot == null) {
+            int x = (int) (this.getX() + YouRobotSetting.getSize());
+            int y = (int) (this.getY());
+
+            // Drawing the text.
+            gd.drawString(this.getTypeElement() + duration, x, y);
+        } else {
+            int x = (int) (robot.getX() + YouRobotSetting.getSize());
+            int y = (int) (robot.getY());
+            Long tmp = durationOfBonusInSeconds - Math.round((double) (Calendar.getInstance().getTimeInMillis() - bonusActivationDate) / 1000.0);
+            gd.drawString(tmp.toString(), x, y);
+        }
+    }
+
+    /**
+     * Get a new random bonus.
+     * 
+     * @return A bonus.
+     */
+    public static Bonus getRandomBonus() {
+        Random rand = new Random();
+        TypeElementBase typeElement;
+
+        switch (rand.nextInt(3)) {
+            case 0:
+                typeElement = TypeElementBase.Ice;
+                break;
+            case 1:
+                typeElement = TypeElementBase.Wood;
+                break;
+            default:
+                typeElement = TypeElementBase.Stone;
+                break;
+        }
+
+        switch (rand.nextInt(3)) {
+            case 0:
+                try {
+                    return new BombeMagnetique(typeElement, TextureLoader.loadTexture("src/textures/bomb.png", true),
+                            rand.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
+                            rand.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                } catch (IOException ex) {
+                    System.err.println("Error while loading texture : src/textures/bomb.png");
+                }
+                break;
+            case 1:
+                try {
+                    return new Snap(typeElement, TextureLoader.loadTexture("src/textures/snap.png", true), rand.nextInt(4) + 1,
+                            rand.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
+                            rand.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                } catch (IOException ex) {
+                    System.err.println("Error while loading texture : src/textures/bomb.png");
+                }
+                break;
+            default:
+                try {
+                    return new Leurre(typeElement, TextureLoader.loadTexture("src/textures/leurre.png", true), rand.nextInt(10) + 2,
+                            rand.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
+                            rand.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                } catch (IOException ex) {
+                    System.err.println("Error while loading texture : src/textures/bomb.png");
+                }
+                break;
+        }
+
+        // Should never happen.
+        throw new IllegalStateException("This case must not happen. return null");
     }
 }

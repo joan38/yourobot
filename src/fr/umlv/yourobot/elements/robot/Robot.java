@@ -75,8 +75,8 @@ public abstract class Robot extends Element {
     public void setIsBoosting(boolean isBoosting) {
         this.isBoosting = isBoosting;
         if (isBoosting == true && getBody() != null) {
-            float forceX = (float) (100 * Math.sin(getBody().getAngle()));
-            float forceY = (float) (-100 * Math.cos(getBody().getAngle()));
+            float forceX = (float) (5 * Math.sin(getBody().getAngle()));
+            float forceY = (float) (-5 * Math.cos(getBody().getAngle()));
 
             getBody().applyForce(new Vec2(forceX, forceY), getBody().getWorldCenter());
         }

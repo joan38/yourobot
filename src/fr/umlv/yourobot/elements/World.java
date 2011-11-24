@@ -3,6 +3,8 @@ package fr.umlv.yourobot.elements;
 import fr.umlv.yourobot.elements.wall.Barres;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.elements.bonus.Bonus;
+import fr.umlv.yourobot.elements.robot.Robot;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class World {
         Objects.requireNonNull(backgroundPattern);
         Objects.requireNonNull(areas);
 
-        elements = new LinkedList<Element>();
+        this.elements = new LinkedList<Element>();
         this.backgroundPattern = backgroundPattern;
 
         if (areas.length != 3) {
@@ -113,7 +115,11 @@ public class World {
      * @param e Element to add.
      */
     public void addElement(Element element) {
-        elements.add(element);
+        if (element instanceof Robot) {
+            elements.add(element);
+        } else {
+            elements.push(element);
+        }
 
         // Adding the element to the physical world.
         element.attachToWorld(jWorld);
@@ -127,7 +133,7 @@ public class World {
     public void removeElement(Element e) {
         elements.remove(e);
 
-        // Removing the lement from the physical world.
+        // Removing the element from the physical world.
         e.detachFromWorld(jWorld);
     }
 
@@ -182,7 +188,7 @@ public class World {
         // Preventing the overlapping.
         final Boolean[] isOverlapping = new Boolean[1];
         isOverlapping[0] = false;
-        
+
         jWorld.queryAABB(new QueryCallback() {
 
             @Override

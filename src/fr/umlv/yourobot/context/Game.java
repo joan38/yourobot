@@ -7,18 +7,15 @@ import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.*;
-import fr.umlv.yourobot.elements.bonus.BombeMagnetique;
-import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.zen.*;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -39,12 +36,26 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     private final Player[] players;
     private final World world; // World of the game.
     private BufferedImage bi; // Double buffer.
-    
     // Game Logic variables.
-    private final int numberOfBonus;
-    private final int delayBeforeCreateABonus; // Seconds.
-    private final ArrayList<Bonus> listBonus = new ArrayList<Bonus>();
+    private final int maxNumberOfBonus;
+    private final int delayBeforeCreateABonus; // Milliseconds.
+    private int numberOfBonus;
+    private long lastBonnusPlacement = Calendar.getInstance().getTimeInMillis(); // Milliseconds
+    private final ArrayList<Bonus> runningBonus = new ArrayList<Bonus>();
+    // Player bonus management.
+    // When a player take a bonus, its value is stored inside the variable playerBonus.
+    // To take a bonus, the collision listener place the available bonus inside the array playersAvailableBonus.
+    private final Bonus[] playersBonus = new Bonus[2]; // 2 = Max number of player.
+    private final Bonus[] playersAvailableBonus = new Bonus[2];
 
+    /**
+     * Represent a game.
+     * 
+     * @param world World on the game will be played.
+     * @param players Players of the games. (Set plauer[1] to null for single plauer)
+     * @param numberOfBonus Number of simultaneous bonus on the map.
+     * @param delayBeforeCreateABonus Delay between the creation of a bonus.
+     */
     public Game(World world, Player[] players, int numberOfBonus, int delayBeforeCreateABonus) {
         //Objects.requireNonNull(players[0]);
         Objects.requireNonNull(world);
@@ -58,10 +69,11 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         if (players[1] != null) {
             this.world.addElement(players[1].getRobot());
         }
-        
+
         // Bonus management.
-        this.numberOfBonus = numberOfBonus;
-        this.delayBeforeCreateABonus = delayBeforeCreateABonus;
+        this.maxNumberOfBonus = numberOfBonus;
+        this.delayBeforeCreateABonus = delayBeforeCreateABonus * 1000;
+        this.numberOfBonus = 0;
 
         // Contact management.
         this.world.getjbox2DWorld().setContactListener(new RobotContactListener());
@@ -78,13 +90,33 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         final float timeStep = 1.0f / 60.0f;
         final int velocityIteration = 6;
         final int positioniteration = 2;
-        int counter = 0;
 
         // Drawing the menu.
         context.render(this);
 
         // Managing the menu.
         for (;;) {
+            // Bonus iteration
+            Iterator<Bonus> bonusIt = runningBonus.iterator();
+            while (bonusIt.hasNext()) {
+                if ((bonusIt.next()).stepBonus() == false) { // If stepBonus return false, I must remove ended the bonus.
+                    bonusIt.remove();
+                }
+            }
+            // Adding/Removing bonus.
+            if (numberOfBonus >= maxNumberOfBonus) {
+                lastBonnusPlacement = Calendar.getInstance().getTimeInMillis();
+            } else if (lastBonnusPlacement + delayBeforeCreateABonus < Calendar.getInstance().getTimeInMillis()) {
+                // Adding a bonus.
+                Bonus b;
+                do {
+                    b = Bonus.getRandomBonus();
+                } while (world.isOverlap(b.getX(), b.getY(), YouRobotSetting.getSize(), YouRobotSetting.getSize()));
+                lastBonnusPlacement = Calendar.getInstance().getTimeInMillis();
+                numberOfBonus++;
+                world.addElement(b);
+            }
+
             // JBox2D Iteration.
             world.getjbox2DWorld().step(timeStep, velocityIteration, positioniteration);
             context.render(this);
@@ -104,23 +136,13 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                     // Applying the boost.
                     p.getRobot().setIsBoosting(p.getRobot().isIsBoosting());
                 }
-                /*counter = (counter + 1) % 2;
-                if (counter == 0) {
-                for (Player p : players) {
-                if (p == null) {
                 continue;
-                }
-                p.getRobot().setIsBoosting(false);
-                p.getRobot().setIsBraking(false);
-                }
-                }*/
-                continue;
-            } else {
-                counter = 0;
             }
 
             // Managing player keybindings.
-            for (Player p : players) {
+            for (int i = 0; i < 2; i++) {
+                Player p = players[i];
+
                 if (p == null) {
                     continue;
                 }
@@ -138,15 +160,19 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                             //System.out.println("Brake");
                             break;
                         case Take:
-                            try {
-                                // TODO
-                                System.out.println("Bomb!");
-                                Bonus b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true),3, 90, 90);
-                                b.activateBonus(p.getRobot(), world);
-                            } catch (IOException ex) {
-                                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                            // If the player hold a bonus, I activate it.
+                            if (playersBonus[i] != null) {
+                                // Activating the bonus.
+                                playersBonus[i].activateBonus(p.getRobot(), world);
+                                runningBonus.add(playersBonus[i]);
+                                // The player do not hold anymore a bonus.
+                                playersBonus[i] = null;
+                            } else if (playersAvailableBonus[i] != null) {
+                                // If the player is on a bonus, I grab it, and remove it.
+                                playersBonus[i] = playersAvailableBonus[i];
+                                world.removeElement(playersBonus[i]);
+                                numberOfBonus--;
                             }
-
                             break;
                         case Turn_Left:
                             p.getRobot().turnLeft();
@@ -180,13 +206,9 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         world.render(g2bi);
-        /*for (Player p : players) {
-        if (p == null) {
-        continue;
+        for (Bonus b : runningBonus) {
+            b.render(g2bi);
         }
-        p.getRobot().render(g2bi);
-        }*/
-
         gd.drawImage(bi, 0, 0, null);
     }
 
@@ -197,10 +219,36 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
         @Override
         public void beginContact(Contact contact) {
+            // Managing contact with a bonus.
+            Body bodyA = contact.getFixtureA().getBody();
+            Body bodyB = contact.getFixtureB().getBody();
+
+            if (bodyB.getUserData() instanceof Robot && bodyA.getUserData() instanceof Bonus) {
+                // Woot, a bonus.
+                // Marking it as available to be took by the player.
+                playersAvailableBonus[(bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = (Bonus) bodyA.getUserData();
+            } else if (bodyA.getUserData() instanceof Robot && bodyB.getUserData() instanceof Bonus) {
+                // Woot, a bonus.
+                // Marking it as available to be took by the player.
+                playersAvailableBonus[(bodyA.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = (Bonus) bodyB.getUserData();
+            }
         }
 
         @Override
         public void endContact(Contact contact) {
+            // Managing the endcontact with a bonus.
+            Body bodyA = contact.getFixtureA().getBody();
+            Body bodyB = contact.getFixtureB().getBody();
+
+            if (bodyB.getUserData() instanceof Robot && bodyA.getUserData() instanceof Bonus) {
+                // Woot, a bonus.
+                // Marking it as available to be took by the player.
+                playersAvailableBonus[(bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = null;
+            } else if (bodyA.getUserData() instanceof Robot && bodyB.getUserData() instanceof Bonus) {
+                // Woot, a bonus.
+                // Marking it as available to be took by the player.
+                playersAvailableBonus[(bodyA.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = null;
+            }
         }
 
         @Override
@@ -221,11 +269,14 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             if (bodyA.getUserData() instanceof Robot) {
                 // Something hitted the robot.
                 //System.out.println("Something hitted the robot; Velocity: " + approachVelocity);
+                // The collision is only an information for an area.
+                if (bodyB.getUserData() instanceof Area || bodyB.getUserData() instanceof Bonus) {
+                    contact.setEnabled(false);
+                }
             }
             if (bodyB.getUserData() instanceof Robot) {
                 // The robot hitted something.
                 //System.out.println("The robot hitted something.  Velocity: " + approachVelocity);
-
 
                 // The collision is only an information for an area.
                 if (bodyA.getUserData() instanceof Area || bodyA.getUserData() instanceof Bonus) {
