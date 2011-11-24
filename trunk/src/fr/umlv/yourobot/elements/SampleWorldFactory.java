@@ -10,6 +10,7 @@ import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.BombeMagnetique;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.elements.bonus.Snap;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Random;
@@ -47,7 +48,7 @@ public class SampleWorldFactory {
 
             // Generating 15 random walls.
             Random random = new Random(); // Seed set to prevent random :)
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 15; i++) {
                 do {
                     e = new Wall(TypeElementBase.Ice, TextureLoader.loadTexture("src/textures/texture-glace.jpg", true),
                             random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
@@ -73,6 +74,9 @@ public class SampleWorldFactory {
             }
 
             Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 90, 90);
+            w.addElement(b);
+            
+            b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true),10, 120, 120);
             w.addElement(b);
 
             return w;
