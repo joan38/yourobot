@@ -2,11 +2,9 @@ package fr.umlv.yourobot.elements.bonus;
 
 import fr.umlv.yourobot.YouRobotSetting;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.TypeElementBase;
-import fr.umlv.yourobot.elements.TypeElementBase;
-import fr.umlv.yourobot.elements.World;
 import java.awt.image.BufferedImage;
+import java.util.Calendar;
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.CircleShape;
@@ -29,6 +27,10 @@ public class Snap extends Bonus {
     @Override
     public boolean stepBonus() {
         // BombeMagnetiqueEffect
+        if (((Calendar.getInstance().getTimeInMillis() - bonusActivationDate)) > durationOfBonusInSeconds * 1000) {
+            return false; // End of the effect.
+        }
+
         AABB area = new AABB(new Vec2(robot.getX() - YouRobotSetting.getStride(), robot.getY() - YouRobotSetting.getStride()),
                 new Vec2(robot.getX() + YouRobotSetting.getStride(), robot.getY() + YouRobotSetting.getStride()));
 
@@ -45,16 +47,20 @@ public class Snap extends Bonus {
                 float angle = org.jbox2d.common.MathUtils.atan2(fixture.getBody().getPosition().y - robot.getBody().getPosition().y, fixture.getBody().getPosition().x - robot.getBody().getPosition().x);
                 float force;
                 if (((Element) fixture.getBody().getUserData()).getTypeElement() == getTypeElement()) {
-                    force = -1000000.0f;
+                    force = -1000.0f;
                 } else {
-                    force = -10000.0f;
+                    force = -100.0f;
                 }
+                
+                // Elements are attracted at the rear of the robot. (prevent blocking)
+                Vec2 rearOfRobot = fixture.getBody().getWorldCenter().sub(new Vec2((float)((YouRobotSetting.getSize() * 2) *  Math.cos(angle)), 
+                        (float)((YouRobotSetting.getSize() * 2) *  Math.sin(angle))));
 
-                fixture.getBody().applyLinearImpulse(new Vec2((float) Math.cos(angle) * force, (float) Math.sin(angle) * force), fixture.getBody().getWorldCenter());
+                fixture.getBody().applyLinearImpulse(new Vec2((float) Math.cos(angle) * force, (float) Math.sin(angle) * force), rearOfRobot);
                 return true;
             }
         }, area);
 
-        return false;
+        return true;
     }
 }

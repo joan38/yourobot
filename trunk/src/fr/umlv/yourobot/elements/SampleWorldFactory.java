@@ -14,7 +14,6 @@ import fr.umlv.yourobot.elements.bonus.Snap;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Random;
-import sun.nio.cs.ext.ISO2022_CN;
 
 /**
  * Factory that create sampleworlds.
@@ -76,7 +75,7 @@ public class SampleWorldFactory {
             Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 90, 90);
             w.addElement(b);
             
-            b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true),10, 120, 120);
+            b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true),2, 120, 120);
             w.addElement(b);
 
             return w;

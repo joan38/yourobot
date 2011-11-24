@@ -8,6 +8,7 @@ package fr.umlv.yourobot.elements;
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
 public enum TypeElementBase {
+
     Unasigned,
     Wood,
     Stone,
