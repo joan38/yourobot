@@ -7,15 +7,19 @@ import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.*;
+import fr.umlv.yourobot.elements.robot.RobotIA;
 import fr.umlv.zen.*;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -37,6 +41,8 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     private final World world; // World of the game.
     private BufferedImage bi; // Double buffer.
     // Game Logic variables.
+    //
+    // Bonus
     private final int maxNumberOfBonus;
     private final int delayBeforeCreateABonus; // Milliseconds.
     private int numberOfBonus;
@@ -47,6 +53,9 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     // To take a bonus, the collision listener place the available bonus inside the array playersAvailableBonus.
     private final Bonus[] playersBonus = new Bonus[2]; // 2 = Max number of player.
     private final Bonus[] playersAvailableBonus = new Bonus[2];
+    // IA Robot.
+    //
+    private final ArrayList<RobotIA> robotIAs = new ArrayList<RobotIA>();
 
     /**
      * Represent a game.
@@ -77,6 +86,18 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
         // Contact management.
         this.world.getjbox2DWorld().setContactListener(new RobotContactListener());
+
+        // TODO. Number of ia robots.
+        try {
+            RobotIA r = new RobotIA(TextureLoader.loadTexture("src/textures/robot_human_normal.png", true),
+                    TextureLoader.loadTexture("src/textures/robot_human_boost.png", true),
+                    TextureLoader.loadTexture("src/textures/robot_human_brake.png", true),
+                    160, 200);
+            robotIAs.add(r);
+            world.addElement(r);
+        } catch (IOException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -102,6 +123,10 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 if ((bonusIt.next()).stepBonus() == false) { // If stepBonus return false, I must remove ended the bonus.
                     bonusIt.remove();
                 }
+            }
+            // RobotIA iteration
+            for (RobotIA r : robotIAs) {
+                r.stepIA();
             }
             // Adding/Removing bonus.
             if (numberOfBonus >= maxNumberOfBonus) {
