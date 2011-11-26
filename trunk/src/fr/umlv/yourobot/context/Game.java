@@ -90,8 +90,6 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         // TODO. Number of ia robots.
         try {
             RobotIA r = new RobotIA(TextureLoader.loadTexture("src/textures/robot_human_normal.png", true),
-                    TextureLoader.loadTexture("src/textures/robot_human_boost.png", true),
-                    TextureLoader.loadTexture("src/textures/robot_human_brake.png", true),
                     160, 200);
             robotIAs.add(r);
             world.addElement(r);

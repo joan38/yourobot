@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class RobotPlayer extends Robot {
 
-    protected int health;
+    protected int health = 100;
     protected Bonus listBonus;
 
     /**
@@ -20,5 +20,13 @@ public class RobotPlayer extends Robot {
      */
     public RobotPlayer(int healt, BufferedImage texture, BufferedImage textureBoost, BufferedImage textureBrake, int x, int y) {
         super(texture, textureBoost, textureBrake, x, y);
-    } 
+    }
+    
+    /**
+     * Is the robot dead ?
+     * @return True if the robot is dead.
+     */
+    public boolean  isDead() {
+        return (health <= 0);
+    }
 }
