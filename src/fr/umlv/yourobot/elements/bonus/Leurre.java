@@ -33,7 +33,6 @@ public class Leurre extends Bonus {
         getFixtureDef().shape = dynamicCircle;
     }
 
-
     @Override
     public boolean stepBonus() {
         // BombeMagnetiqueEffect

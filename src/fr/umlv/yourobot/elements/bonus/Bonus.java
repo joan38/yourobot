@@ -27,6 +27,7 @@ public abstract class Bonus extends Element {
     World world;
     long bonusActivationDate;
     final Integer durationOfBonusInSeconds;
+    private boolean activated = false;
 
     /**
      * A Bonus.
@@ -55,6 +56,7 @@ public abstract class Bonus extends Element {
         this.robot = robot;
         this.world = world;
         bonusActivationDate = Calendar.getInstance().getTimeInMillis();
+        activated = true;
 
         stepBonus();
     }
@@ -147,5 +149,12 @@ public abstract class Bonus extends Element {
 
         // Should never happen.
         throw new IllegalStateException("This case must not happen. return null");
+    }
+
+    /**
+     * Returns true if the bonus has been activated.
+     */
+    public boolean isActivated() {
+        return activated;
     }
 }
