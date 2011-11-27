@@ -64,6 +64,26 @@ public abstract class Element {
     }
 
     /**
+     * Render the element on the graphic gd.
+     * This method simply draw the given texture.
+     * 
+     * @param gd Graphic to draw on.
+     * @param texture The texture to draw.
+     * 
+     * @note You can override the position function getX() and getY(). The rendering will be made on the overriden method.
+     */
+    protected void render(Graphics2D gd, BufferedImage texture) {
+        this.textureTransformer.setToIdentity();
+        if (body != null) {
+            textureTransformer.rotate(body.getAngle(), texture.getWidth() / 2.0, texture.getHeight() / 2.0);
+        } else {
+            textureTransformer.rotate(Math.toRadians(orientation), texture.getWidth() / 2.0, texture.getHeight() / 2.0);
+        }
+
+        gd.drawImage(texture, new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR), getX(), getY());
+    }
+
+    /**
      * Define the orientation of the element to render.
      * 
      * @param degree Orientation to set in degree. 
@@ -151,8 +171,8 @@ public abstract class Element {
     public void attachToWorld(org.jbox2d.dynamics.World w) {
         // Associating this object with the body.
         // This is made here and not in the constructor to prevent a constructor this leak.
-        this.bodyDef.userData = (Object) this; 
-        
+        this.bodyDef.userData = (Object) this;
+
         body = w.createBody(bodyDef);
         body.createFixture(fixtureDef);
 

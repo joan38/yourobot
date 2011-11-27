@@ -25,14 +25,15 @@ public class YouRobot {
         final int WIDTH = 800;
         final int HEIGHT = 600;
         final int SIZE = 20;
-        final int STRIDE = 100;
+        final int EFFECT_AREA = 100;
+        final int DETECTION_AREA = 200;
 
         // Banner
         System.out.println("YouRobot version " + versionMajor + "." + versionMinor + " - Licensed under GNU GPLv3.");
         System.out.println("Damien Girard and Joan Goyeau.");
 
         // Setting YouRobot settings.
-        YouRobotSetting.setYouRobotSetting(WIDTH, HEIGHT, SIZE, STRIDE);
+        YouRobotSetting.setYouRobotSetting(WIDTH, HEIGHT, SIZE, EFFECT_AREA, DETECTION_AREA);
 
         // Creation of a dummy world.
         World[] worldList = new World[1];

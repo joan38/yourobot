@@ -13,20 +13,25 @@ public class YouRobotSetting {
     private static int width;
     private static int height;
     private static int size;
-    private static int stride;
+    private static int effectArea;
+    private static int detectionArea;
+    private static int leurreDurationBeforeActivation = 8;
 
     /**
+     * Init the settings of YouRobot.
      * 
-     * @param width
-     * @param height
-     * @param size
-     * @param stride 
+     * @param width Width resolution of YouRobot.
+     * @param height Height resolution of YouRobot.
+     * @param size   Size of an element.
+     * @param effectArea Effect area for bonusses.
+     * @param detectionArea Detection area for IA Robots.
      */
-    public static void setYouRobotSetting(int width, int height, int size, int stride) {
+    public static void setYouRobotSetting(int width, int height, int size, int effectArea, int detectionArea) {
         YouRobotSetting.height = height;
         YouRobotSetting.size = size;
-        YouRobotSetting.stride = stride;
+        YouRobotSetting.effectArea = effectArea;
         YouRobotSetting.width = width;
+        YouRobotSetting.detectionArea = detectionArea;
     }
 
     public static int getHeight() {
@@ -37,15 +42,27 @@ public class YouRobotSetting {
         return size;
     }
 
-    /**
-     * Size of a bonus.
-     * @return 
-     */
-    public static int getStride() {
-        return stride;
+    public static int getEffectArea() {
+        return effectArea;
     }
 
     public static int getWidth() {
         return width;
+    }
+
+    public static int getDetectionArea() {
+        return detectionArea;
+    }
+
+    public static int getLeurreDurationBeforeActivation() {
+        return leurreDurationBeforeActivation;
+    }
+
+    /**
+     * Set the duration before a leurre bonus is activated.
+     * @param leurreDurationBeforeActivation In seconds.
+     */
+    public static void setLeurreDurationBeforeActivation(int leurreDurationBeforeActivation) {
+        YouRobotSetting.leurreDurationBeforeActivation = leurreDurationBeforeActivation;
     }
 }

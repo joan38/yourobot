@@ -2,6 +2,7 @@ package fr.umlv.yourobot.elements.robot;
 
 import fr.umlv.yourobot.YouRobotSetting;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.bonus.Leurre;
 import java.awt.image.BufferedImage;
@@ -45,26 +46,30 @@ public class RobotIA extends Robot {
             @Override
             public boolean reportFixture(Fixture fixture) {
                 Object o = fixture.getBody().getUserData();
-                if (o == null || !(o instanceof RobotPlayer || o instanceof Leurre)) {
+                if (o == null) {
                     return true;
                 }
+                if (!(o instanceof RobotPlayer) && !(o instanceof Leurre)) {
+                    return true;
+                }
+
                 // Checking if the target is dead.
                 if (o instanceof RobotPlayer) {
                     if (((RobotPlayer) o).isDead()) {
                         return true;
                     }
                 } else if (o instanceof Leurre) {
-                    if (!((Bonus) o).isActivated())
+                    if (((Bonus) o).getState() != Bonus.BonusState.Activated) {
                         return true;
+                    }
                 }
-
                 // Ok, we are now only targetting RobotPlayer and Leurre.
 
                 // Getting the distance with this object.
                 double distance = Math.sqrt(Math.pow(fixture.getBody().getWorldCenter().x - getBody().getWorldCenter().x, 2)
                         + Math.pow(fixture.getBody().getWorldCenter().y - getBody().getWorldCenter().y, 2));
 
-                if (distance < maxDistance) {
+                if (distance < maxDistance || (o instanceof Leurre && !(target instanceof Leurre))) {
                     // Ok, this element is interesting.
                     // Checking that we can raycast it without an element between.   
                     RayCallback rayCallback = new RayCallback(o);
@@ -73,9 +78,11 @@ public class RobotIA extends Robot {
                             fixture.getBody().getWorldCenter());
 
                     if (rayCallback.isValidRayCast == true) {
-                        // Marking this object as the most interesting one.
-                        maxDistance = distance;
-                        target = fixture.getBody().getUserData();
+                        if (!(target instanceof Leurre && fixture.getBody().getUserData() instanceof Robot)) {
+                            // Marking this object as the most interesting one.
+                            maxDistance = distance;
+                            target = fixture.getBody().getUserData();
+                        }
                     }
                 }
 
@@ -98,7 +105,7 @@ public class RobotIA extends Robot {
                     // Checking if somebody is between the RobotIA and the detected body.
                     // If there is something, I ignore the element.
                     // Otherwise I mark it as possible element to track.
-                    if (o != target && !(o instanceof Bonus)) {
+                    if (o != target && !(o instanceof Bonus || o instanceof Area)) {
                         isValidRayCast = false;
                         return -1; // An object is between the robotIA and the targetted element.
                     }
@@ -111,8 +118,8 @@ public class RobotIA extends Robot {
 
         // Core code is here !
         //
-        AABB area = new AABB(new Vec2(getX() - YouRobotSetting.getStride(), getY() - YouRobotSetting.getStride()),
-                new Vec2(getX() + YouRobotSetting.getStride(), getY() + YouRobotSetting.getStride()));
+        AABB area = new AABB(new Vec2(getX() - YouRobotSetting.getDetectionArea(), getY() - YouRobotSetting.getDetectionArea()),
+                new Vec2(getX() + YouRobotSetting.getDetectionArea(), getY() + YouRobotSetting.getDetectionArea()));
 
         // Querying a target.
         AreaCallback areaCallback = new AreaCallback(this, getBody().getWorld());

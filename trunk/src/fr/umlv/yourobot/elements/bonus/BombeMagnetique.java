@@ -2,9 +2,7 @@ package fr.umlv.yourobot.elements.bonus;
 
 import fr.umlv.yourobot.YouRobotSetting;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.TypeElementBase;
-import fr.umlv.yourobot.elements.World;
 import java.awt.image.BufferedImage;
 import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.collision.AABB;
@@ -36,20 +34,20 @@ public class BombeMagnetique extends Bonus {
     @Override
     public boolean stepBonus() {
         // BombeMagnetiqueEffect
-        AABB area = new AABB(new Vec2(robot.getX() - YouRobotSetting.getStride(), robot.getY() - YouRobotSetting.getStride()),
-                new Vec2(robot.getX() + YouRobotSetting.getStride(), robot.getY() + YouRobotSetting.getStride()));
+        AABB area = new AABB(new Vec2(getRobot().getX() - YouRobotSetting.getEffectArea(), getRobot().getY() - YouRobotSetting.getEffectArea()),
+                new Vec2(getRobot().getX() + YouRobotSetting.getEffectArea(), getRobot().getY() + YouRobotSetting.getEffectArea()));
 
-        world.getjbox2DWorld().queryAABB(new QueryCallback() {
+        getRobot().getBody().getWorld().queryAABB(new QueryCallback() {
 
             @Override
             public boolean reportFixture(Fixture fixture) {
                 Element e = (Element) fixture.getBody().getUserData();
-                if (e == null || e == robot) {
+                if (e == null || e == getRobot()) {
                     // Unknown element or the robot the throw the bomb, I do not do anything.
                     return true;
                 }
 
-                float angle = org.jbox2d.common.MathUtils.atan2(fixture.getBody().getPosition().y - robot.getBody().getPosition().y, fixture.getBody().getPosition().x - robot.getBody().getPosition().x);
+                float angle = org.jbox2d.common.MathUtils.atan2(fixture.getBody().getPosition().y - getRobot().getBody().getPosition().y, fixture.getBody().getPosition().x - getRobot().getBody().getPosition().x);
                 float force;
                 if (((Element) fixture.getBody().getUserData()).getTypeElement() == getTypeElement()) {
                     force = 1000000.0f;
