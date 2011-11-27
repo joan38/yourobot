@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.robot;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
@@ -118,8 +118,8 @@ public class RobotIA extends Robot {
 
         // Core code is here !
         //
-        AABB area = new AABB(new Vec2(getX() - YouRobotSetting.getDetectionArea(), getY() - YouRobotSetting.getDetectionArea()),
-                new Vec2(getX() + YouRobotSetting.getDetectionArea(), getY() + YouRobotSetting.getDetectionArea()));
+        AABB area = new AABB(new Vec2(getX() - Settings.getDetectionArea(), getY() - Settings.getDetectionArea()),
+                new Vec2(getX() + Settings.getDetectionArea(), getY() + Settings.getDetectionArea()));
 
         // Querying a target.
         AreaCallback areaCallback = new AreaCallback(this, getBody().getWorld());

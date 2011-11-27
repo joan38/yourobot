@@ -2,7 +2,7 @@ package fr.umlv.yourobot.elements;
 
 import fr.umlv.yourobot.elements.wall.Barres;
 import fr.umlv.yourobot.elements.area.Area;
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.robot.RobotIA;
 import java.awt.Graphics2D;
@@ -84,8 +84,8 @@ public class World{
         // Drawing the background.
         if (backgroundPattern != null) {
             // An image is set.
-            for (int i = 0; i < YouRobotSetting.getWidth(); i += backgroundPattern.getWidth()) {
-                for (int j = 0; j < YouRobotSetting.getHeight(); j += backgroundPattern.getHeight()) {
+            for (int i = 0; i < Settings.getWidth(); i += backgroundPattern.getWidth()) {
+                for (int j = 0; j < Settings.getHeight(); j += backgroundPattern.getHeight()) {
                     gd.drawImage(backgroundPattern, i, j, null);
                 }
             }
@@ -173,9 +173,9 @@ public class World{
         BufferedImage tubeTexture = TextureLoader.loadTexture(texturePath, true);
 
         // Vertical.
-        int rightPos = YouRobotSetting.getWidth() - YouRobotSetting.getSize();
+        int rightPos = Settings.getWidth() - Settings.getSize();
         Element e;
-        for (int i = 0; i < YouRobotSetting.getHeight(); i += YouRobotSetting.getSize()) {
+        for (int i = 0; i < Settings.getHeight(); i += Settings.getSize()) {
             e = new Barres(TypeElementBase.Unasigned, tubeTexture, 0, i);
             e.setOrientation(90);
             w.addElement(e);
@@ -186,8 +186,8 @@ public class World{
         }
 
         // Horizontal.
-        int lowerPos = YouRobotSetting.getHeight() - YouRobotSetting.getSize();
-        for (int i = 0; i < YouRobotSetting.getWidth(); i += YouRobotSetting.getSize()) {
+        int lowerPos = Settings.getHeight() - Settings.getSize();
+        for (int i = 0; i < Settings.getWidth(); i += Settings.getSize()) {
             w.addElement(new Barres(TypeElementBase.Unasigned, tubeTexture, i, 0));
             w.addElement(new Barres(TypeElementBase.Unasigned, tubeTexture, i, lowerPos));
         }

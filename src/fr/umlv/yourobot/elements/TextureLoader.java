@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -46,10 +46,10 @@ public class TextureLoader {
             // Scaling down the texture in order to have it to the right size.
             AffineTransform textureTransformer = new AffineTransform();
             textureTransformer.setToIdentity();
-            double scale = (double) YouRobotSetting.getSize() / (double) texture.getHeight();
+            double scale = (double) Settings.getSize() / (double) texture.getHeight();
             textureTransformer.setToScale(scale, scale);
 
-            BufferedImage scaledDownImage = new BufferedImage(YouRobotSetting.getSize(), YouRobotSetting.getSize(), texture.getType());
+            BufferedImage scaledDownImage = new BufferedImage(Settings.getSize(), Settings.getSize(), texture.getType());
             Graphics2D gd = (Graphics2D) scaledDownImage.getGraphics();
             gd.drawImage(texture, new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR), 0, 0);
 

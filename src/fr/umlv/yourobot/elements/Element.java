@@ -23,7 +23,7 @@ public abstract class Element {
     // Positions
     private int orientation = 0;
     // Affinetransform for the texture (rotation)
-    private AffineTransform textureTransformer = new AffineTransform();
+    private AffineTransform textureTransformer;
     // JBox2D
     private Body body;
     private final BodyDef bodyDef;

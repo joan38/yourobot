@@ -9,7 +9,7 @@ import fr.umlv.yourobot.elements.area.SimpleArea;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.BombeMagnetique;
 import fr.umlv.yourobot.elements.bonus.Bonus;
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.context.WorldSet;
 import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.robot.RobotIA;
@@ -72,9 +72,9 @@ public class SampleWorldFactory {
         // Creation of a dummy world.
         try {
             Area[] areas = new Area[3];
-            areas[0] = new SimpleArea(YouRobotSetting.getSize() * 18, YouRobotSetting.getSize() * 3, Color.GREEN); // EndArea
-            areas[1] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 3, Color.yellow); // StartArea P1
-            areas[2] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 8, Color.blue); // StartArea P2
+            areas[0] = new SimpleArea(Settings.getSize() * 18, Settings.getSize() * 3, Color.GREEN); // EndArea
+            areas[1] = new SimpleArea(Settings.getSize() * 3, Settings.getSize() * 3, Color.yellow); // StartArea P1
+            areas[2] = new SimpleArea(Settings.getSize() * 3, Settings.getSize() * 8, Color.blue); // StartArea P2
 
 
             World w = new World("Random World", TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
@@ -91,22 +91,22 @@ public class SampleWorldFactory {
             for (int i = 0; i < 3; i++) {
                 do {
                     e = new Wall(TypeElementBase.Ice, TextureLoader.loadTexture("src/textures/texture-glace.jpg", true),
-                            random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                            random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                            random.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
+                            random.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
                 do {
                     e = new Wall(TypeElementBase.Wood, TextureLoader.loadTexture("src/textures/texture-bois-bleu.jpg", true),
-                            random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                            random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                            random.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
+                            random.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
                 do {
                     e = new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true),
-                            random.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                            random.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                            random.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
+                            random.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
@@ -136,20 +136,20 @@ public class SampleWorldFactory {
         // Creation of a dummy world.
         try {
             Area[] areas = new Area[3];
-            areas[1] = new SimpleArea(YouRobotSetting.getSize() + 40, YouRobotSetting.getHeight() / 2 - 40, Color.blue); // StartArea P1
-            areas[2] = new SimpleArea(YouRobotSetting.getSize() + 40, YouRobotSetting.getHeight() / 2 + 40, Color.blue); // StartArea P2
-            areas[0] = new SimpleArea(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() + 50), YouRobotSetting.getHeight() / 2, Color.GREEN); // EndArea
+            areas[1] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 - 40, Color.blue); // StartArea P1
+            areas[2] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 + 40, Color.blue); // StartArea P2
+            areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2, Color.GREEN); // EndArea
 
             World w = new World("Level 1", TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
             World.fillBorder(w, "src/textures/tube_texture.png");
 
             // Adding elements to this world.
-            for (int i = YouRobotSetting.getSize() + 110; i < 690; i += YouRobotSetting.getSize()) {
-                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, YouRobotSetting.getHeight() / 2 - 70));
+            for (int i = Settings.getSize() + 110; i < 690; i += Settings.getSize()) {
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, Settings.getHeight() / 2 - 70));
             }
 
-            for (int i = YouRobotSetting.getSize() + 110; i < 690; i += YouRobotSetting.getSize()) {
-                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, YouRobotSetting.getHeight() / 2 + 70));
+            for (int i = Settings.getSize() + 110; i < 690; i += Settings.getSize()) {
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, Settings.getHeight() / 2 + 70));
             }
 
             // Adding a IA Robot to the world.

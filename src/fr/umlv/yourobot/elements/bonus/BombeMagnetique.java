@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.bonus;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.image.BufferedImage;
@@ -26,7 +26,7 @@ public class BombeMagnetique extends Bonus {
         super(typeElement, texture, 0, x, y);
 
         this.dynamicCircle = new CircleShape();
-        this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
+        this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;
 
         getFixtureDef().shape = dynamicCircle;
     }
@@ -34,8 +34,8 @@ public class BombeMagnetique extends Bonus {
     @Override
     public boolean stepBonus() {
         // BombeMagnetiqueEffect
-        AABB area = new AABB(new Vec2(getRobot().getX() - YouRobotSetting.getEffectArea(), getRobot().getY() - YouRobotSetting.getEffectArea()),
-                new Vec2(getRobot().getX() + YouRobotSetting.getEffectArea(), getRobot().getY() + YouRobotSetting.getEffectArea()));
+        AABB area = new AABB(new Vec2(getRobot().getX() - Settings.getEffectArea(), getRobot().getY() - Settings.getEffectArea()),
+                new Vec2(getRobot().getX() + Settings.getEffectArea(), getRobot().getY() + Settings.getEffectArea()));
 
         getRobot().getBody().getWorld().queryAABB(new QueryCallback() {
 

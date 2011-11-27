@@ -8,7 +8,7 @@ package fr.umlv.yourobot;
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public class YouRobotSetting {
+public class Settings {
 
     private static int width;
     private static int height;
@@ -27,11 +27,11 @@ public class YouRobotSetting {
      * @param detectionArea Detection area for IA Robots.
      */
     public static void setYouRobotSetting(int width, int height, int size, int effectArea, int detectionArea) {
-        YouRobotSetting.height = height;
-        YouRobotSetting.size = size;
-        YouRobotSetting.effectArea = effectArea;
-        YouRobotSetting.width = width;
-        YouRobotSetting.detectionArea = detectionArea;
+        Settings.height = height;
+        Settings.size = size;
+        Settings.effectArea = effectArea;
+        Settings.width = width;
+        Settings.detectionArea = detectionArea;
     }
 
     public static int getHeight() {
@@ -63,6 +63,6 @@ public class YouRobotSetting {
      * @param leurreDurationBeforeActivation In seconds.
      */
     public static void setLeurreDurationBeforeActivation(int leurreDurationBeforeActivation) {
-        YouRobotSetting.leurreDurationBeforeActivation = leurreDurationBeforeActivation;
+        Settings.leurreDurationBeforeActivation = leurreDurationBeforeActivation;
     }
 }

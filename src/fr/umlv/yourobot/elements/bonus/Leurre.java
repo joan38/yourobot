@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.bonus;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.Color;
 import java.awt.Font;
@@ -27,7 +27,7 @@ public class Leurre extends Bonus {
         super(typeElement, texture, durationOfBonusInSeconds, x, y);
 
         this.dynamicCircle = new CircleShape();
-        this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
+        this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;
 
         getFixtureDef().shape = dynamicCircle;
 
@@ -49,8 +49,8 @@ public class Leurre extends Bonus {
     @Override
     public boolean stepBonus() {
         // Leurre effect
-        if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > YouRobotSetting.getLeurreDurationBeforeActivation() * 1000) {
-            if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > durationOfBonusInSeconds * 1000 + YouRobotSetting.getLeurreDurationBeforeActivation() * 1000) {
+        if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > Settings.getLeurreDurationBeforeActivation() * 1000) {
+            if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > durationOfBonusInSeconds * 1000 + Settings.getLeurreDurationBeforeActivation() * 1000) {
                 return false; // End of the bonus.
             }
             if (getState() == BonusState.DisplayedButNotActive) {
@@ -94,22 +94,22 @@ public class Leurre extends Bonus {
                 break;
             case DisplayedButNotActive:
                 gd.setPaint(Color.red.darker());
-                durationToDisplay = YouRobotSetting.getLeurreDurationBeforeActivation() - Math.round((double) (Calendar.getInstance().getTimeInMillis() - getBonusActivationDate()) / 1000.0);
+                durationToDisplay = Settings.getLeurreDurationBeforeActivation() - Math.round((double) (Calendar.getInstance().getTimeInMillis() - getBonusActivationDate()) / 1000.0);
                 break;
             case Activated:
                 gd.setPaint(Color.lightGray);
-                durationToDisplay = durationOfBonusInSeconds + YouRobotSetting.getLeurreDurationBeforeActivation() - Math.round((double) (Calendar.getInstance().getTimeInMillis() - getBonusActivationDate()) / 1000.0);
+                durationToDisplay = durationOfBonusInSeconds + Settings.getLeurreDurationBeforeActivation() - Math.round((double) (Calendar.getInstance().getTimeInMillis() - getBonusActivationDate()) / 1000.0);
                 break;
         }
         
         if (getRobot() == null) {
-            int x = (int) (this.getX() + YouRobotSetting.getSize());
+            int x = (int) (this.getX() + Settings.getSize());
             int y = (int) (this.getY());
 
             // Drawing the text.
             gd.drawString(this.getTypeElement() + duration, x, y);
         } else {
-            int x = (int) (this.getX() + YouRobotSetting.getSize());
+            int x = (int) (this.getX() + Settings.getSize());
             int y = (int) (this.getY());
             gd.drawString(durationToDisplay.toString(), x, y);
         }

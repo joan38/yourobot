@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.area;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -30,7 +30,7 @@ public class SimpleArea extends Area {
         getBodyDef().type = BodyType.STATIC; // An area is static.
 
         this.dynamicCircle = new CircleShape();
-        this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
+        this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;
 
         getFixtureDef().shape = dynamicCircle;
     }
@@ -40,7 +40,7 @@ public class SimpleArea extends Area {
         gd.setStroke(new BasicStroke(2.0f));
         gd.setPaint(color);
         if (getBody() != null) {
-            gd.drawOval((int) getBody().getPosition().x, (int) getBody().getPosition().y, YouRobotSetting.getSize(), YouRobotSetting.getSize());
+            gd.drawOval((int) getBody().getPosition().x, (int) getBody().getPosition().y, Settings.getSize(), Settings.getSize());
         }
     }
 }

@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public abstract class Area extends Element{
+public abstract class Area extends Element {
 
     public Area(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
         super(typeElement, texture, x, y);

@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.bonus;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robot.Robot;
@@ -182,13 +182,13 @@ public abstract class Bonus extends Element {
         gd.setFont(new Font("Arial", Font.BOLD, 12));
         gd.setPaint(Color.yellow.darker());
         if (state != BonusState.Activated) {
-            int x = (int) (this.getX() + YouRobotSetting.getSize());
+            int x = (int) (this.getX() + Settings.getSize());
             int y = (int) (this.getY());
 
             // Drawing the text.
             gd.drawString(this.getTypeElement() + duration, x, y);
         } else {
-            int x = (int) (robot.getX() + YouRobotSetting.getSize());
+            int x = (int) (robot.getX() + Settings.getSize());
             int y = (int) (robot.getY());
             Long tmp = durationOfBonusInSeconds - Math.round((double) (Calendar.getInstance().getTimeInMillis() - bonusActivationDate) / 1000.0);
             gd.drawString(tmp.toString(), x, y);
@@ -222,8 +222,8 @@ public abstract class Bonus extends Element {
             case 0:
                 try {
                     return new BombeMagnetique(typeElement, TextureLoader.loadTexture("src/textures/bomb.png", true),
-                            rand.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                            rand.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                            rand.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
+                            rand.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } catch (IOException ex) {
                     System.err.println("Error while loading texture : src/textures/bomb.png");
                 }
@@ -231,8 +231,8 @@ public abstract class Bonus extends Element {
             case 1:
                 try {
                     return new Snap(typeElement, TextureLoader.loadTexture("src/textures/snap.png", true), rand.nextInt(4) + 1,
-                            rand.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                            rand.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                            rand.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
+                            rand.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } catch (IOException ex) {
                     System.err.println("Error while loading texture : src/textures/bomb.png");
                 }
@@ -243,8 +243,8 @@ public abstract class Bonus extends Element {
                             TextureLoader.loadTexture("src/textures/leurre_activated.png", true),
                             TextureLoader.loadTexture("src/textures/leurre_before_activated.png", true),
                             rand.nextInt(5) + 5,
-                            rand.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
-                            rand.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
+                            rand.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
+                            rand.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } catch (IOException ex) {
                     System.err.println("Error while loading texture : src/textures/bomb.png");
                 }
