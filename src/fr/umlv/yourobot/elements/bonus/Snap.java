@@ -49,7 +49,7 @@ public class Snap extends Bonus {
                 if (((Element) fixture.getBody().getUserData()).getTypeElement() == getTypeElement()) {
                     force = -1000.0f;
                 } else {
-                    force = -100.0f;
+                    force = -500.0f;
                 }
                 
                 // Elements are attracted at the rear of the robot. (prevent blocking)
