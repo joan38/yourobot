@@ -11,6 +11,7 @@ import fr.umlv.yourobot.elements.bonus.BombeMagnetique;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.YouRobotSetting;
 import fr.umlv.yourobot.elements.bonus.Snap;
+import fr.umlv.yourobot.elements.robot.RobotIA;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Random;
@@ -35,9 +36,9 @@ public class SampleWorldFactory {
             areas[1] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 3, Color.yellow); // StartArea P1
             areas[2] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 8, Color.blue); // StartArea P2
 
-            
+
             World w = new World(TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
-            
+
             World.fillBorder(w, "src/textures/tube_texture.png");
             // Adding elements to this world.
             //w.addElement(new Wall(TypeElementBase.Ice, TextureLoader.loadTexture("src/textures/texture-glace.jpg"), 0, 0));
@@ -69,22 +70,28 @@ public class SampleWorldFactory {
                 } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
-                
+
             }
-            
+
             Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 90, 90);
             w.addElement(b);
-            
+
             b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 2, 120, 120);
             w.addElement(b);
-            
+
+            // Adding a IA Robot to the world.
+            RobotIA r = new RobotIA(TextureLoader.loadTexture("src/textures/robot_enemie.png", true),
+                    160, 200);
+            w.addRobotIA(r);
+
+
             return w;
         } catch (IOException ex) {
             System.err.println("Texture not found. " + ex.getMessage());
             return null;
         }
     }
-    
+
     public static World getDummyWorldLevel1() {
         // Creation of a dummy world.
         try {
@@ -100,11 +107,16 @@ public class SampleWorldFactory {
             for (int i = YouRobotSetting.getSize() + 110; i < 690; i += YouRobotSetting.getSize()) {
                 w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, YouRobotSetting.getHeight() / 2 - 70));
             }
-            
+
             for (int i = YouRobotSetting.getSize() + 110; i < 690; i += YouRobotSetting.getSize()) {
                 w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, YouRobotSetting.getHeight() / 2 + 70));
             }
-            
+
+            // Adding a IA Robot to the world.
+            RobotIA r = new RobotIA(TextureLoader.loadTexture("src/textures/robot_enemie.png", true),
+                    160, 200);
+             w.addRobotIA(r);
+
             return w;
         } catch (IOException ex) {
             System.err.println("Texture not found. " + ex.getMessage());

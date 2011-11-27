@@ -63,7 +63,7 @@ public class Manager {
      */
     public Game newGame(World map, int numberOfHumanPlayer) {
         // Create a game.
-        renderGame = new Game(map, players, 4, 2);
+        renderGame = new Game(map, players, 4, 2, 0.1f);
         return renderGame;
     }
 

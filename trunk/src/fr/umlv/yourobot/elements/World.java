@@ -3,11 +3,12 @@ package fr.umlv.yourobot.elements;
 import fr.umlv.yourobot.elements.wall.Barres;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.YouRobotSetting;
-import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robot.Robot;
+import fr.umlv.yourobot.elements.robot.RobotIA;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
 import org.jbox2d.callbacks.QueryCallback;
@@ -30,6 +31,7 @@ public class World {
     private Area[] areas;
     private final LinkedList<Element> elements; // Elements of the game.
     private BufferedImage backgroundPattern;
+    private ArrayList<RobotIA> robotIAs = new ArrayList<RobotIA>();
     // JBox2D
     private final org.jbox2d.dynamics.World jWorld;
     private final BodyDef jGroundBodyDef;
@@ -98,6 +100,11 @@ public class World {
             e.render(gd);
         }
 
+        // Drawing RobotIA
+        for (RobotIA ia : robotIAs) {
+            ia.render(gd);
+        }
+
         // Ok.
     }
 
@@ -135,6 +142,22 @@ public class World {
 
         // Removing the element from the physical world.
         e.detachFromWorld(jWorld);
+    }
+
+    /**
+     * Add a robotIA to the world.
+     * @param robotIA The robotIA to add.
+     */
+    public void addRobotIA(RobotIA robotIA) {
+        robotIAs.add(robotIA);
+        robotIA.attachToWorld(jWorld);
+    }
+
+    /**
+     * Get the RobotIA of the world. Do not modify.
+     */
+    public ArrayList<RobotIA> getRobotIAs() {
+        return robotIAs;
     }
 
     /**

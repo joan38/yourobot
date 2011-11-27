@@ -8,6 +8,7 @@ import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.robot.RobotIA;
+import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import fr.umlv.zen.*;
 
 import java.awt.Graphics2D;
@@ -55,7 +56,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     private final Bonus[] playersAvailableBonus = new Bonus[2];
     // IA Robot.
     //
-    private final ArrayList<RobotIA> robotIAs = new ArrayList<RobotIA>();
+    private final float robotIAPower;
 
     /**
      * Represent a game.
@@ -65,7 +66,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
      * @param numberOfBonus Number of simultaneous bonus on the map.
      * @param delayBeforeCreateABonus Delay between the creation of a bonus.
      */
-    public Game(World world, Player[] players, int numberOfBonus, int delayBeforeCreateABonus) {
+    public Game(World world, Player[] players, int numberOfBonus, int delayBeforeCreateABonus, float robotIAPower) {
         //Objects.requireNonNull(players[0]);
         Objects.requireNonNull(world);
 
@@ -87,15 +88,8 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         // Contact management.
         this.world.getjbox2DWorld().setContactListener(new RobotContactListener());
 
-        // TODO. Number of ia robots.
-        try {
-            RobotIA r = new RobotIA(TextureLoader.loadTexture("src/textures/robot_human_normal.png", true),
-                    160, 200);
-            robotIAs.add(r);
-            world.addElement(r);
-        } catch (IOException ex) {
-            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Power of RobotIA.
+        this.robotIAPower = robotIAPower;
     }
 
     /**
@@ -125,7 +119,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 }
             }
             // RobotIA iteration
-            for (RobotIA r : robotIAs) {
+            for (RobotIA r : world.getRobotIAs()) {
                 r.stepIA();
             }
             // Adding/Removing bonus.
@@ -232,7 +226,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
         world.render(g2bi);
         /*for (Bonus b : runningBonus) {
-            b.render(g2bi);
+        b.render(g2bi);
         }*/
 
         gd.drawImage(bi, 0, 0, null);
@@ -292,30 +286,46 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             float approachVelocity = Vec2.dot(vB.sub(vA), worldManifold.normal);
 
             // Ok, I have got the velocity. Managing the collision.
-            if (bodyA.getUserData() instanceof Robot) {
-                // Something hitted the robot.
-                //System.out.println("Something hitted the robot; Velocity: " + approachVelocity);
-                // The collision is only an information for an area.
-                if (bodyB.getUserData() instanceof Area || bodyB.getUserData() instanceof Bonus) {
-                    contact.setEnabled(false);
-                }
-            }
-            if (bodyB.getUserData() instanceof Robot) {
-                // The robot hitted something.
-                //System.out.println("The robot hitted something.  Velocity: " + approachVelocity);
 
-                // The collision is only an information for an area.
-                if (bodyA.getUserData() instanceof Area || bodyA.getUserData() instanceof Bonus) {
-                    contact.setEnabled(false);
-                } else if (!(bodyA.getUserData() instanceof Robot)) {
-                    // If it is not another robot, I disable the booster.
-                    ((Robot) bodyB.getUserData()).setIsBoosting(false);
+            // Collision between a robotPlayer and RobotIA.
+            if (bodyA.getUserData() instanceof RobotPlayer && bodyB.getUserData() instanceof RobotIA
+                    || bodyB.getUserData() instanceof RobotPlayer && bodyA.getUserData() instanceof RobotIA) {
+                // Collision of a RobotPlayer and RobotIA.
+                RobotPlayer robotPlayer = (RobotPlayer) ((bodyA.getUserData() instanceof RobotPlayer) ? bodyA.getUserData() : bodyB.getUserData());
+                robotPlayer.applyDamage((int) (Math.abs(approachVelocity) * robotIAPower));
+                return;
+            }
+
+            // Collision of a robot with a bonus.
+            if ((bodyA.getUserData() instanceof Robot || bodyB.getUserData() instanceof RobotPlayer)
+                    && (bodyA.getUserData() instanceof Bonus || bodyB.getUserData() instanceof Bonus)) {
+                contact.setEnabled(false); // Ignoring the contact.
+                return;
+            }
+
+            // Collision of a robot with an area.
+            if ((bodyA.getUserData() instanceof Robot || bodyB.getUserData() instanceof Robot)
+                    && (bodyA.getUserData() instanceof Area || bodyB.getUserData() instanceof Area)) {
+                contact.setEnabled(false); // Ignoring the contact.
+
+                // Checking if there is a victory.
+                if (bodyA.getUserData() == world.getAreas()[0] || bodyB.getUserData() == world.getAreas()[0]) {
+                    // Victory area. Is it an human robot that touched the element ?
+                    
+                    RobotPlayer robotPlayer = null;
+                    if (bodyA.getUserData() instanceof RobotPlayer) {
+                        robotPlayer = (RobotPlayer) bodyA.getUserData();
+                    } else if (bodyB.getUserData() instanceof RobotPlayer) {
+                        robotPlayer = (RobotPlayer) bodyB.getUserData();
+                    }
+
+                    if (robotPlayer != null) {
+                        // It is an human robot.
+                        // Setting the victory.
+                        System.out.println("Victory of Player " + (bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1));
+                    }
                 }
-                // Victory ? area[0] is the end area.
-                if (bodyA.getUserData() == world.getAreas()[0]) {
-                    // Victory!
-                    System.out.println("Victory of Player " + (bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1));
-                }
+                return;
             }
         }
 

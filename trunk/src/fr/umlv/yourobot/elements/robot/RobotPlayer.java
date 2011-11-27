@@ -1,11 +1,15 @@
 package fr.umlv.yourobot.elements.robot;
 
+import fr.umlv.yourobot.YouRobotSetting;
 import fr.umlv.yourobot.elements.bonus.Bonus;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class RobotPlayer extends Robot {
 
-    protected int health = 100;
+    protected Integer health = 100;
     protected Bonus listBonus;
 
     /**
@@ -21,12 +25,41 @@ public class RobotPlayer extends Robot {
     public RobotPlayer(int healt, BufferedImage texture, BufferedImage textureBoost, BufferedImage textureBrake, int x, int y) {
         super(texture, textureBoost, textureBrake, x, y);
     }
-    
+
     /**
      * Is the robot dead ?
      * @return True if the robot is dead.
      */
-    public boolean  isDead() {
+    public boolean isDead() {
         return (health <= 0);
+    }
+
+    @Override
+    public void render(Graphics2D gd) {
+        super.render(gd);
+
+        // Drawing the health.
+        gd.setFont(new Font("Arial", Font.BOLD, 10));
+        if (health > 75) {
+            gd.setPaint(Color.green);
+        } else if (health > 25 && health <= 75) {
+            gd.setPaint(Color.orange);
+        } else {
+            gd.setPaint(Color.red);
+        }
+
+        int x = (int) (this.getX() - YouRobotSetting.getSize());
+        int y = (int) (this.getY());
+        gd.drawString(health.toString(), x, y);
+
+    }
+
+    /**
+     * Apply damages to the robot.
+     * 
+     * @param damage Damage of the robot. (Set negative damage to apply a life boost!)
+     */
+    public void applyDamage(int damage) {
+        health -= damage;
     }
 }
