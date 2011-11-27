@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -195,11 +193,6 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                         case Boost:
                             p.getRobot().setIsBoosting(!p.getRobot().isIsBoosting());
                             //System.out.println("Boost");
-                            break;
-                        case Brake:
-                            // Currently unsuported.
-                            //p.getRobot().setIsBraking(true);
-                            //System.out.println("Brake");
                             break;
                         case Take:
                             // If the player hold a bonus, I activate it.

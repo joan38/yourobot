@@ -12,6 +12,5 @@ public enum  RobotKeyAction {
     Turn_Right,
     Turn_Left,
     Boost,
-    Brake,
     Take
 }

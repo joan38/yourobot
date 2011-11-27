@@ -54,10 +54,10 @@ public class YouRobot {
         players[1] = new Player(robot2);
         
         // Setting the default key of second player.
-        players[1].setKeyBinding(RobotKeyAction.Boost, KeyboardKey.SHIFT);
+        players[1].setKeyBinding(RobotKeyAction.Boost, KeyboardKey.UP);
+        players[1].setKeyBinding(RobotKeyAction.Take, KeyboardKey.SHIFT);
         players[1].setKeyBinding(RobotKeyAction.Turn_Left, KeyboardKey.LEFT);
         players[1].setKeyBinding(RobotKeyAction.Turn_Right, KeyboardKey.RIGHT);
-        players[1].setKeyBinding(RobotKeyAction.Brake, KeyboardKey.DOWN);
         
         Manager manager = new Manager(SampleWorldFactory.getWorldSet1(), players);  // Launching the application manager.
         manager.run();
