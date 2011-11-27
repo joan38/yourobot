@@ -64,7 +64,13 @@ public class RobotPlayer extends Robot {
      * @param damage Damage of the robot. (Set negative damage to apply a life boost!)
      */
     public void applyDamage(int damage) {
-        health -= damage;
+        if (health > 0) {
+            health -= damage;
+
+            if (health <= 0) {
+                setIsBoosting(false);
+            }
+        }
     }
 
     /**
