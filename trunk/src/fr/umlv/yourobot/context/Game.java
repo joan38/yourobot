@@ -2,7 +2,7 @@ package fr.umlv.yourobot.context;
 
 import fr.umlv.yourobot.Player;
 import fr.umlv.yourobot.RobotKeyAction;
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
@@ -77,7 +77,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         this.world = world;
         this.players = players;
 
-        this.bi = new BufferedImage(YouRobotSetting.getWidth(), YouRobotSetting.getHeight(), BufferedImage.TYPE_INT_RGB);
+        this.bi = new BufferedImage(Settings.getWidth(), Settings.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         this.world.addElement(players[0].getRobot());
         if (players.length > 1 && players[1] != null) {
@@ -144,7 +144,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 Bonus b;
                 do {
                     b = Bonus.getRandomBonus();
-                } while (world.isOverlap(b.getX(), b.getY(), YouRobotSetting.getSize(), YouRobotSetting.getSize()));
+                } while (world.isOverlap(b.getX(), b.getY(), Settings.getSize(), Settings.getSize()));
                 lastBonnusPlacement = Calendar.getInstance().getTimeInMillis();
                 numberOfBonus++;
                 world.addElement(b);

@@ -2,8 +2,6 @@ package fr.umlv.yourobot;
 
 import fr.umlv.yourobot.elements.SampleWorldFactory;
 import fr.umlv.yourobot.elements.TextureLoader;
-import fr.umlv.yourobot.elements.World;
-import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import fr.umlv.zen.KeyboardKey;
 import java.io.IOException;
@@ -33,7 +31,7 @@ public class YouRobot {
         System.out.println("Damien Girard and Joan Goyeau.");
 
         // Setting YouRobot settings.
-        YouRobotSetting.setYouRobotSetting(WIDTH, HEIGHT, SIZE, EFFECT_AREA, DETECTION_AREA);
+        Settings.setYouRobotSetting(WIDTH, HEIGHT, SIZE, EFFECT_AREA, DETECTION_AREA);
 
         // Creation of a robot and player.
         RobotPlayer robot, robot2;

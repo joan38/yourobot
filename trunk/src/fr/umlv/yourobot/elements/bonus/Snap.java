@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.bonus;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import fr.umlv.yourobot.elements.robot.RobotIA;
@@ -20,7 +20,7 @@ public class Snap extends Bonus {
         super(typeElement, texture, durationOfBonusInSeconds, x, y);
 
         this.dynamicCircle = new CircleShape();
-        this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
+        this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;
 
         getFixtureDef().shape = dynamicCircle;
     }
@@ -32,8 +32,8 @@ public class Snap extends Bonus {
             return false; // End of the effect.
         }
 
-        AABB area = new AABB(new Vec2(getRobot().getX() - YouRobotSetting.getEffectArea(), getRobot().getY() - YouRobotSetting.getEffectArea()),
-                new Vec2(getRobot().getX() + YouRobotSetting.getEffectArea(), getRobot().getY() + YouRobotSetting.getEffectArea()));
+        AABB area = new AABB(new Vec2(getRobot().getX() - Settings.getEffectArea(), getRobot().getY() - Settings.getEffectArea()),
+                new Vec2(getRobot().getX() + Settings.getEffectArea(), getRobot().getY() + Settings.getEffectArea()));
 
         getRobot().getBody().getWorld().queryAABB(new QueryCallback() {
 
@@ -54,8 +54,8 @@ public class Snap extends Bonus {
                 }
                 
                 // Elements are attracted at the rear of the robot. (prevent blocking)
-                Vec2 rearOfRobot = fixture.getBody().getWorldCenter().sub(new Vec2((float)((YouRobotSetting.getSize() * 2) *  Math.cos(angle)), 
-                        (float)((YouRobotSetting.getSize() * 2) *  Math.sin(angle))));
+                Vec2 rearOfRobot = fixture.getBody().getWorldCenter().sub(new Vec2((float)((Settings.getSize() * 2) *  Math.cos(angle)), 
+                        (float)((Settings.getSize() * 2) *  Math.sin(angle))));
 
                 fixture.getBody().applyLinearImpulse(new Vec2((float) Math.cos(angle) * force, (float) Math.sin(angle) * force), rearOfRobot);
                 return true;

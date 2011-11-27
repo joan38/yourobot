@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.wall;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.image.BufferedImage;
@@ -19,7 +19,7 @@ public class Barres extends Element {
         getBodyDef().type = BodyType.STATIC; // A wall is dynamic.
 
         this.dynamicBox = new PolygonShape();
-        this.dynamicBox.setAsBox(YouRobotSetting.getSize() / 2.0f, YouRobotSetting.getSize() / 2.0f);
+        this.dynamicBox.setAsBox(Settings.getSize() / 2.0f, Settings.getSize() / 2.0f);
         
         getFixtureDef().shape = dynamicBox;
         getFixtureDef().density = 1.0f;

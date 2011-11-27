@@ -2,7 +2,7 @@ package fr.umlv.yourobot.context;
 
 import fr.umlv.yourobot.Manager;
 import fr.umlv.yourobot.YouRobot;
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.zen.*;
 
 import java.awt.Color;
@@ -10,6 +10,11 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /**
  * Manage the logic of the application.
@@ -148,7 +153,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
     public void render(Graphics2D gd) {
         // Drawing the background.
         gd.setColor(backColor);
-        gd.fillRect(0, 0, YouRobotSetting.getWidth(), YouRobotSetting.getHeight());
+        gd.fillRect(0, 0, Settings.getWidth(), Settings.getHeight());
 
         // Drawing the title.
         gd.setPaint(colorTitle);
@@ -166,12 +171,20 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
         // Drawing the menu.
         gd.setFont(menuFont);
         gd.setPaint(menuColor);
-        float y = YouRobotSetting.getHeight() / 2.5f;
+        float y = Settings.getHeight() / 2.5f;
 
 
         drawCenter(gd, drawMenuText("New Game", 0, getSelectedIndex()), y);
         y += 50;
         drawCenter(gd, drawMenuText("New Game - 2 Player", 1, getSelectedIndex()), y);
+        
+        AffineTransform textureTransformer = new AffineTransform();
+        textureTransformer.setToIdentity();
+        try {
+            gd.drawImage(ImageIO.read(new File("src/textures/controls.png")), new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR), 55, 350);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private static String drawMenuText(String str, int index, int selectedIndex) {
@@ -190,7 +203,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
      */
     private void drawCenter(Graphics2D gd, String txt, float y) {
         FontMetrics fm = gd.getFontMetrics();
-        float border = (YouRobotSetting.getWidth() - fm.stringWidth(txt)) / 2.0f;
+        float border = (Settings.getWidth() - fm.stringWidth(txt)) / 2.0f;
         gd.drawString(txt, border, y);
     }
 
@@ -226,7 +239,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
         public void render(Graphics2D gd) {
             // Drawing the background.
             gd.setColor(backColor);
-            gd.fillRect(0, 0, YouRobotSetting.getWidth(), YouRobotSetting.getHeight());
+            gd.fillRect(0, 0, Settings.getWidth(), Settings.getHeight());
 
             // Drawing the title.
             gd.setPaint(colorTitle);
@@ -243,7 +256,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
                 // Drawing menu.
                 gd.setFont(menuFont);
                 gd.setPaint(menuColor);
-                float y = YouRobotSetting.getHeight() / 2.5f;
+                float y = Settings.getHeight() / 2.5f;
                 drawCenter(gd, drawMenuText("RETRY", 0, getSelectedIndex()), y);
                 y += 60;
                 drawCenter(gd, drawMenuText("GO BACK TO MENU", 1, getSelectedIndex()), y);
@@ -256,7 +269,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
                 // Drawing menu.
                 gd.setFont(menuFont);
                 gd.setPaint(menuColor);
-                float y = YouRobotSetting.getHeight() / 2.5f;
+                float y = Settings.getHeight() / 2.5f;
                 drawCenter(gd, drawMenuText("NEXT LEVEL", 0, getSelectedIndex()), y);
                 y += 60;
                 drawCenter(gd, drawMenuText("GO BACK TO MENU", 1, getSelectedIndex()), y);
@@ -273,7 +286,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
         public void render(Graphics2D gd) {
             // Drawing the background.
             gd.setColor(backColor);
-            gd.fillRect(0, 0, YouRobotSetting.getWidth(), YouRobotSetting.getHeight());
+            gd.fillRect(0, 0, Settings.getWidth(), Settings.getHeight());
 
             // Drawing the title.
             gd.setPaint(colorTitle);
@@ -289,7 +302,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
             // Drawing menu.
             gd.setFont(menuFont);
             gd.setPaint(menuColor);
-            float y = YouRobotSetting.getHeight() / 2.0f;
+            float y = Settings.getHeight() / 2.0f;
             drawCenter(gd, "[ GO BACK TO MENU ]", y);
         }
 
@@ -321,7 +334,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
         public void render(Graphics2D gd) {
             // Drawing the background.
             gd.setColor(backColor);
-            gd.fillRect(0, 0, YouRobotSetting.getWidth(), YouRobotSetting.getHeight());
+            gd.fillRect(0, 0, Settings.getWidth(), Settings.getHeight());
 
             // Drawing the title.
             gd.setPaint(colorTitle);
@@ -339,7 +352,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
             // Drawing difficulties
             gd.setFont(menuFont);
             gd.setPaint(menuColor);
-            float y = YouRobotSetting.getHeight() / 3.0f;
+            float y = Settings.getHeight() / 3.0f;
 
             int i = 0;
             for (Manager.Difficuly d : Manager.Difficuly.values()) {

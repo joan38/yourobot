@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.robot;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import java.awt.Color;
 import java.awt.Font;
@@ -48,7 +48,7 @@ public class RobotPlayer extends Robot {
             gd.setPaint(Color.red);
         }
 
-        int x = (int) (this.getX() - YouRobotSetting.getSize());
+        int x = (int) (this.getX() - Settings.getSize());
         int y = (int) (this.getY());
         if (health < 0) {
             gd.drawString("0", x, y);

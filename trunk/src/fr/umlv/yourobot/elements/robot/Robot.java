@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements.robot;
 
-import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.Graphics2D;
@@ -28,7 +28,7 @@ public abstract class Robot extends Element {
         getBodyDef().type = BodyType.DYNAMIC; // A robot is dynamic.
 
         this.dynamicCircle = new CircleShape();
-        this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
+        this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;
 
         getFixtureDef().shape = dynamicCircle;
         getFixtureDef().density = 0.0001f;

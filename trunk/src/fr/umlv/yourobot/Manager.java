@@ -5,11 +5,6 @@ import fr.umlv.yourobot.context.Menu;
 import fr.umlv.yourobot.context.WorldSet;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.zen.*;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -79,7 +74,7 @@ public class Manager {
      * @param height Height of the window of the game.
      */
     public void run() {
-        Application.run("YouRobot", YouRobotSetting.getWidth(), YouRobotSetting.getHeight(), new MainManager());
+        Application.run("YouRobot", Settings.getWidth(), Settings.getHeight(), new MainManager());
     }
 
     /**
