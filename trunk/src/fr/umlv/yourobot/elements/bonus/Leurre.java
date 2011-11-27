@@ -107,7 +107,7 @@ public class Leurre extends Bonus {
             int y = (int) (this.getY());
 
             // Drawing the text.
-            gd.drawString(this.getTypeElement() + duration, x, y);
+            gd.drawString(duration, x, y);
         } else {
             int x = (int) (this.getX() + Settings.getSize());
             int y = (int) (this.getY());
