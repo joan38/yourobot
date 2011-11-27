@@ -23,11 +23,21 @@ import java.util.Random;
  */
 public abstract class Bonus extends Element {
 
-    Robot robot;
-    World world;
-    long bonusActivationDate;
+    private Robot robot;
+    private long bonusActivationDate;
     final Integer durationOfBonusInSeconds;
-    private boolean activated = false;
+    private BonusState state;
+
+    /**
+     * Current state of the bonus.
+     */
+    public enum BonusState {
+
+        Placed, // Placed on the world.
+        Grabbed, // Grabbed by a robot.
+        Activated, // Activated by a robot.
+        DisplayedButNotActive // The bonus is drawn on the world but not active.
+    }
 
     /**
      * A Bonus.
@@ -43,22 +53,9 @@ public abstract class Bonus extends Element {
         // A bonus do not rotate.
         getBodyDef().fixedRotation = true;
         this.durationOfBonusInSeconds = durationOfBonusInSeconds;
-    }
 
-    /**
-     * Associate the bonus with a world and a robot.
-     * Call automatically stepBonus to action the bonus.
-     * 
-     * @param robot Robot that activate the bonus.
-     * @param world World of the bonus.
-     */
-    public void activateBonus(Robot robot, World world) {
-        this.robot = robot;
-        this.world = world;
-        bonusActivationDate = Calendar.getInstance().getTimeInMillis();
-        activated = true;
-
-        stepBonus();
+        // A bonus is placed at the beggining.
+        this.state = BonusState.Placed;
     }
 
     /**
@@ -70,19 +67,122 @@ public abstract class Bonus extends Element {
      */
     public abstract boolean stepBonus();
 
+    /**
+     * Call this method when a robot is grabbing the bonus.
+     * Disable the box2d rendering and the rendering of the bonus.
+     * 
+     * Associate the bonus with a world and a robot.
+     * 
+     * @param robot Robot that activate the bonus.
+     * 
+     * @note The bonus is not removed from the world, just not visible. Do not forget to remove it when stepBonus return false.
+     */
+    public void grabBonus(Robot robot) {
+        this.robot = robot;
+
+        state = BonusState.Grabbed;
+        getBody().setActive(false);
+    }
+
+    /**
+     * Activate the bonus.
+     * 
+     * @note Call automatically stepBonus.
+     */
+    public void activateBonus() {
+        state = BonusState.Activated;
+        bonusActivationDate = Calendar.getInstance().getTimeInMillis();
+
+        stepBonus();
+    }
+
+    /**
+     * Get the current state of the bonus.
+     * 
+     * @return The state of the bonus.
+     */
+    public BonusState getState() {
+        return state;
+    }
+
+    /**
+     * Set the state of the bonus.
+     * 
+     * @note Protected because other objects must not change the state of a bonus.
+     */
+    protected void setState(BonusState state) {
+        this.state = state;
+    }
+
+    /**
+     * Returns the activation date of the bonus.
+     * 
+     * @return The activation date of the bonus.
+     */
+    protected long getBonusActivationDate() {
+        return bonusActivationDate;
+    }
+
+    /**
+     * Get the robot associated with the bonus.
+     * @return The robot associated.
+     */
+    protected Robot getRobot() {
+        return robot;
+    }
+    
+    // Rendering
+    //
     @Override
     public void render(Graphics2D gd) {
-        super.render(gd);
+        switch (state) {
+            case DisplayedButNotActive:
+            case Placed: // Bonus placed on the map, I display the texture.
+                super.render(gd);
+            case Activated: // Bonus activated on the map, I render the duration.
+                renderDuration(gd);
+            default:
+        }
+    }
 
-        // Render the duration.
+    @Override
+    protected void render(Graphics2D gd, BufferedImage texture) {
+        switch (state) {
+            case DisplayedButNotActive:
+            case Placed: // Bonus placed on the map, I display the texture.
+                super.render(gd, texture);
+            case Activated: // Bonus activated on the map, I render the duration.
+                renderDuration(gd);
+            default:
+        }
+    }
+
+    /**
+     * This method do a rendering and ignore the bonus logic. (Activated/Placed etc... It render !)
+     * 
+     * @param gd Graphic to draw on.
+     * @param texture The texture to draw.
+     * 
+     * @see render
+     */
+    protected void renderIgnoreBonusLogic(Graphics2D gd, BufferedImage texture) {
+        super.render(gd, texture);
+        renderDuration(gd);
+    }
+
+    /**
+     * Render the duration of the bonus.
+     * @param gd Graphics 2D to draw on.
+     */
+    protected void renderDuration(Graphics2D gd) {
         String duration = "";
         if (durationOfBonusInSeconds != 0) {
-            duration = " "+ durationOfBonusInSeconds.toString();
+            duration = " " + durationOfBonusInSeconds.toString();
         }
 
         gd.setFont(new Font("Arial", Font.BOLD, 12));
         gd.setPaint(Color.yellow.darker());
-        if (robot == null) {
+        if (state != BonusState.Activated) {
             int x = (int) (this.getX() + YouRobotSetting.getSize());
             int y = (int) (this.getY());
 
@@ -96,6 +196,8 @@ public abstract class Bonus extends Element {
         }
     }
 
+    // Factory
+    //
     /**
      * Get a new random bonus.
      * 
@@ -138,7 +240,10 @@ public abstract class Bonus extends Element {
                 break;
             default:
                 try {
-                    return new Leurre(typeElement, TextureLoader.loadTexture("src/textures/leurre.png", true), rand.nextInt(10) + 2,
+                    return new Leurre(typeElement, TextureLoader.loadTexture("src/textures/leurre.png", true),
+                            TextureLoader.loadTexture("src/textures/leurre_activated.png", true),
+                            TextureLoader.loadTexture("src/textures/leurre_before_activated.png", true),
+                            rand.nextInt(5) + 5,
                             rand.nextInt(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize(),
                             rand.nextInt(YouRobotSetting.getHeight() - (YouRobotSetting.getSize() * 2)) + YouRobotSetting.getSize());
                 } catch (IOException ex) {
@@ -149,12 +254,5 @@ public abstract class Bonus extends Element {
 
         // Should never happen.
         throw new IllegalStateException("This case must not happen. return null");
-    }
-
-    /**
-     * Returns true if the bonus has been activated.
-     */
-    public boolean isActivated() {
-        return activated;
     }
 }

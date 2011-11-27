@@ -118,8 +118,10 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             // Bonus iteration
             Iterator<Bonus> bonusIt = runningBonus.iterator();
             while (bonusIt.hasNext()) {
-                if ((bonusIt.next()).stepBonus() == false) { // If stepBonus return false, I must remove ended the bonus.
-                    bonusIt.remove();
+                Bonus b = bonusIt.next();
+                if (b.stepBonus() == false) { // If stepBonus return false, I must remove ended the bonus.
+                    world.removeElement(b); // Removing the bonus from the world.
+                    bonusIt.remove(); // Removing the bonus from the bonus list.
                 }
             }
             // RobotIA iteration
@@ -186,14 +188,14 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                             // If the player hold a bonus, I activate it.
                             if (playersBonus[i] != null) {
                                 // Activating the bonus.
-                                playersBonus[i].activateBonus(p.getRobot(), world);
+                                playersBonus[i].activateBonus();
                                 runningBonus.add(playersBonus[i]);
                                 // The player do not hold anymore a bonus.
                                 playersBonus[i] = null;
                             } else if (playersAvailableBonus[i] != null) {
-                                // If the player is on a bonus, I grab it, and remove it.
+                                // If the player is on a bonus, I grab it.
                                 playersBonus[i] = playersAvailableBonus[i];
-                                world.removeElement(playersBonus[i]);
+                                playersBonus[i].grabBonus(p.getRobot()); // I mark the bonus as grabbed.
                                 numberOfBonus--;
                             }
                             break;
@@ -229,9 +231,10 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         world.render(g2bi);
-        for (Bonus b : runningBonus) {
+        /*for (Bonus b : runningBonus) {
             b.render(g2bi);
-        }
+        }*/
+
         gd.drawImage(bi, 0, 0, null);
     }
 

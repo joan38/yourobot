@@ -26,25 +26,25 @@ public class Snap extends Bonus {
 
     @Override
     public boolean stepBonus() {
-        // BombeMagnetiqueEffect
-        if (((Calendar.getInstance().getTimeInMillis() - bonusActivationDate)) > durationOfBonusInSeconds * 1000) {
+        // SnapEffect
+        if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > durationOfBonusInSeconds * 1000) {
             return false; // End of the effect.
         }
 
-        AABB area = new AABB(new Vec2(robot.getX() - YouRobotSetting.getStride(), robot.getY() - YouRobotSetting.getStride()),
-                new Vec2(robot.getX() + YouRobotSetting.getStride(), robot.getY() + YouRobotSetting.getStride()));
+        AABB area = new AABB(new Vec2(getRobot().getX() - YouRobotSetting.getEffectArea(), getRobot().getY() - YouRobotSetting.getEffectArea()),
+                new Vec2(getRobot().getX() + YouRobotSetting.getEffectArea(), getRobot().getY() + YouRobotSetting.getEffectArea()));
 
-        world.getjbox2DWorld().queryAABB(new QueryCallback() {
+        getRobot().getBody().getWorld().queryAABB(new QueryCallback() {
 
             @Override
             public boolean reportFixture(Fixture fixture) {
                 Element e = (Element) fixture.getBody().getUserData();
-                if (e == null || e == robot) {
+                if (e == null || e == getRobot()) {
                     // Unknown element or the robot the throw the bomb, I do not do anything.
                     return true;
                 }
 
-                float angle = org.jbox2d.common.MathUtils.atan2(fixture.getBody().getPosition().y - robot.getBody().getPosition().y, fixture.getBody().getPosition().x - robot.getBody().getPosition().x);
+                float angle = org.jbox2d.common.MathUtils.atan2(fixture.getBody().getPosition().y - getRobot().getBody().getPosition().y, fixture.getBody().getPosition().x - getRobot().getBody().getPosition().x);
                 float force;
                 if (((Element) fixture.getBody().getUserData()).getTypeElement() == getTypeElement()) {
                     force = -1000.0f;

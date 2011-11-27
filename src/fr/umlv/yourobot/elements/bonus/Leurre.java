@@ -1,16 +1,13 @@
 package fr.umlv.yourobot.elements.bonus;
 
 import fr.umlv.yourobot.YouRobotSetting;
-import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.TypeElementBase;
-import fr.umlv.yourobot.elements.World;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import org.jbox2d.callbacks.QueryCallback;
-import org.jbox2d.collision.AABB;
+import java.util.Calendar;
 import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Fixture;
 
 /**
  * Represent a Leurre bonus.
@@ -21,47 +18,100 @@ import org.jbox2d.dynamics.Fixture;
  */
 public class Leurre extends Bonus {
 
+    private final BufferedImage activatedTexture;
+    private final BufferedImage beforeActivatedTexture;
     // JBox2D.
     private final CircleShape dynamicCircle;
 
-    public Leurre(TypeElementBase typeElement, BufferedImage texture, int durationOfBonusInSeconds, int x, int y) {
+    public Leurre(TypeElementBase typeElement, BufferedImage texture, BufferedImage activatedTexture, BufferedImage beforeActivatedTexture, int durationOfBonusInSeconds, int x, int y) {
         super(typeElement, texture, durationOfBonusInSeconds, x, y);
 
         this.dynamicCircle = new CircleShape();
         this.dynamicCircle.m_radius = (float) YouRobotSetting.getSize() / 2.0f;
 
         getFixtureDef().shape = dynamicCircle;
+
+        this.activatedTexture = activatedTexture;
+        this.beforeActivatedTexture = beforeActivatedTexture;
+    }
+
+    // I override activateBonus just to mark the bonus as not activated.
+    // Because when the bonus will be activated, the RobotIA will track this bonus.
+    @Override
+    public void activateBonus() {
+        super.activateBonus();
+        setState(BonusState.DisplayedButNotActive);
+
+        this.setX(getRobot().getX());
+        this.setY(getRobot().getY());
     }
 
     @Override
     public boolean stepBonus() {
-        // BombeMagnetiqueEffect
-        AABB area = new AABB(new Vec2(robot.getX() - YouRobotSetting.getStride(), robot.getY() - YouRobotSetting.getStride()),
-                new Vec2(robot.getX() + YouRobotSetting.getStride(), robot.getY() + YouRobotSetting.getStride()));
-
-        world.getjbox2DWorld().queryAABB(new QueryCallback() {
-
-            @Override
-            public boolean reportFixture(Fixture fixture) {
-                Element e = (Element) fixture.getBody().getUserData();
-                if (e == null || e == robot) {
-                    // Unknown element or the robot the throw the bomb, I do not do anything.
-                    return true;
-                }
-
-                float angle = org.jbox2d.common.MathUtils.atan2(fixture.getBody().getPosition().y - robot.getBody().getPosition().y, fixture.getBody().getPosition().x - robot.getBody().getPosition().x);
-                float force;
-                if (((Element) fixture.getBody().getUserData()).getTypeElement() == getTypeElement()) {
-                    force = 1000000.0f;
-                } else {
-                    force = 10000.0f;
-                }
-
-                fixture.getBody().applyLinearImpulse(new Vec2((float) Math.cos(angle) * force, (float) Math.sin(angle) * force), fixture.getBody().getWorldCenter());
-                return true;
+        // Leurre effect
+        if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > YouRobotSetting.getLeurreDurationBeforeActivation() * 1000) {
+            if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > durationOfBonusInSeconds * 1000 + YouRobotSetting.getLeurreDurationBeforeActivation() * 1000) {
+                return false; // End of the bonus.
             }
-        }, area);
+            if (getState() == BonusState.DisplayedButNotActive) {
+                // Re-activating the bonus in the physical world.
+                getBody().setActive(true);
+                setState(BonusState.Activated); // Activation of the bonus.
+            }
+            return true; // Activation of the bonus.
+        }
 
-        return false;
+        return true;
+    }
+
+    @Override
+    public void render(Graphics2D gd) {
+        switch (getState()) {
+            case Activated:
+                super.renderIgnoreBonusLogic(gd, activatedTexture);
+                break;
+            case DisplayedButNotActive:
+                super.renderIgnoreBonusLogic(gd, beforeActivatedTexture);
+                break;
+            default:
+                super.render(gd);
+        }
+    }
+
+    @Override
+    protected void renderDuration(Graphics2D gd) {
+        // Render the duration.
+        String duration = "";
+        Long durationToDisplay = 0l;
+        if (durationOfBonusInSeconds != 0) {
+            duration = " " + durationOfBonusInSeconds.toString();
+        }
+
+        gd.setFont(new Font("Arial", Font.BOLD, 12));
+        switch (getState()) {
+            default:
+                gd.setPaint(Color.yellow.darker());    
+                break;
+            case DisplayedButNotActive:
+                gd.setPaint(Color.red.darker());
+                durationToDisplay = YouRobotSetting.getLeurreDurationBeforeActivation() - Math.round((double) (Calendar.getInstance().getTimeInMillis() - getBonusActivationDate()) / 1000.0);
+                break;
+            case Activated:
+                gd.setPaint(Color.lightGray);
+                durationToDisplay = durationOfBonusInSeconds + YouRobotSetting.getLeurreDurationBeforeActivation() - Math.round((double) (Calendar.getInstance().getTimeInMillis() - getBonusActivationDate()) / 1000.0);
+                break;
+        }
+        
+        if (getRobot() == null) {
+            int x = (int) (this.getX() + YouRobotSetting.getSize());
+            int y = (int) (this.getY());
+
+            // Drawing the text.
+            gd.drawString(this.getTypeElement() + duration, x, y);
+        } else {
+            int x = (int) (this.getX() + YouRobotSetting.getSize());
+            int y = (int) (this.getY());
+            gd.drawString(durationToDisplay.toString(), x, y);
+        }
     }
 }
