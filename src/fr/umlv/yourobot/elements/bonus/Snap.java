@@ -3,6 +3,7 @@ package fr.umlv.yourobot.elements.bonus;
 import fr.umlv.yourobot.YouRobotSetting;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.TypeElementBase;
+import fr.umlv.yourobot.elements.robot.RobotIA;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
 import org.jbox2d.callbacks.QueryCallback;
@@ -39,7 +40,7 @@ public class Snap extends Bonus {
             @Override
             public boolean reportFixture(Fixture fixture) {
                 Element e = (Element) fixture.getBody().getUserData();
-                if (e == null || e == getRobot()) {
+                if (e == null || e == getRobot() || e instanceof RobotIA) {
                     // Unknown element or the robot the throw the bomb, I do not do anything.
                     return true;
                 }

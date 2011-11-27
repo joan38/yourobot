@@ -20,14 +20,15 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.Fixture;
 
 /**
- * Manage the logic of the application.
+ * Represent a World of elements.
  * 
  * @copyright GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public class World {
+public class World{
 
+    private final String name;
     private Area[] areas;
     private final LinkedList<Element> elements; // Elements of the game.
     private BufferedImage backgroundPattern;
@@ -41,13 +42,15 @@ public class World {
     /**
      * Empty world.
      * 
+     * @param name Name of the world.
      * @param backgroundPattern Texture pattern for the background.
      * @param area area[0] = endArea, area[1] = startArea Player 1, area[2] = startArea Player 2.
      */
-    public World(BufferedImage backgroundPattern, Area[] areas) {
+    public World(String name, BufferedImage backgroundPattern, Area[] areas) {
         Objects.requireNonNull(backgroundPattern);
         Objects.requireNonNull(areas);
 
+        this.name = name;
         this.elements = new LinkedList<Element>();
         this.backgroundPattern = backgroundPattern;
 
@@ -60,11 +63,11 @@ public class World {
         this.jWorld = new org.jbox2d.dynamics.World(new Vec2(0.0f, 0.0f), true);
         this.jWorld.setContinuousPhysics(true);
         this.jGroundBodyDef = new BodyDef();
-        jGroundBodyDef.position.set(0.0f, -10.0f);
+        this.jGroundBodyDef.position.set(0.0f, -10.0f);
         this.jGroundBody = jWorld.createBody(jGroundBodyDef);
         this.jGroundBox = new PolygonShape();
-        jGroundBox.setAsBox(50.0f, 10.0f);
-        jGroundBody.createFixture(jGroundBox, 0.0f);
+        this.jGroundBox.setAsBox(50.0f, 10.0f);
+        this.jGroundBody.createFixture(jGroundBox, 0.0f);
 
         // Registering areas in Jbox2d
         for (Area a : areas) {
@@ -223,5 +226,10 @@ public class World {
         }, new AABB(new Vec2(x - (width / 2), y - (height / 2)), new Vec2(x + (width / 2), y + (height / 2))));
 
         return isOverlapping[0];
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

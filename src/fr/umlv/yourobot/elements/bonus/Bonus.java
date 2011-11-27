@@ -5,7 +5,6 @@ import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.TypeElementBase;
-import fr.umlv.yourobot.elements.World;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;

@@ -1,6 +1,6 @@
 package fr.umlv.yourobot;
 
-import fr.umlv.yourobot.elements.robot.Robot;
+import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import fr.umlv.zen.KeyboardKey;
 import java.util.EnumMap;
 import java.util.Objects;
@@ -14,11 +14,11 @@ import java.util.Objects;
  */
 public class Player {
 
-    private Robot robot;
+    private RobotPlayer robot;
     private EnumMap<RobotKeyAction, KeyboardKey> controls = new EnumMap<RobotKeyAction, KeyboardKey>(RobotKeyAction.class);
     private EnumMap<KeyboardKey, RobotKeyAction> controls_inverted;
 
-    public Player(Robot robot) {
+    public Player(RobotPlayer robot) {
         this.robot = robot;
 
         // Default controls.
@@ -52,13 +52,13 @@ public class Player {
      * 
      * @param robot Robot to set.
      */
-    public void setRobot(Robot robot) {
+    public void setRobot(RobotPlayer robot) {
         Objects.requireNonNull(robot);
 
         this.robot = robot;
     }
 
-    public Robot getRobot() {
+    public RobotPlayer getRobot() {
         return robot;
     }
 

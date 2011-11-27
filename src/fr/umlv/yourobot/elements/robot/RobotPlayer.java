@@ -50,7 +50,11 @@ public class RobotPlayer extends Robot {
 
         int x = (int) (this.getX() - YouRobotSetting.getSize());
         int y = (int) (this.getY());
-        gd.drawString(health.toString(), x, y);
+        if (health < 0) {
+            gd.drawString("0", x, y);
+        } else {
+            gd.drawString(health.toString(), x, y);
+        }
 
     }
 
@@ -61,5 +65,12 @@ public class RobotPlayer extends Robot {
      */
     public void applyDamage(int damage) {
         health -= damage;
+    }
+
+    /**
+     * Reset the entire life of the robot.
+     */
+    public void resetRobot() {
+        health = 100;
     }
 }

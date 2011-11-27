@@ -10,6 +10,7 @@ import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.BombeMagnetique;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.YouRobotSetting;
+import fr.umlv.yourobot.context.WorldSet;
 import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.robot.RobotIA;
 import java.awt.Color;
@@ -25,6 +26,45 @@ import java.util.Random;
  */
 public class SampleWorldFactory {
 
+    public static WorldSet getWorldSet1() {
+        return new WorldSet() {
+
+            private int index = -1;
+            private final int numberOfWorlds = 2;
+
+            private World getWorld(int i) {
+                switch (i) {
+                    case 0: // level 0
+                        return SampleWorldFactory.getDummyWorldLevel1();
+                    case 1: // level 1
+                        return SampleWorldFactory.getRandomDummyWorld();
+                }
+                return null;
+            }
+
+            @Override
+            public World getNextWorld() {
+                index++;
+                return getWorld(index);
+            }
+
+            @Override
+            public World getReplayWorld() {
+                return getWorld(index);
+            }
+
+            @Override
+            public boolean hasMoreWorld() {
+                return !(index + 1 >= numberOfWorlds);
+            }
+
+            @Override
+            public void newGame() {
+                index = -1;
+            }
+        };
+    }
+
     /**
      * Generate a sample world.
      */
@@ -37,7 +77,7 @@ public class SampleWorldFactory {
             areas[2] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 8, Color.blue); // StartArea P2
 
 
-            World w = new World(TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
+            World w = new World("Random World", TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
 
             World.fillBorder(w, "src/textures/tube_texture.png");
             // Adding elements to this world.
@@ -100,7 +140,7 @@ public class SampleWorldFactory {
             areas[2] = new SimpleArea(YouRobotSetting.getSize() + 40, YouRobotSetting.getHeight() / 2 + 40, Color.blue); // StartArea P2
             areas[0] = new SimpleArea(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() + 50), YouRobotSetting.getHeight() / 2, Color.GREEN); // EndArea
 
-            World w = new World(TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
+            World w = new World("Level 1", TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
             World.fillBorder(w, "src/textures/tube_texture.png");
 
             // Adding elements to this world.
@@ -115,7 +155,7 @@ public class SampleWorldFactory {
             // Adding a IA Robot to the world.
             RobotIA r = new RobotIA(TextureLoader.loadTexture("src/textures/robot_enemie.png", true),
                     160, 200);
-             w.addRobotIA(r);
+            w.addRobotIA(r);
 
             return w;
         } catch (IOException ex) {
