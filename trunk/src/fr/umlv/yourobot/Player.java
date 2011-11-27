@@ -23,8 +23,7 @@ public class Player {
 
         // Default controls.
         controls.put(RobotKeyAction.Take, KeyboardKey.A);
-        controls.put(RobotKeyAction.Boost, KeyboardKey.F);
-        controls.put(RobotKeyAction.Brake, KeyboardKey.S);
+        controls.put(RobotKeyAction.Boost, KeyboardKey.Z);
         controls.put(RobotKeyAction.Turn_Left, KeyboardKey.Q);
         controls.put(RobotKeyAction.Turn_Right, KeyboardKey.D);
     }
