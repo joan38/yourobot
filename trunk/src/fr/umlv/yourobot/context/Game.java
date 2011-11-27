@@ -14,7 +14,6 @@ import fr.umlv.zen.*;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -57,18 +56,25 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     // IA Robot.
     //
     private final float robotIAPower;
+    // Victory.
+    //
+    private int victoriousPlayer = 0; // 0 -> no Victory.
 
     /**
      * Represent a game.
      * 
      * @param world World on the game will be played.
-     * @param players Players of the games. (Set plauer[1] to null for single plauer)
+     * @param players Players of the games. (Set plauer[1] to null for single player. Must be an array of 2 elements.)
      * @param numberOfBonus Number of simultaneous bonus on the map.
      * @param delayBeforeCreateABonus Delay between the creation of a bonus.
      */
     public Game(World world, Player[] players, int numberOfBonus, int delayBeforeCreateABonus, float robotIAPower) {
-        //Objects.requireNonNull(players[0]);
+        Objects.requireNonNull(players);
         Objects.requireNonNull(world);
+
+        if (players.length != 2) {
+            throw new IllegalArgumentException("Invalid players array. Lenght != 2");
+        }
 
         this.world = world;
         this.players = players;
@@ -76,7 +82,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         this.bi = new BufferedImage(YouRobotSetting.getWidth(), YouRobotSetting.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         this.world.addElement(players[0].getRobot());
-        if (players[1] != null) {
+        if (players.length > 1 && players[1] != null) {
             this.world.addElement(players[1].getRobot());
         }
 
@@ -90,6 +96,16 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
         // Power of RobotIA.
         this.robotIAPower = robotIAPower;
+
+        // Placing robots inside areas.
+        for (int i = 0; i < 2; i++) {
+            Player p = players[i];
+            if (p != null) {
+                p.getRobot().resetRobot();
+                p.getRobot().setX(world.getAreas()[i + 1].getX());
+                p.getRobot().setY(world.getAreas()[i + 1].getY());
+            }
+        }
     }
 
     /**
@@ -104,7 +120,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         final int velocityIteration = 6;
         final int positioniteration = 2;
 
-        // Drawing the menu.
+        // Drawing the game.
         context.render(this);
 
         // Managing the menu.
@@ -114,8 +130,8 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             while (bonusIt.hasNext()) {
                 Bonus b = bonusIt.next();
                 if (b.stepBonus() == false) { // If stepBonus return false, I must remove ended the bonus.
-                    world.removeElement(b); // Removing the bonus from the world.
                     bonusIt.remove(); // Removing the bonus from the bonus list.
+                    world.removeElement(b); // Removing the bonus from the world.
                 }
             }
             // RobotIA iteration
@@ -139,6 +155,12 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             // JBox2D Iteration.
             world.getjbox2DWorld().step(timeStep, velocityIteration, positioniteration);
             context.render(this);
+
+            // Victory !
+            if (victoriousPlayer != 0) {
+                return; // A player have won.
+            }
+
             // A little sleep.
             try {
                 Thread.sleep(10);
@@ -159,12 +181,13 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             }
 
             // Managing player keybindings.
+            boolean atLeastOnePlayerIsAlive = false;
             for (int i = 0; i < 2; i++) {
                 Player p = players[i];
-
-                if (p == null) {
+                if (p == null || p.getRobot().isDead()) {
                     continue;
                 }
+                atLeastOnePlayerIsAlive = true;
 
                 RobotKeyAction action = p.getKeyBinding(event.getKey());
                 if (action != null) { // if null, the key is not associated to an action.
@@ -204,13 +227,19 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                     }
                 }
             }
-
-            switch (event.getKey()) {
-                case W:
-                    System.out.println("Fin du jeu.");
-                    return;
+            // Managing victory or death of all players.
+            if (atLeastOnePlayerIsAlive == false) {
+                return; // Everybody is dead.
             }
         }
+    }
+
+    /**
+     * Get the victorious player.
+     * @return 0: No win, 1: player 1 win, 2: player 2 win.
+     */
+    public int getVictoriousPlayer() {
+        return victoriousPlayer;
     }
 
     /**
@@ -297,7 +326,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             }
 
             // Collision of a robot with a bonus.
-            if ((bodyA.getUserData() instanceof Robot || bodyB.getUserData() instanceof RobotPlayer)
+            if ((bodyA.getUserData() instanceof Robot || bodyB.getUserData() instanceof Robot)
                     && (bodyA.getUserData() instanceof Bonus || bodyB.getUserData() instanceof Bonus)) {
                 contact.setEnabled(false); // Ignoring the contact.
                 return;
@@ -311,7 +340,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 // Checking if there is a victory.
                 if (bodyA.getUserData() == world.getAreas()[0] || bodyB.getUserData() == world.getAreas()[0]) {
                     // Victory area. Is it an human robot that touched the element ?
-                    
+
                     RobotPlayer robotPlayer = null;
                     if (bodyA.getUserData() instanceof RobotPlayer) {
                         robotPlayer = (RobotPlayer) bodyA.getUserData();
@@ -322,7 +351,8 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                     if (robotPlayer != null) {
                         // It is an human robot.
                         // Setting the victory.
-                        System.out.println("Victory of Player " + (bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1));
+                        victoriousPlayer = (bodyB.getUserData().equals(players[0].getRobot()) ? 1 : 2);
+                        return;
                     }
                 }
                 return;

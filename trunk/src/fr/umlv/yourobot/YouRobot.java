@@ -35,13 +35,8 @@ public class YouRobot {
         // Setting YouRobot settings.
         YouRobotSetting.setYouRobotSetting(WIDTH, HEIGHT, SIZE, EFFECT_AREA, DETECTION_AREA);
 
-        // Creation of a dummy world.
-        World[] worldList = new World[1];
-        World dummyWorld = SampleWorldFactory.getDummyWorldLevel1();
-        worldList[0] = dummyWorld;
-
         // Creation of a robot and player.
-        Robot robot, robot2;
+        RobotPlayer robot, robot2;
         try {
             robot = new RobotPlayer(50, TextureLoader.loadTexture("src/textures/robot_human_normal.png", true),
                     TextureLoader.loadTexture("src/textures/robot_human_boost.png", true),
@@ -64,7 +59,7 @@ public class YouRobot {
         players[1].setKeyBinding(RobotKeyAction.Turn_Right, KeyboardKey.RIGHT);
         players[1].setKeyBinding(RobotKeyAction.Brake, KeyboardKey.DOWN);
         
-        Manager manager = new Manager(worldList, players);  // Launching the application manager.
+        Manager manager = new Manager(SampleWorldFactory.getWorldSet1(), players);  // Launching the application manager.
         manager.run();
     }
 }
