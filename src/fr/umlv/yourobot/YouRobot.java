@@ -36,7 +36,7 @@ public class YouRobot {
 
         // Creation of a dummy world.
         World[] worldList = new World[1];
-        World dummyWorld = SampleWorldFactory.getDummyWorld1();
+        World dummyWorld = SampleWorldFactory.getRandomDummyWorld();
         worldList[0] = dummyWorld;
 
         // Creation of a robot and player.

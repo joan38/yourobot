@@ -27,7 +27,34 @@ public class SampleWorldFactory {
     /**
      * Generate a sample world.
      */
-    public static World getDummyWorld1() {
+    public static World getRandomDummyWorld() {
+        // Creation of a dummy world.
+        try {
+            Area[] areas = new Area[3];
+            areas[1] = new SimpleArea(YouRobotSetting.getSize() + 40, YouRobotSetting.getHeight() / 2 - 40, Color.blue); // StartArea P1
+            areas[2] = new SimpleArea(YouRobotSetting.getSize() + 40, YouRobotSetting.getHeight() / 2 + 40, Color.blue); // StartArea P2
+            areas[0] = new SimpleArea(YouRobotSetting.getWidth() - (YouRobotSetting.getSize() + 50), YouRobotSetting.getHeight() / 2, Color.GREEN); // EndArea
+
+            World w = new World(TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
+            World.fillBorder(w, "src/textures/tube_texture.png");
+
+            // Adding elements to this world.
+            for (int i = YouRobotSetting.getSize() + 110; i < 690; i += YouRobotSetting.getSize()) {
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, YouRobotSetting.getHeight() / 2 - 70));
+            }
+            
+            for (int i = YouRobotSetting.getSize() + 110; i < 690; i += YouRobotSetting.getSize()) {
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, YouRobotSetting.getHeight() / 2 + 70));
+            }
+            
+            return w;
+        } catch (IOException ex) {
+            System.err.println("Texture not found. " + ex.getMessage());
+            return null;
+        }
+    }
+    
+    public static World getDummyWorldLevel1() {
         // Creation of a dummy world.
         try {
             Area[] areas = new Area[3];
@@ -35,9 +62,9 @@ public class SampleWorldFactory {
             areas[1] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 3, Color.yellow); // StartArea P1
             areas[2] = new SimpleArea(YouRobotSetting.getSize() * 3, YouRobotSetting.getSize() * 8, Color.blue); // StartArea P2
 
-
+            
             World w = new World(TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
-
+            
             World.fillBorder(w, "src/textures/tube_texture.png");
             // Adding elements to this world.
             //w.addElement(new Wall(TypeElementBase.Ice, TextureLoader.loadTexture("src/textures/texture-glace.jpg"), 0, 0));
@@ -69,15 +96,15 @@ public class SampleWorldFactory {
                 } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
-
+                
             }
-
+            
             Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 90, 90);
             w.addElement(b);
             
-            b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true),2, 120, 120);
+            b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 2, 120, 120);
             w.addElement(b);
-
+            
             return w;
         } catch (IOException ex) {
             System.err.println("Texture not found. " + ex.getMessage());
