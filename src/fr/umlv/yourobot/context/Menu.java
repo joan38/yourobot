@@ -4,7 +4,6 @@ import fr.umlv.yourobot.Manager;
 import fr.umlv.yourobot.YouRobot;
 import fr.umlv.yourobot.Settings;
 import fr.umlv.zen.*;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -12,7 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
@@ -177,13 +175,13 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
         drawCenter(gd, drawMenuText("New Game", 0, getSelectedIndex()), y);
         y += 50;
         drawCenter(gd, drawMenuText("New Game - 2 Player", 1, getSelectedIndex()), y);
-        
+
         AffineTransform textureTransformer = new AffineTransform();
         textureTransformer.setToIdentity();
         try {
-            gd.drawImage(ImageIO.read(new File("src/textures/controls.png")), new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR), 55, 350);
+            gd.drawImage(ImageIO.read(YouRobot.class.getResource("/textures/controls.png")), new AffineTransformOp(textureTransformer, AffineTransformOp.TYPE_BILINEAR), 55, 350);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println("Texture not found. " + ex.getMessage());
         }
     }
 

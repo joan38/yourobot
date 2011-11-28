@@ -20,8 +20,6 @@ public class Manager {
     private final Player[] players;
     private Game renderGame;
     private final Menu renderMenu;
-    //private final ApplicationRenderCode renderPauseMenu; TODO
-    private CurrentRenderer currentRenderer;
 
     /**
      * Tell which renderer is currently displayed.
@@ -64,7 +62,6 @@ public class Manager {
         this.players = players;
 
         renderMenu = new Menu(this);
-        // TODO init of the pause menu.
     }
 
     /**
@@ -106,9 +103,6 @@ public class Manager {
 
         @Override
         public void run(ApplicationContext context) {
-            // Hello, setting the renderer the menu.
-            currentRenderer = CurrentRenderer.Menu;
-
             // Drawing the menu.
             context.render(renderMenu);
 

@@ -221,32 +221,32 @@ public abstract class Bonus extends Element {
         switch (rand.nextInt(3)) {
             case 0:
                 try {
-                    return new BombeMagnetique(typeElement, TextureLoader.loadTexture("src/textures/bomb.png", true),
+                    return new BombeMagnetique(typeElement, TextureLoader.loadTexture(Bonus.class.getResource("/textures/bomb.png"), true),
                             rand.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
                             rand.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } catch (IOException ex) {
-                    System.err.println("Error while loading texture : src/textures/bomb.png");
+                    System.err.println("Error while loading texture : /textures/bomb.png");
                 }
                 break;
             case 1:
                 try {
-                    return new Snap(typeElement, TextureLoader.loadTexture("src/textures/snap.png", true), rand.nextInt(4) + 1,
+                    return new Snap(typeElement, TextureLoader.loadTexture(Bonus.class.getResource("/textures/snap.png"), true), rand.nextInt(4) + 1,
                             rand.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
                             rand.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } catch (IOException ex) {
-                    System.err.println("Error while loading texture : src/textures/bomb.png");
+                    System.err.println("Error while loading texture : /textures/bomb.png");
                 }
                 break;
             default:
                 try {
-                    return new Leurre(typeElement, TextureLoader.loadTexture("src/textures/leurre.png", true),
-                            TextureLoader.loadTexture("src/textures/leurre_activated.png", true),
-                            TextureLoader.loadTexture("src/textures/leurre_before_activated.png", true),
+                    return new Leurre(typeElement, TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre.png"), true),
+                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_activated.png"), true),
+                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_before_activated.png"), true),
                             rand.nextInt(5) + 5,
                             rand.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
                             rand.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } catch (IOException ex) {
-                    System.err.println("Error while loading texture : src/textures/bomb.png");
+                    System.err.println("Error while loading texture : /textures/bomb.png");
                 }
                 break;
         }

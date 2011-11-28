@@ -5,8 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 
@@ -19,7 +19,7 @@ import javax.imageio.ImageIO;
  */
 public class TextureLoader {
 
-    private static HashMap<String, BufferedImage> textures = new HashMap<String, BufferedImage>();
+    private static HashMap<URL, BufferedImage> textures = new HashMap<URL, BufferedImage>();
 
     /**
      * Load the texture path. If the texture has been previously loaded, then the
@@ -32,12 +32,12 @@ public class TextureLoader {
      * 
      * @return The image of the texture.
      */
-    public static BufferedImage loadTexture(String path, boolean scaleDown) throws IOException {
+    public static BufferedImage loadTexture(URL path, boolean scaleDown) throws IOException {
         if (textures.containsKey(path)) {
             return textures.get(path);
         }
 
-        BufferedImage texture = ImageIO.read(new File(path));
+        BufferedImage texture = ImageIO.read(path);
         if (texture.getWidth() != texture.getHeight()) {
             throw new IOException("Invalid texture format. The texture is not a square.");
         }
