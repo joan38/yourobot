@@ -8,6 +8,7 @@ import fr.umlv.yourobot.elements.robot.RobotIA;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -169,7 +170,7 @@ public class World{
      * @param w World to fill.
      * @param texturePath Path of the texture to use.
      */
-    public static void fillBorder(World w, String texturePath) throws IOException {
+    public static void fillBorder(World w, URL texturePath) throws IOException {
         BufferedImage tubeTexture = TextureLoader.loadTexture(texturePath, true);
 
         // Vertical.

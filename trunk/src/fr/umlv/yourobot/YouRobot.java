@@ -36,27 +36,27 @@ public class YouRobot {
         // Creation of a robot and player.
         RobotPlayer robot, robot2;
         try {
-            robot = new RobotPlayer(50, TextureLoader.loadTexture("src/textures/robot_human_normal.png", true),
-                    TextureLoader.loadTexture("src/textures/robot_human_boost.png", true),
-                    TextureLoader.loadTexture("src/textures/robot_human_brake.png", true), 50, 50);
-            robot2 = new RobotPlayer(50, TextureLoader.loadTexture("src/textures/robot_human_normal_2.png", true),
-                    TextureLoader.loadTexture("src/textures/robot_human_boost_2.png", true),
-                    TextureLoader.loadTexture("src/textures/robot_human_brake_2.png", true), 100, 100);
+            robot = new RobotPlayer(50, TextureLoader.loadTexture(YouRobot.class.getResource("/textures/robot_human_normal.png"), true),
+                    TextureLoader.loadTexture(YouRobot.class.getResource("/textures/robot_human_boost.png"), true),
+                    TextureLoader.loadTexture(YouRobot.class.getResource("/textures/robot_human_brake.png"), true), 50, 50);
+            robot2 = new RobotPlayer(50, TextureLoader.loadTexture(YouRobot.class.getResource("/textures/robot_human_normal_2.png"), true),
+                    TextureLoader.loadTexture(YouRobot.class.getResource("/textures/robot_human_boost_2.png"), true),
+                    TextureLoader.loadTexture(YouRobot.class.getResource("/textures/robot_human_brake_2.png"), true), 100, 100);
         } catch (IOException ex) {
-            System.out.println(ex);
+            System.out.println("Can't load textures. " + ex);
             return;
         }
-        
+
         Player[] players = new Player[2];
         players[0] = new Player(robot);
         players[1] = new Player(robot2);
-        
+
         // Setting the default key of second player.
         players[1].setKeyBinding(RobotKeyAction.Boost, KeyboardKey.UP);
         players[1].setKeyBinding(RobotKeyAction.Take, KeyboardKey.SHIFT);
         players[1].setKeyBinding(RobotKeyAction.Turn_Left, KeyboardKey.LEFT);
         players[1].setKeyBinding(RobotKeyAction.Turn_Right, KeyboardKey.RIGHT);
-        
+
         Manager manager = new Manager(SampleWorldFactory.getWorldSet1(), players);  // Launching the application manager.
         manager.run();
     }

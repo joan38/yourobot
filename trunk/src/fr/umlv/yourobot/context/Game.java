@@ -10,7 +10,6 @@ import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.robot.RobotIA;
 import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import fr.umlv.zen.*;
-
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -163,6 +162,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException ex) {
+                throw new IllegalStateException("Unexpected thread interruption", ex);
             }
 
             // Managing keyboard.

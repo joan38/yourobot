@@ -77,34 +77,34 @@ public class SampleWorldFactory {
             areas[2] = new SimpleArea(Settings.getSize() * 3, Settings.getSize() * 8, Color.blue); // StartArea P2
 
 
-            World w = new World("Random World", TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
+            World w = new World("Random World", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
 
-            World.fillBorder(w, "src/textures/tube_texture.png");
+            World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
             // Adding elements to this world.
-            //w.addElement(new Wall(TypeElementBase.Ice, TextureLoader.loadTexture("src/textures/texture-glace.jpg"), 0, 0));
-            //w.addElement(new Wall(TypeElementBase.Wood, TextureLoader.loadTexture("src/textures/texture-bois-bleu.jpg"), 50, 50));
-            //Element e = new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg"), 100, 100);
+            //w.addElement(new Wall(TypeElementBase.Ice, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-glace.jpg"), true), 0, 0));
+            //w.addElement(new Wall(TypeElementBase.Wood, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-bois-bleu.jpg"), true), 50, 50));
+            //Element e = new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), 100, 100);
             Element e;
 
             // Generating 15 random walls.
             Random random = new Random(); // Seed set to prevent random :)
             for (int i = 0; i < 3; i++) {
                 do {
-                    e = new Wall(TypeElementBase.Ice, TextureLoader.loadTexture("src/textures/texture-glace.jpg", true),
+                    e = new Wall(TypeElementBase.Ice, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-glace.jpg"), true),
                             random.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
                             random.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
                 do {
-                    e = new Wall(TypeElementBase.Wood, TextureLoader.loadTexture("src/textures/texture-bois-bleu.jpg", true),
+                    e = new Wall(TypeElementBase.Wood, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-bois-bleu.jpg"), true),
                             random.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
                             random.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
                 //e.setOrientation(random.nextInt(360));
                 w.addElement(e);
                 do {
-                    e = new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true),
+                    e = new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true),
                             random.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
                             random.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } while (w.isOverlap(e.getX(), e.getY(), e.getTexture().getWidth(), e.getTexture().getHeight()));
@@ -113,14 +113,14 @@ public class SampleWorldFactory {
 
             }
 
-            Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 90, 90);
+            Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/bomb.png"), true), 90, 90);
             w.addElement(b);
 
-            b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/bomb.png", true), 2, 120, 120);
+            b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/bomb.png"), true), 2, 120, 120);
             w.addElement(b);
 
             // Adding a IA Robot to the world.
-            RobotIA r = new RobotIA(TextureLoader.loadTexture("src/textures/robot_enemie.png", true),
+            RobotIA r = new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
                     160, 200);
             w.addRobotIA(r);
 
@@ -140,20 +140,20 @@ public class SampleWorldFactory {
             areas[2] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 + 40, Color.blue); // StartArea P2
             areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2, Color.GREEN); // EndArea
 
-            World w = new World("Level 1", TextureLoader.loadTexture("src/textures/metal_floor.jpg", false), areas);
-            World.fillBorder(w, "src/textures/tube_texture.png");
+            World w = new World("Level 1", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
+            World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
             // Adding elements to this world.
             for (int i = Settings.getSize() + 110; i < 690; i += Settings.getSize()) {
-                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, Settings.getHeight() / 2 - 70));
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), i, Settings.getHeight() / 2 - 70));
             }
 
             for (int i = Settings.getSize() + 110; i < 690; i += Settings.getSize()) {
-                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture("src/textures/texture-brique-blanche.jpg", true), i, Settings.getHeight() / 2 + 70));
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), i, Settings.getHeight() / 2 + 70));
             }
 
             // Adding a IA Robot to the world.
-            RobotIA r = new RobotIA(TextureLoader.loadTexture("src/textures/robot_enemie.png", true),
+            RobotIA r = new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
                     160, 200);
             w.addRobotIA(r);
 
