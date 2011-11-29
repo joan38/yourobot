@@ -23,6 +23,16 @@ public class Leurre extends Bonus {
     // JBox2D.
     private final CircleShape dynamicCircle;
 
+    /**
+     * Create a BombeMagnetique.
+     * @param typeElement Type of the bomb.
+     * @param texture Texture to use.
+     * @param activatedTexture Texture to use when the leurre is active.
+     * @param beforeActivatedTexture Texture to use before the leurre is active.
+     * @param durationOfBonusInSeconds Duration of the leurre.
+     * @param x X position of the bonus.
+     * @param y Y position of the bonus.
+     */
     public Leurre(TypeElementBase typeElement, BufferedImage texture, BufferedImage activatedTexture, BufferedImage beforeActivatedTexture, int durationOfBonusInSeconds, int x, int y) {
         super(typeElement, texture, durationOfBonusInSeconds, x, y);
 

@@ -21,8 +21,14 @@ public class SimpleArea extends Area {
     // JBox2D.
     private final CircleShape dynamicCircle;
 
+    /**
+     * Create a simple area.
+     * @param x X position of the area.
+     * @param y Y position of the area.
+     * @param color Color of the area.
+     */
     public SimpleArea(int x, int y, Color color) {
-        super(TypeElementBase.Unasigned, null, x, y);
+        super(null, x, y);
 
         this.color = color;
 

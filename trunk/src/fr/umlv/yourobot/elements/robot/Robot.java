@@ -9,6 +9,13 @@ import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
+/**
+ * Represent a Robot.
+ * 
+ * @copyright GNU Public license v3.
+ * @author Damien Girard <dgirard@nativesoft.fr>
+ * @author Joan Goyeau <joan.goyeau@gmail.com>
+ */
 public abstract class Robot extends Element {
 
     private boolean isBoosting = false;
@@ -18,6 +25,15 @@ public abstract class Robot extends Element {
     // JBox2D.
     private final CircleShape dynamicCircle;
 
+    
+    /**
+     * Create a robot.
+     * @param texture Standard texture to use.
+     * @param textureBoost Texture to use when the robot is boosting.
+     * @param textureBrake Texture to use when the robot is braking.
+     * @param x X position of the robot.
+     * @param y Y position of the robot.
+     */
     public Robot(BufferedImage texture, BufferedImage textureBoost, BufferedImage textureBrake, int x, int y) {
         super(TypeElementBase.Robot, texture, x, y);
 
@@ -56,10 +72,18 @@ public abstract class Robot extends Element {
         }
     }
 
+    /**
+     * Does the robot is boosting ?
+     * @return True or false.
+     */
     public boolean isIsBoosting() {
         return isBoosting;
     }
 
+    /**
+     * Set the boost of the robot.
+     * @param isBoosting true to boost, false to stop.
+     */
     public void setIsBoosting(boolean isBoosting) {
         this.isBoosting = isBoosting;
         if (isBoosting == true && getBody() != null) {
@@ -70,19 +94,35 @@ public abstract class Robot extends Element {
             getBody().applyForce(new Vec2(forceX, forceY), getBody().getWorldCenter());
         }
     }
-
+    
+    /**
+     * Is the robot braking ?
+     * @return true if braking, false otherwise.
+     */
     public boolean isIsBraking() {
         return isBraking;
     }
 
+    /**
+     * Set the robot braking.
+     * @param isBraking true or false.
+     * 
+     * @note Unused in version 0.1.
+     */
     public void setIsBraking(boolean isBraking) {
         this.isBraking = isBraking;
     }
 
+    /**
+     * Turns the robot left.
+     */
     public void turnLeft() {
         getBody().setAngularVelocity(-6.0f);
     }
 
+    /**
+     * Turns the robot right.
+     */
     public void turnRight() {
         getBody().setAngularVelocity(6.0f);
     }

@@ -32,10 +32,14 @@ public abstract class Bonus extends Element {
      */
     public enum BonusState {
 
-        Placed, // Placed on the world.
-        Grabbed, // Grabbed by a robot.
-        Activated, // Activated by a robot.
-        DisplayedButNotActive // The bonus is drawn on the world but not active.
+        /** Placed on the world. */
+        Placed, 
+        /** Grabbed by a robot. */
+        Grabbed,
+        /** Activated by a robot. */
+        Activated,
+        /** The bonus is drawn on the world but not active. */
+        DisplayedButNotActive
     }
 
     /**
@@ -43,6 +47,7 @@ public abstract class Bonus extends Element {
      * 
      * @param typeElement Type of the element.
      * @param texture Texture of the bonus.
+     * @param durationOfBonusInSeconds Duration of the bonus.
      * @param x Initial x position of the bonus.
      * @param y Initial y position of the bonus.
      */
@@ -106,6 +111,8 @@ public abstract class Bonus extends Element {
 
     /**
      * Set the state of the bonus.
+     * 
+     * @param state State of the bonus.
      * 
      * @note Protected because other objects must not change the state of a bonus.
      */

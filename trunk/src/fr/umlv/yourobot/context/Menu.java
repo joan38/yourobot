@@ -25,10 +25,14 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
 
     private final Manager manager;
 
+    /**
+     * Create a menu.
+     * @param manager Manager to associate with the menu.
+     */
     public Menu(Manager manager) {
         this.manager = manager;
     }
-
+    
     @Override
     public void run(ApplicationContext context) {
         // Current menu displayed.

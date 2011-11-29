@@ -31,6 +31,8 @@ public class TextureLoader {
      * @note A texture must be a square image.
      * 
      * @return The image of the texture.
+     * 
+     * @throws IOException If the texture cannot be loaded. 
      */
     public static BufferedImage loadTexture(URL path, boolean scaleDown) throws IOException {
         if (textures.containsKey(path)) {

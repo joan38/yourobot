@@ -18,6 +18,10 @@ public class Player {
     private EnumMap<RobotKeyAction, KeyboardKey> controls = new EnumMap<RobotKeyAction, KeyboardKey>(RobotKeyAction.class);
     private EnumMap<KeyboardKey, RobotKeyAction> controls_inverted;
 
+    /**
+     * Create a new player.
+     * @param robot Robot to be associated with the player.
+     */
     public Player(RobotPlayer robot) {
         this.robot = robot;
 
@@ -57,6 +61,10 @@ public class Player {
         this.robot = robot;
     }
 
+    /**
+     * Return the robot associated with the player.
+     * @return The robot.
+     */
     public RobotPlayer getRobot() {
         return robot;
     }
@@ -65,6 +73,7 @@ public class Player {
      * Returns the associated action with the keyBinding.
      * 
      * @param keyboardKey Keybinding.
+     * @return The action that must be took with the defined key. null if the key is not defined. 
      */
     public RobotKeyAction getKeyBinding(KeyboardKey keyboardKey) {
         if (controls_inverted == null) {

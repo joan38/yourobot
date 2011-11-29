@@ -20,6 +20,13 @@ public class Wall extends Element {
     // JBox2D.
     private final PolygonShape dynamicBox;
 
+    /**
+     * Creates a wall.
+     * @param typeElement Type of the wall.
+     * @param texture Texture of the wall.
+     * @param x X position of the wall.
+     * @param y Y position of the wall.
+     */
     public Wall(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
         super(typeElement, texture, x, y);
 

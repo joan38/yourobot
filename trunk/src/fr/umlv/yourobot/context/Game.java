@@ -64,6 +64,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
      * @param players Players of the games. (Set plauer[1] to null for single player. Must be an array of 2 elements.)
      * @param numberOfBonus Number of simultaneous bonus on the map.
      * @param delayBeforeCreateABonus Delay between the creation of a bonus.
+     * @param robotIAPower The intensity of damages made by the RobotIA to a RobotPlayer. 
      */
     public Game(World world, Player[] players, int numberOfBonus, int delayBeforeCreateABonus, float robotIAPower) {
         Objects.requireNonNull(players);

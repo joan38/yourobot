@@ -45,7 +45,7 @@ public class World{
      * 
      * @param name Name of the world.
      * @param backgroundPattern Texture pattern for the background.
-     * @param area area[0] = endArea, area[1] = startArea Player 1, area[2] = startArea Player 2.
+     * @param areas Start and end areas of the world.
      */
     public World(String name, BufferedImage backgroundPattern, Area[] areas) {
         Objects.requireNonNull(backgroundPattern);
@@ -123,7 +123,7 @@ public class World{
     /**
      * Add an element into the world.
      * 
-     * @param e Element to add.
+     * @param element Element to add.
      */
     public void addElement(Element element) {
         if (element instanceof Robot) {
@@ -159,6 +159,7 @@ public class World{
 
     /**
      * Get the RobotIA of the world. Do not modify.
+     * @return The list of robotIA stored in the world.
      */
     public ArrayList<RobotIA> getRobotIAs() {
         return robotIAs;
@@ -169,6 +170,8 @@ public class World{
      * 
      * @param w World to fill.
      * @param texturePath Path of the texture to use.
+     * 
+     * @throws IOException If the texture cannot be loaded.
      */
     public static void fillBorder(World w, URL texturePath) throws IOException {
         BufferedImage tubeTexture = TextureLoader.loadTexture(texturePath, true);
@@ -177,11 +180,11 @@ public class World{
         int rightPos = Settings.getWidth() - Settings.getSize();
         Element e;
         for (int i = 0; i < Settings.getHeight(); i += Settings.getSize()) {
-            e = new Barres(TypeElementBase.Unasigned, tubeTexture, 0, i);
+            e = new Barres(tubeTexture, 0, i);
             e.setOrientation(90);
             w.addElement(e);
 
-            e = new Barres(TypeElementBase.Unasigned, tubeTexture, rightPos, i);
+            e = new Barres(tubeTexture, rightPos, i);
             e.setOrientation(90);
             w.addElement(e);
         }
@@ -189,15 +192,23 @@ public class World{
         // Horizontal.
         int lowerPos = Settings.getHeight() - Settings.getSize();
         for (int i = 0; i < Settings.getWidth(); i += Settings.getSize()) {
-            w.addElement(new Barres(TypeElementBase.Unasigned, tubeTexture, i, 0));
-            w.addElement(new Barres(TypeElementBase.Unasigned, tubeTexture, i, lowerPos));
+            w.addElement(new Barres(tubeTexture, i, 0));
+            w.addElement(new Barres(tubeTexture, i, lowerPos));
         }
     }
 
+    /**
+     * Get the JBox2D world.
+     * @return The jbox2D world.
+     */
     public org.jbox2d.dynamics.World getjbox2DWorld() {
         return jWorld;
     }
 
+    /**
+     * Get areas of the world.
+     * @return The areas.
+     */
     public Area[] getAreas() {
         return areas;
     }

@@ -29,6 +29,14 @@ public abstract class Element {
     private final BodyDef bodyDef;
     private final FixtureDef fixtureDef;
 
+    /**
+     * A game element.
+     * 
+     * @param typeElement Type of the element.
+     * @param texture Texture of the element.
+     * @param x X position of the element.
+     * @param y Y position of the element.
+     */
     public Element(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
         this.typeElement = typeElement;
         this.texture = texture;

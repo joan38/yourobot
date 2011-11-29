@@ -22,6 +22,13 @@ public class BombeMagnetique extends Bonus {
     // JBox2D.
     private final CircleShape dynamicCircle;
 
+    /**
+     * Create a BombeMagnetique.
+     * @param typeElement Type of the bomb.
+     * @param texture Texture to use.
+     * @param x X position of the bomb.
+     * @param y Y position of the bomb.
+     */
     public BombeMagnetique(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
         super(typeElement, texture, 0, x, y);
 
