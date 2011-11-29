@@ -26,6 +26,10 @@ import java.util.Random;
  */
 public class SampleWorldFactory {
 
+    /**
+     * World set 1.
+     * @return A world set.
+     */
     public static WorldSet getWorldSet1() {
         return new WorldSet() {
 
@@ -66,7 +70,9 @@ public class SampleWorldFactory {
     }
 
     /**
-     * Generate a sample world.
+     * Generate a sample world. Elements are placed randomly.
+     * 
+     * @return A sample random world to be played.
      */
     public static World getRandomDummyWorld() {
         // Creation of a dummy world.
@@ -132,6 +138,10 @@ public class SampleWorldFactory {
         }
     }
 
+    /**
+     * Get the world level 1.
+     * @return The world.
+     */
     public static World getDummyWorldLevel1() {
         // Creation of a dummy world.
         try {

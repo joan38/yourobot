@@ -19,11 +19,13 @@ public interface WorldSet {
     
     /**
      * Get the current world in order to be replayed.
+     * @return The world to be played.
      */
     public World getReplayWorld();
     
     /**
      * Returns true if there is one or more worlds.
+     * @return True if more worlds, false otherwise.
      */
     public boolean hasMoreWorld();
     

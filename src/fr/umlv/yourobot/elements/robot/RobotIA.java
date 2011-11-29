@@ -13,11 +13,24 @@ import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
 
+/**
+ * Represent a Robot IA.
+ * 
+ * @copyright GNU Public license v3.
+ * @author Damien Girard <dgirard@nativesoft.fr>
+ * @author Joan Goyeau <joan.goyeau@gmail.com>
+ */
 public class RobotIA extends Robot {
 
     private boolean isTracking;
     private float speed = 0.05f;
     
+    /**
+     * Create a robot IA.
+     * @param texture Texture of the robot.
+     * @param x X position of the robot.
+     * @param y Y position of the robot.
+     */
     public RobotIA(BufferedImage texture, int x, int y) {
         super(texture, texture, texture, x, y);
     }
@@ -155,10 +168,18 @@ public class RobotIA extends Robot {
         }
     }
 
+    /**
+     * Get the speed of the IA Robot.
+     * @return The speed.
+     */
     public float getSpeed() {
         return speed;
     }
 
+    /**
+     * Set the speed of the IA Robot.
+     * @param speed The new speed.
+     */
     public void setSpeed(float speed) {
         this.speed = speed;
     }

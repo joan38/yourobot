@@ -2,7 +2,7 @@ package fr.umlv.yourobot;
 
 
 /**
- * Represent the different action that a Robot can do.
+ * Represent the differents action that a Robot can do.
  * 
  * @copyright GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>

@@ -33,12 +33,30 @@ public class Manager {
         Pause
     }
 
+    /**
+     * Defines the difficulty of the game.
+     */
     public enum Difficuly {
 
+        /**
+         * Easy.
+         */
         ICanWin("I can win", 10, 2, 0.05f, 0.05f),
+        /**
+         * Easy+.
+         */
         BringItOn("Bring it on", 10, 4, 0.1f, 0.08f),
+        /**
+         * Normal.
+         */
         HurtMePlenty("Hurt Me Plenty", 5, 4, 0.3f, 0.1f),
+        /**
+         * Hard.
+         */
         HardCore("Hardcore", 3, 4, 0.8f, 0.15f),
+        /**
+         * Nightmare.
+         */
         Nightmare("Nightmare", 3, 6, 1.5f, 0.2f);
 
         private Difficuly(String name, int numberOfBonus, int delayBeforeCreateBonus, float robotIAPower, float robotIASpeed) {
@@ -60,6 +78,12 @@ public class Manager {
         }
     }
 
+    /**
+     * Game manager.
+     * 
+     * @param worlds Worlds to play.
+     * @param players Players of the game. (include settings etc...)
+     */
     public Manager(WorldSet worlds, Player[] players) {
         this.worlds = worlds;
         this.players = players;
@@ -69,9 +93,6 @@ public class Manager {
 
     /**
      * Run the application.
-     * 
-     * @param width Width of the window of the game.
-     * @param height Height of the window of the game.
      */
     public void run() {
         Application.run("YouRobot", Settings.getWidth(), Settings.getHeight(), new MainManager());
@@ -82,6 +103,8 @@ public class Manager {
      * 
      * @param map The map to start the game on.
      * @param numberOfHumanPlayer Number of Human player.
+     * @param d Difficulty of the game.
+     * @return The launched game.
      */
     public Game newGame(World map, int numberOfHumanPlayer, Difficuly d) {
         Objects.requireNonNull(map);
@@ -103,10 +126,17 @@ public class Manager {
         return renderGame;
     }
 
+    /**
+     * Get maps that the manager is holding.
+     * @return Maps to play.
+     */
     public WorldSet getMaps() {
         return worlds;
     }
 
+    /**
+     * Zen application code.
+     */
     private class MainManager implements ApplicationCode {
 
         @Override

@@ -34,26 +34,52 @@ public class Settings {
         Settings.detectionArea = detectionArea;
     }
 
+    /**
+     * Returns the height of the window.
+     * @return The height of the window.
+     */
     public static int getHeight() {
         return height;
     }
 
+    /**
+     * Returns the size of an element in the game.
+     * @return The size of an element.
+     * 
+     * @note Elements are square in the game.
+     */
     public static int getSize() {
         return size;
     }
 
+    /**
+     * Returns the effect area of a bonus.
+     * @return The size of the area.
+     */
     public static int getEffectArea() {
         return effectArea;
     }
 
+    /**
+     * Returns the width of the window.
+     * @return The width of the window.
+     */
     public static int getWidth() {
         return width;
     }
 
+    /**
+     * Returns the detection area for RobotIA.
+     * @return The detection area size.
+     */
     public static int getDetectionArea() {
         return detectionArea;
     }
 
+    /**
+     * Returns the duration of a leurre bonus before it get activated.
+     * @return The duration.
+     */
     public static int getLeurreDurationBeforeActivation() {
         return leurreDurationBeforeActivation;
     }

@@ -13,7 +13,13 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Area extends Element {
 
-    public Area(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
-        super(typeElement, texture, x, y);
+    /**
+     * Define a game area.
+     * @param texture Texture of the area.
+     * @param x X position of the area.
+     * @param y Y position of the area.
+     */
+    public Area(BufferedImage texture, int x, int y) {
+        super(TypeElementBase.Unasigned, texture, x, y);
     }
 }

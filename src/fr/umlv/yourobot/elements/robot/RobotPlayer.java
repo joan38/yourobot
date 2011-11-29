@@ -7,23 +7,30 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * Represent an human robot.
+ * 
+ * @copyright GNU Public license v3.
+ * @author Damien Girard <dgirard@nativesoft.fr>
+ * @author Joan Goyeau <joan.goyeau@gmail.com>
+ */
 public class RobotPlayer extends Robot {
 
-    protected Integer health = 100;
-    protected Bonus listBonus;
+    private Integer health = 100;
 
     /**
      * Create a new robot for a player.
      * 
-     * @param health Health of the robot.
+     * @param health Health of the robot. (Usually 100)
      * @param texture Texture of robot.
      * @param textureBoost Texture of the robot while boosting.
      * @param textureBrake Texture of the robot while braking.
      * @param x X position of the robot.
      * @param y Y position of the robot.
      */
-    public RobotPlayer(int healt, BufferedImage texture, BufferedImage textureBoost, BufferedImage textureBrake, int x, int y) {
+    public RobotPlayer(int health, BufferedImage texture, BufferedImage textureBoost, BufferedImage textureBrake, int x, int y) {
         super(texture, textureBoost, textureBrake, x, y);
+        this.health = health;
     }
 
     /**
