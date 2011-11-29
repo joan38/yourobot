@@ -113,11 +113,11 @@ public class SampleWorldFactory {
 
             }
 
-            Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/bomb.png"), true), 90, 90);
-            w.addElement(b);
+            //Bonus b = new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/bomb.png"), true), 90, 90);
+            //w.addElement(b);
 
-            b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/bomb.png"), true), 2, 120, 120);
-            w.addElement(b);
+            //b = new Snap(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/bomb.png"), true), 2, 120, 120);
+            //w.addElement(b);
 
             // Adding a IA Robot to the world.
             RobotIA r = new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
