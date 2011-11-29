@@ -88,7 +88,7 @@ public class SampleWorldFactory {
 
             // Generating 15 random walls.
             Random random = new Random(); // Seed set to prevent random :)
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 30; i++) {
                 do {
                     e = new Wall(TypeElementBase.Ice, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-glace.jpg"), true),
                             random.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),

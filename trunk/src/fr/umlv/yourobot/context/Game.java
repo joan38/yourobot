@@ -350,6 +350,14 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 }
                 return;
             }
+
+            if ((bodyA.getUserData() instanceof RobotIA)) {
+                ((RobotIA) bodyA.getUserData()).turnRight();
+            }
+            if ((bodyB.getUserData() instanceof RobotIA)) {
+                ((RobotIA) bodyB.getUserData()).turnRight();
+            }
+
         }
 
         @Override
