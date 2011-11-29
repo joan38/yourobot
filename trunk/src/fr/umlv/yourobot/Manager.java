@@ -4,6 +4,7 @@ import fr.umlv.yourobot.context.Game;
 import fr.umlv.yourobot.context.Menu;
 import fr.umlv.yourobot.context.WorldSet;
 import fr.umlv.yourobot.elements.*;
+import fr.umlv.yourobot.elements.robot.RobotIA;
 import fr.umlv.zen.*;
 import java.util.Objects;
 
@@ -34,22 +35,24 @@ public class Manager {
 
     public enum Difficuly {
 
-        ICanWin("I can win", 10, 2, 0.05f),
-        BringItOn("Bring it on", 10, 4, 0.1f),
-        HurtMePlenty("Hurt Me Plenty", 5, 4, 0.3f),
-        HardCore("Hardcore", 3, 4, 0.8f),
-        Nightmare("Nightmare", 3, 6, 1.5f);
+        ICanWin("I can win", 10, 2, 0.05f, 0.05f),
+        BringItOn("Bring it on", 10, 4, 0.1f, 0.08f),
+        HurtMePlenty("Hurt Me Plenty", 5, 4, 0.3f, 0.1f),
+        HardCore("Hardcore", 3, 4, 0.8f, 0.15f),
+        Nightmare("Nightmare", 3, 6, 1.5f, 0.2f);
 
-        private Difficuly(String name, int numberOfBonus, int delayBeforeCreateBonus, float robotIAPower) {
+        private Difficuly(String name, int numberOfBonus, int delayBeforeCreateBonus, float robotIAPower, float robotIASpeed) {
             this.name = name;
             this.numberOfBonus = numberOfBonus;
             this.delayBeforeCreateBonus = delayBeforeCreateBonus;
             this.robotIAPower = robotIAPower;
+            this.robotIASpeed = robotIASpeed;
         }
         private final String name;
         private final int numberOfBonus;
         private final int delayBeforeCreateBonus;
         private final float robotIAPower;
+        private final float robotIASpeed;
 
         @Override
         public String toString() {
@@ -89,6 +92,11 @@ public class Manager {
         array[0] = players[0];
         if (numberOfHumanPlayer > 1) {
             array[1] = players[1];
+        }
+
+        // Setting the speed of RobotIA.
+        for (RobotIA iA : map.getRobotIAs()) {
+            iA.setSpeed(d.robotIASpeed);
         }
 
         renderGame = new Game(map, array, d.numberOfBonus, d.delayBeforeCreateBonus, d.robotIAPower);

@@ -16,7 +16,8 @@ import org.jbox2d.dynamics.Fixture;
 public class RobotIA extends Robot {
 
     private boolean isTracking;
-
+    private float speed = 0.05f;
+    
     public RobotIA(BufferedImage texture, int x, int y) {
         super(texture, texture, texture, x, y);
     }
@@ -132,9 +133,8 @@ public class RobotIA extends Robot {
             Vec2 B = ((Element) areaCallback.target).getBody().getWorldCenter();
 
             float angle = org.jbox2d.common.MathUtils.atan2(B.y - A.y, B.x - A.x);
-            float force = 0.05f;
 
-            getBody().applyLinearImpulse(new Vec2((float) Math.cos(angle) * force, (float) Math.sin(angle) * force), B);
+            getBody().applyLinearImpulse(new Vec2((float) Math.cos(angle) * speed, (float) Math.sin(angle) * speed), B);
 
         } else {
             // No target, random movement.
@@ -153,5 +153,13 @@ public class RobotIA extends Robot {
                 }
             }
         }
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 }
