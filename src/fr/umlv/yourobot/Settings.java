@@ -4,7 +4,7 @@ package fr.umlv.yourobot;
  * General settings of the application.
  * Static because those general settings are accessible anywhere.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -46,7 +46,7 @@ public class Settings {
      * Returns the size of an element in the game.
      * @return The size of an element.
      * 
-     * @note Elements are square in the game.
+     * Note: Elements are square in the game.
      */
     public static int getSize() {
         return size;

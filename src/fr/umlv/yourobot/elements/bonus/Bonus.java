@@ -16,7 +16,7 @@ import java.util.Random;
 /**
  * Represent a bonus.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -65,7 +65,7 @@ public abstract class Bonus extends Element {
     /**
      * Step the bonus, no effect if activateBonus was not activated.
      * 
-     * @note The bonus effect will end after the duration of the bonus.
+     * Note: The bonus effect will end after the duration of the bonus.
      * 
      * @return false is the bonus MUST BE DELETED. Because its effect has finished. true otherwise.
      */
@@ -79,7 +79,7 @@ public abstract class Bonus extends Element {
      * 
      * @param robot Robot that activate the bonus.
      * 
-     * @note The bonus is not removed from the world, just not visible. Do not forget to remove it when stepBonus return false.
+     * Note: The bonus is not removed from the world, just not visible. Do not forget to remove it when stepBonus return false.
      */
     public void grabBonus(Robot robot) {
         this.robot = robot;
@@ -91,7 +91,7 @@ public abstract class Bonus extends Element {
     /**
      * Activate the bonus.
      * 
-     * @note Call automatically stepBonus.
+     * Note: Call automatically stepBonus.
      */
     public void activateBonus() {
         state = BonusState.Activated;
@@ -114,7 +114,7 @@ public abstract class Bonus extends Element {
      * 
      * @param state State of the bonus.
      * 
-     * @note Protected because other objects must not change the state of a bonus.
+     * Note: Protected because other objects must not change the state of a bonus.
      */
     protected void setState(BonusState state) {
         this.state = state;
@@ -169,7 +169,7 @@ public abstract class Bonus extends Element {
      * @param gd Graphic to draw on.
      * @param texture The texture to draw.
      * 
-     * @see render
+     * @see #render(java.awt.Graphics2D) 
      */
     protected void renderIgnoreBonusLogic(Graphics2D gd, BufferedImage texture) {
         super.render(gd, texture);

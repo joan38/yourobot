@@ -11,7 +11,7 @@ import org.jbox2d.dynamics.BodyType;
 /**
  * Represent an area.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */

@@ -16,7 +16,7 @@ import org.jbox2d.dynamics.Fixture;
 /**
  * Represent a Robot IA.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
