@@ -6,7 +6,7 @@ import java.util.EnumMap;
 import java.util.Objects;
 
 /**
- * Représente un joueur.
+ * Represent an human player.
  * 
  * @copyright GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
