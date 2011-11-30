@@ -53,7 +53,6 @@ public class BombeMagnetique extends Bonus {
                     // Unknown element or the robot the throw the bomb, I do not do anything.
                     return true;
                 }
-
                 float angle = org.jbox2d.common.MathUtils.atan2(fixture.getBody().getPosition().y - getRobot().getBody().getPosition().y, fixture.getBody().getPosition().x - getRobot().getBody().getPosition().x);
                 float force;
                 if (((Element) fixture.getBody().getUserData()).getTypeElement() == getTypeElement()) {

@@ -156,6 +156,12 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
             // Victory !
             if (victoriousPlayer != 0) {
+                for (Player p : players) {
+                    if (p == null) {
+                        continue;
+                    }
+                    p.getRobot().setIsBoosting(false);
+                }
                 return; // A player have won.
             }
 

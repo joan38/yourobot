@@ -7,11 +7,8 @@ package fr.umlv.yourobot.elements;
 import fr.umlv.yourobot.elements.wall.Wall;
 import fr.umlv.yourobot.elements.area.SimpleArea;
 import fr.umlv.yourobot.elements.area.Area;
-import fr.umlv.yourobot.elements.bonus.BombeMagnetique;
-import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.context.WorldSet;
-import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.robot.RobotIA;
 import java.awt.Color;
 import java.io.IOException;
@@ -34,13 +31,17 @@ public class SampleWorldFactory {
         return new WorldSet() {
 
             private int index = -1;
-            private final int numberOfWorlds = 2;
+            private final int numberOfWorlds = 4;
 
             private World getWorld(int i) {
                 switch (i) {
-                    case 0: // level 0
+                    case 0: // level 1
                         return SampleWorldFactory.getDummyWorldLevel1();
                     case 1: // level 1
+                        return SampleWorldFactory.getDummyWorldLevel2();
+                    case 2: // level 1
+                        return SampleWorldFactory.getDummyWorldLevel3();
+                    case 3: // level 1
                         return SampleWorldFactory.getRandomDummyWorld();
                 }
                 return null;
@@ -126,10 +127,7 @@ public class SampleWorldFactory {
             //w.addElement(b);
 
             // Adding a IA Robot to the world.
-            RobotIA r = new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
-                    160, 200);
-            w.addRobotIA(r);
-
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 160, 200));
 
             return w;
         } catch (IOException ex) {
@@ -146,26 +144,160 @@ public class SampleWorldFactory {
         // Creation of a dummy world.
         try {
             Area[] areas = new Area[3];
-            areas[1] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 - 40, Color.blue); // StartArea P1
-            areas[2] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 + 40, Color.blue); // StartArea P2
-            areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2, Color.GREEN); // EndArea
+            areas[1] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 - Settings.getSize() / 2 - 40, Color.blue); // StartArea P1
+            areas[2] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 - Settings.getSize() / 2 + 40, Color.blue); // StartArea P2
+            areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
             World w = new World("Level 1", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
             World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
             // Adding elements to this world.
             for (int i = Settings.getSize() + 110; i < 690; i += Settings.getSize()) {
-                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), i, Settings.getHeight() / 2 - 70));
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), i, Settings.getHeight() / 2 - Settings.getSize() / 2 - 70));
             }
 
             for (int i = Settings.getSize() + 110; i < 690; i += Settings.getSize()) {
-                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), i, Settings.getHeight() / 2 + 70));
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), i, Settings.getHeight() / 2 - Settings.getSize() / 2 + 70));
             }
 
             // Adding a IA Robot to the world.
-            RobotIA r = new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
-                    160, 200);
-            w.addRobotIA(r);
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 390, 120));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 390, 290));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 390, 470));
+
+            return w;
+        } catch (IOException ex) {
+            System.err.println("Texture not found. " + ex.getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * Get the world level 2.
+     * @return The world.
+     */
+    public static World getDummyWorldLevel2() {
+        // Creation of a dummy world.
+        try {
+            Area[] areas = new Area[3];
+            areas[1] = new SimpleArea(Settings.getSize() + 30, 520, Color.blue); // StartArea P1
+            areas[2] = new SimpleArea(Settings.getSize() + 100, 520, Color.blue); // StartArea P2
+            areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), 520, Color.GREEN); // EndArea
+
+            World w = new World("Level 1", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
+            World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
+
+            // Adding elements to this world.
+            for (int i = 140; i < Settings.getHeight() - Settings.getSize(); i += Settings.getSize()) {
+                w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), 170, i));
+            }
+
+            for (int i = 0; i < 100; i += Settings.getSize()) {
+                for (int j = 0; j < 100; j += Settings.getSize()) {
+                    w.addElement(new Wall(TypeElementBase.Ice, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-glace.jpg"), true), i + 280, j + 80));
+                }
+            }
+            
+            for (int i = 180; i < Settings.getHeight() - Settings.getSize() - 100; i += Settings.getSize()) {
+                w.addElement(new Wall(TypeElementBase.Wood, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-bois-bleu.jpg"), true), 360, i));
+            }
+            
+            for (int i = 400; i < Settings.getHeight() - Settings.getSize(); i += Settings.getSize()) {
+                w.addElement(new Wall(TypeElementBase.Wood, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-bois-bleu.jpg"), true), 680, i));
+            }
+            
+            for (int i = 0; i < 100; i += Settings.getSize()) {
+                for (int j = 0; j < 100; j += Settings.getSize()) {
+                    w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), i + 480, j + 390));
+                }
+            }
+
+            // Adding a IA Robot to the world.
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 135, 45));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 135, 205));
+
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 310, 45));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 310, 205));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 310, 375));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 310, 540));
+
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 470, 45));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 470, 205));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 470, 375));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 470, 540));
+
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 645, 45));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 645, 205));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 645, 375));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 645, 540));
+
+            return w;
+        } catch (IOException ex) {
+            System.err.println("Texture not found. " + ex.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Get the world level 2.
+     * @return The world.
+     */
+    public static World getDummyWorldLevel3() {
+        // Creation of a dummy world.
+        try {
+            Area[] areas = new Area[3];
+            areas[1] = new SimpleArea(Settings.getSize() + 30, Settings.getHeight() / 2 - Settings.getSize() / 2 - 170, Color.blue); // StartArea P1
+            areas[2] = new SimpleArea(Settings.getSize() + 30, Settings.getHeight() / 2 - Settings.getSize() / 2 + 170, Color.blue); // StartArea P2
+            areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
+
+            World w = new World("Level 1", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
+            World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
+
+            // Adding elements to this world.
+            for (int i = 0; i < 100; i += Settings.getSize()) {
+                for (int j = 0; j < 100; j += Settings.getSize()) {
+                    for (int k = 0; k < 4; k++) {
+                        w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true), i + Settings.getSize() + 75 + k * 170, j + Settings.getSize() + 60));
+                    }
+                }
+            }
+
+            for (int i = 0; i < 100; i += Settings.getSize()) {
+                for (int j = 0; j < 100; j += Settings.getSize()) {
+                    for (int k = 0; k < 4; k++) {
+                        w.addElement(new Wall(TypeElementBase.Wood, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-bois-bleu.jpg"), true), i + Settings.getSize() + 75 + k * 170, j + Settings.getSize() + 230));
+                    }
+                }
+            }
+
+            for (int i = 0; i < 100; i += Settings.getSize()) {
+                for (int j = 0; j < 100; j += Settings.getSize()) {
+                    for (int k = 0; k < 4; k++) {
+                        w.addElement(new Wall(TypeElementBase.Ice, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-glace.jpg"), true), i + Settings.getSize() + 75 + k * 170, j + Settings.getSize() + 400));
+                    }
+                }
+            }
+
+            // Adding a IA Robot to the world.
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 135, 45));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 135, 205));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 135, 375));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 135, 540));
+
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 310, 45));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 310, 205));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 310, 375));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 310, 540));
+
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 470, 45));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 470, 205));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 470, 375));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 470, 540));
+
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 645, 45));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 645, 205));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 645, 375));
+            w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 645, 540));
 
             return w;
         } catch (IOException ex) {
