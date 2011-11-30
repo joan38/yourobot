@@ -36,7 +36,7 @@ public class SampleWorldFactory {
             private World getWorld(int i) {
                 switch (i) {
                     case 0: // level 1
-                        return SampleWorldFactory.getRandomDummyWorld();
+                        return SampleWorldFactory.getDummyWorldLevel1();
                     case 1: // level 2
                         return SampleWorldFactory.getRandomDummyWorld();
                     case 2: // level 3
