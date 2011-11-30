@@ -12,7 +12,7 @@ import org.jbox2d.dynamics.BodyType;
 /**
  * Represent a Robot.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -107,7 +107,7 @@ public abstract class Robot extends Element {
      * Set the robot braking.
      * @param isBraking true or false.
      * 
-     * @note Unused in version 0.1.
+     * Note: Unused in version 0.1.
      */
     public void setIsBraking(boolean isBraking) {
         this.isBraking = isBraking;

@@ -5,7 +5,7 @@ import fr.umlv.yourobot.elements.World;
 /**
  * Represent a set of world playable.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */

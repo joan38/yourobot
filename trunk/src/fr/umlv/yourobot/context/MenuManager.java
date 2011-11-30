@@ -5,7 +5,7 @@ import fr.umlv.zen.ApplicationRenderCode;
 /**
  * Manage the logic of a menu.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */

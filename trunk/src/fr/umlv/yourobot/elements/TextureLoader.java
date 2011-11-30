@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 /**
  * Flyweight pattern. Prevent the loading of 200 textures in memory.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -28,7 +28,7 @@ public class TextureLoader {
      * @param path Path of the texture to load.
      * @param scaleDown Scale down the texture to the size defined in settings of YouRobot.
      * 
-     * @note A texture must be a square image.
+     * Note: A texture must be a square image.
      * 
      * @return The image of the texture.
      * 

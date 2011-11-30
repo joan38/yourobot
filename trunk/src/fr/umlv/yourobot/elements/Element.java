@@ -12,7 +12,7 @@ import org.jbox2d.dynamics.FixtureDef;
 /**
  * Represent an element.
  * 
- * @copyright GNU Public license v3.
+ * License: GNU Public license v3.
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -58,7 +58,7 @@ public abstract class Element {
      * 
      * @param gd Graphic to draw on.
      * 
-     * @note You can override the position function getX() and getY(). The rendering will be made on the overriden method.
+     * Note: You can override the position function getX() and getY(). The rendering will be made on the overriden method.
      */
     public void render(Graphics2D gd) {
         this.textureTransformer.setToIdentity();
@@ -78,7 +78,7 @@ public abstract class Element {
      * @param gd Graphic to draw on.
      * @param texture The texture to draw.
      * 
-     * @note You can override the position function getX() and getY(). The rendering will be made on the overriden method.
+     * Note: You can override the position function getX() and getY(). The rendering will be made on the overriden method.
      */
     protected void render(Graphics2D gd, BufferedImage texture) {
         this.textureTransformer.setToIdentity();
@@ -146,7 +146,7 @@ public abstract class Element {
 
     /**
      * Force the position.
-     * @note Break all the physics. (Apply a transform, do not use)
+     * Note: Break all the physics. (Apply a transform, do not use)
      * @param x New x.
      */
     public void setX(int x) {
@@ -159,7 +159,7 @@ public abstract class Element {
 
     /**
      * Force the position.
-     * @note Break all the physics. (Apply a transform, do not use)
+     * Note: Break all the physics. (Apply a transform, do not use)
      * @param y New y.
      */
     public void setY(int y) {
@@ -219,7 +219,7 @@ public abstract class Element {
      * Get the definition of the body.
      * @return The definition of the body.
      * 
-     * @note Once the element is registered, the definition is ignored. Use only inside the constructor.
+     * Note: Once the element is registered, the definition is ignored. Use only inside the constructor.
      */
     protected BodyDef getBodyDef() {
         return bodyDef;
@@ -229,7 +229,7 @@ public abstract class Element {
      * The fixtureDefinition of the element.
      * @return The fixturedefinition of element.
      * 
-     * @note Once the element is registered, the definition is ignored. Use only inside the constructor.
+     * Note: Once the element is registered, the definition is ignored. Use only inside the constructor.
      */
     protected FixtureDef getFixtureDef() {
         return fixtureDef;
