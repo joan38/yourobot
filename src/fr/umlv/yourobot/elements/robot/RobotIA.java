@@ -119,7 +119,7 @@ public class RobotIA extends Robot {
                     // Checking if somebody is between the RobotIA and the detected body.
                     // If there is something, I ignore the element.
                     // Otherwise I mark it as possible element to track.
-                    if (o != target && !(o instanceof Bonus || o instanceof Area)) {
+                    if (o != target && !(o instanceof Bonus || o instanceof Area || o instanceof RobotIA)) {
                         isValidRayCast = false;
                         return -1; // An object is between the robotIA and the targetted element.
                     }
