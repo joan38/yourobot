@@ -1,6 +1,7 @@
 package fr.umlv.yourobot.elements.bonus;
 
 import fr.umlv.yourobot.Settings;
+import fr.umlv.yourobot.SoundPlayer;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robot.Robot;
@@ -33,7 +34,7 @@ public abstract class Bonus extends Element {
     public enum BonusState {
 
         /** Placed on the world. */
-        Placed, 
+        Placed,
         /** Grabbed by a robot. */
         Grabbed,
         /** Activated by a robot. */

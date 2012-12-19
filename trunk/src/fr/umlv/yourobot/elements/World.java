@@ -22,18 +22,21 @@ import org.jbox2d.dynamics.Fixture;
 
 /**
  * Represent a World of elements.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public class World{
+public class World {
 
     private final String name;
     private Area[] areas;
     private final LinkedList<Element> elements; // Elements of the game.
     private BufferedImage backgroundPattern;
     private ArrayList<RobotIA> robotIAs = new ArrayList<RobotIA>();
+    // Music
+    private final String musique;
     // JBox2D
     private final org.jbox2d.dynamics.World jWorld;
     private final BodyDef jGroundBodyDef;
@@ -42,15 +45,16 @@ public class World{
 
     /**
      * Empty world.
-     * 
+     *
      * @param name Name of the world.
      * @param backgroundPattern Texture pattern for the background.
      * @param areas Start and end areas of the world.
      */
-    public World(String name, BufferedImage backgroundPattern, Area[] areas) {
+    public World(String name, BufferedImage backgroundPattern, Area[] areas, String musique) {
         Objects.requireNonNull(backgroundPattern);
         Objects.requireNonNull(areas);
 
+        this.musique = musique;
         this.name = name;
         this.elements = new LinkedList<Element>();
         this.backgroundPattern = backgroundPattern;
@@ -77,8 +81,17 @@ public class World{
     }
 
     /**
+     * Gets the music of this world.
+     *
+     * @return The music name to use.
+     */
+    public String getMusique() {
+        return musique;
+    }
+
+    /**
      * Render a world.
-     * 
+     *
      * @param gd World to render.
      */
     public void render(Graphics2D gd) {
@@ -114,6 +127,7 @@ public class World{
 
     /**
      * Set the background pattern element.
+     *
      * @param image Image to set.
      */
     public void setBackgroundPattern(BufferedImage image) {
@@ -122,7 +136,7 @@ public class World{
 
     /**
      * Add an element into the world.
-     * 
+     *
      * @param element Element to add.
      */
     public void addElement(Element element) {
@@ -138,7 +152,7 @@ public class World{
 
     /**
      * Remove an element from the world.
-     * 
+     *
      * @param e Element to remove.
      */
     public void removeElement(Element e) {
@@ -150,6 +164,7 @@ public class World{
 
     /**
      * Add a robotIA to the world.
+     *
      * @param robotIA The robotIA to add.
      */
     public void addRobotIA(RobotIA robotIA) {
@@ -159,6 +174,7 @@ public class World{
 
     /**
      * Get the RobotIA of the world. Do not modify.
+     *
      * @return The list of robotIA stored in the world.
      */
     public ArrayList<RobotIA> getRobotIAs() {
@@ -167,10 +183,10 @@ public class World{
 
     /**
      * Fill the given world with an unbreakable tube around.
-     * 
+     *
      * @param w World to fill.
      * @param texturePath Path of the texture to use.
-     * 
+     *
      * @throws IOException If the texture cannot be loaded.
      */
     public static void fillBorder(World w, URL texturePath) throws IOException {
@@ -199,6 +215,7 @@ public class World{
 
     /**
      * Get the JBox2D world.
+     *
      * @return The jbox2D world.
      */
     public org.jbox2d.dynamics.World getjbox2DWorld() {
@@ -207,6 +224,7 @@ public class World{
 
     /**
      * Get areas of the world.
+     *
      * @return The areas.
      */
     public Area[] getAreas() {
@@ -215,7 +233,7 @@ public class World{
 
     /**
      * Returns true if the element will overlap another element.
-     * 
+     *
      * @param x X position.
      * @param y Y position.
      * @param width Width of the element.
@@ -228,7 +246,6 @@ public class World{
         isOverlapping[0] = false;
 
         jWorld.queryAABB(new QueryCallback() {
-
             @Override
             public boolean reportFixture(Fixture fixture) {
                 // Gosh, an overlap !

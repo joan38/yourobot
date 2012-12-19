@@ -3,6 +3,7 @@ package fr.umlv.yourobot.context;
 import fr.umlv.yourobot.Player;
 import fr.umlv.yourobot.RobotKeyAction;
 import fr.umlv.yourobot.Settings;
+import fr.umlv.yourobot.SoundPlayer;
 import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
@@ -27,8 +28,9 @@ import org.jbox2d.dynamics.contacts.Contact;
 
 /**
  * Manage the logic of the application.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -49,7 +51,6 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
     // When a player take a bonus, its value is stored inside the variable playerBonus.
     // To take a bonus, the collision listener place the available bonus inside the array playersAvailableBonus.
     private final Bonus[] playersBonus = new Bonus[2]; // 2 = Max number of player.
-    private final Bonus[] playersAvailableBonus = new Bonus[2];
     // IA Robot.
     //
     private final float robotIAPower;
@@ -59,12 +60,14 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
     /**
      * Represent a game.
-     * 
+     *
      * @param world World on the game will be played.
-     * @param players Players of the games. (Set plauer[1] to null for single player. Must be an array of 2 elements.)
+     * @param players Players of the games. (Set plauer[1] to null for single
+     * player. Must be an array of 2 elements.)
      * @param numberOfBonus Number of simultaneous bonus on the map.
      * @param delayBeforeCreateABonus Delay between the creation of a bonus.
-     * @param robotIAPower The intensity of damages made by the RobotIA to a RobotPlayer. 
+     * @param robotIAPower The intensity of damages made by the RobotIA to a
+     * RobotPlayer.
      */
     public Game(World world, Player[] players, int numberOfBonus, int delayBeforeCreateABonus, float robotIAPower) {
         Objects.requireNonNull(players);
@@ -108,7 +111,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
     /**
      * Game logic here.
-     * 
+     *
      * @param context Context.
      */
     @Override
@@ -209,11 +212,8 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                                 runningBonus.add(playersBonus[i]);
                                 // The player do not hold anymore a bonus.
                                 playersBonus[i] = null;
-                            } else if (playersAvailableBonus[i] != null) {
-                                // If the player is on a bonus, I grab it.
-                                playersBonus[i] = playersAvailableBonus[i];
-                                playersBonus[i].grabBonus(p.getRobot()); // I mark the bonus as grabbed.
-                                numberOfBonus--;
+                            } else {
+                                SoundPlayer.play("nobonus");
                             }
                             break;
                         case Turn_Left:
@@ -236,6 +236,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
     /**
      * Get the victorious player.
+     *
      * @return 0: No win, 1: player 1 win, 2: player 2 win.
      */
     public int getVictoriousPlayer() {
@@ -244,6 +245,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
 
     /**
      * Game rendering here.
+     *
      * @param gd Graphic context.
      */
     @Override
@@ -254,9 +256,6 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         world.render(g2bi);
-        /*for (Bonus b : runningBonus) {
-        b.render(g2bi);
-        }*/
 
         gd.drawImage(bi, 0, 0, null);
     }
@@ -272,14 +271,28 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             Body bodyA = contact.getFixtureA().getBody();
             Body bodyB = contact.getFixtureB().getBody();
 
-            if (bodyB.getUserData() instanceof Robot && bodyA.getUserData() instanceof Bonus) {
+            if (bodyB.getUserData() instanceof RobotPlayer && bodyA.getUserData() instanceof Bonus) {
                 // Woot, a bonus.
-                // Marking it as available to be took by the player.
-                playersAvailableBonus[(bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = (Bonus) bodyA.getUserData();
-            } else if (bodyA.getUserData() instanceof Robot && bodyB.getUserData() instanceof Bonus) {
+                if (((Bonus) bodyA.getUserData()).getState() == Bonus.BonusState.Placed) {
+                    // Grabing it.
+                    int playerIndex = (bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1);
+
+                    playersBonus[playerIndex] = (Bonus) bodyA.getUserData();
+                    playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
+                    SoundPlayer.play("bonuspickup");
+                    numberOfBonus--;
+                }
+            } else if (bodyA.getUserData() instanceof RobotPlayer && bodyB.getUserData() instanceof Bonus) {
                 // Woot, a bonus.
-                // Marking it as available to be took by the player.
-                playersAvailableBonus[(bodyA.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = (Bonus) bodyB.getUserData();
+                if (((Bonus) bodyB.getUserData()).getState() == Bonus.BonusState.Placed) {
+                    // Grabing it.
+                    int playerIndex = (bodyA.getUserData().equals(players[0].getRobot()) ? 0 : 1);
+
+                    playersBonus[playerIndex] = (Bonus) bodyB.getUserData();
+                    playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
+                    SoundPlayer.play("bonuspickup");
+                    numberOfBonus--;
+                }
             }
         }
 
@@ -289,15 +302,16 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             Body bodyA = contact.getFixtureA().getBody();
             Body bodyB = contact.getFixtureB().getBody();
 
-            if (bodyB.getUserData() instanceof Robot && bodyA.getUserData() instanceof Bonus) {
-                // Woot, a bonus.
-                // Marking it as available to be took by the player.
-                playersAvailableBonus[(bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = null;
-            } else if (bodyA.getUserData() instanceof Robot && bodyB.getUserData() instanceof Bonus) {
-                // Woot, a bonus.
-                // Marking it as available to be took by the player.
-                playersAvailableBonus[(bodyA.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = null;
-            }
+            /* Deprecated. Fckin Forax.
+             if (bodyB.getUserData() instanceof Robot && bodyA.getUserData() instanceof Bonus) {
+             // Woot, a bonus.
+             // Marking it as available to be took by the player.
+             playersAvailableBonus[(bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = null;
+             } else if (bodyA.getUserData() instanceof Robot && bodyB.getUserData() instanceof Bonus) {
+             // Woot, a bonus.
+             // Marking it as available to be took by the player.
+             playersAvailableBonus[(bodyA.getUserData().equals(players[0].getRobot()) ? 0 : 1)] = null;
+             }*/
         }
 
         @Override

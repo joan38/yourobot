@@ -1,6 +1,7 @@
 package fr.umlv.yourobot.elements.bonus;
 
 import fr.umlv.yourobot.Settings;
+import fr.umlv.yourobot.SoundPlayer;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import fr.umlv.yourobot.elements.robot.RobotIA;
@@ -14,10 +15,11 @@ import org.jbox2d.dynamics.Fixture;
 
 /**
  * Represent a Snap bonus.
- * 
+ *
  * A Snap bring all elements behinds the robot.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -27,6 +29,7 @@ public class Snap extends Bonus {
 
     /**
      * Create a Snap.
+     *
      * @param typeElement Type of the snap.
      * @param texture Texture to use.
      * @param x X position of the bonus.
@@ -40,10 +43,19 @@ public class Snap extends Bonus {
 
         getFixtureDef().shape = dynamicCircle;
     }
+    private long playSoundAt = 0;
 
     @Override
     public boolean stepBonus() {
         // SnapEffect
+        // Playing sound each seconds if activated.
+        if (getState() == BonusState.Activated) {
+            if (playSoundAt < Calendar.getInstance().getTimeInMillis()) {
+                SoundPlayer.play("bonusSnap");
+                playSoundAt = Calendar.getInstance().getTimeInMillis() + 1000;
+            }
+        }
+
         if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > durationOfBonusInSeconds * 1000) {
             return false; // End of the effect.
         }
@@ -52,7 +64,6 @@ public class Snap extends Bonus {
                 new Vec2(getRobot().getX() + Settings.getEffectArea(), getRobot().getY() + Settings.getEffectArea()));
 
         getRobot().getBody().getWorld().queryAABB(new QueryCallback() {
-
             @Override
             public boolean reportFixture(Fixture fixture) {
                 Element e = (Element) fixture.getBody().getUserData();
