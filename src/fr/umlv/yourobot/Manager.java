@@ -121,6 +121,9 @@ public class Manager {
         for (RobotIA iA : map.getRobotIAs()) {
             iA.setSpeed(d.robotIASpeed);
         }
+        
+        // Starting the music.
+        MusicPlayer.getMusiquePlayer().playMusic(map.getMusique());
 
         renderGame = new Game(map, array, d.numberOfBonus, d.delayBeforeCreateBonus, d.robotIAPower);
         return renderGame;

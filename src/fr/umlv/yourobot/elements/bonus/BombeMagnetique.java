@@ -1,6 +1,7 @@
 package fr.umlv.yourobot.elements.bonus;
 
 import fr.umlv.yourobot.Settings;
+import fr.umlv.yourobot.SoundPlayer;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.image.BufferedImage;
@@ -36,6 +37,12 @@ public class BombeMagnetique extends Bonus {
         this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;
 
         getFixtureDef().shape = dynamicCircle;
+    }
+
+    @Override
+    public void activateBonus() {
+        super.activateBonus();
+        SoundPlayer.play("bonusbomb");
     }
 
     @Override

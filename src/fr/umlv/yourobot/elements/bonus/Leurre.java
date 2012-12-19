@@ -1,6 +1,7 @@
 package fr.umlv.yourobot.elements.bonus;
 
 import fr.umlv.yourobot.Settings;
+import fr.umlv.yourobot.SoundPlayer;
 import fr.umlv.yourobot.elements.TypeElementBase;
 import java.awt.Color;
 import java.awt.Font;
@@ -11,8 +12,9 @@ import org.jbox2d.collision.shapes.CircleShape;
 
 /**
  * Represent a Leurre bonus.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -25,6 +27,7 @@ public class Leurre extends Bonus {
 
     /**
      * Create a BombeMagnetique.
+     *
      * @param typeElement Type of the bomb.
      * @param texture Texture to use.
      * @param activatedTexture Texture to use when the leurre is active.
@@ -55,9 +58,18 @@ public class Leurre extends Bonus {
         this.setX(getRobot().getX());
         this.setY(getRobot().getY());
     }
+    private long playSoundAt = 0;
 
     @Override
     public boolean stepBonus() {
+        // Playing sound each seconds if activated.
+        if (getState() == BonusState.Activated) {
+            if (playSoundAt < Calendar.getInstance().getTimeInMillis()) {
+                SoundPlayer.play("bonusLeurre");
+                playSoundAt = Calendar.getInstance().getTimeInMillis() + 1000;
+            }
+        }
+
         // Leurre effect
         if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > Settings.getLeurreDurationBeforeActivation() * 1000) {
             if (((Calendar.getInstance().getTimeInMillis() - getBonusActivationDate())) > durationOfBonusInSeconds * 1000 + Settings.getLeurreDurationBeforeActivation() * 1000) {
@@ -100,7 +112,7 @@ public class Leurre extends Bonus {
         gd.setFont(new Font("Arial", Font.BOLD, 12));
         switch (getState()) {
             default:
-                gd.setPaint(Color.yellow.darker());    
+                gd.setPaint(Color.yellow.darker());
                 break;
             case DisplayedButNotActive:
                 gd.setPaint(Color.red.darker());
@@ -111,7 +123,7 @@ public class Leurre extends Bonus {
                 durationToDisplay = durationOfBonusInSeconds + Settings.getLeurreDurationBeforeActivation() - Math.round((double) (Calendar.getInstance().getTimeInMillis() - getBonusActivationDate()) / 1000.0);
                 break;
         }
-        
+
         if (getRobot() == null) {
             int x = (int) (this.getX() + Settings.getSize());
             int y = (int) (this.getY());

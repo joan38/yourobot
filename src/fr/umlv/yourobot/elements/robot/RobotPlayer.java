@@ -80,6 +80,11 @@ public class RobotPlayer extends Robot {
         }
     }
 
+    @Override
+    public float getBoostLevel() {
+        return 15;
+    }
+
     /**
      * Reset the entire life of the robot.
      */

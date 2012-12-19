@@ -1,8 +1,10 @@
 package fr.umlv.yourobot.context;
 
 import fr.umlv.yourobot.Manager;
+import fr.umlv.yourobot.MusicPlayer;
 import fr.umlv.yourobot.YouRobot;
 import fr.umlv.yourobot.Settings;
+import fr.umlv.yourobot.SoundPlayer;
 import fr.umlv.zen.*;
 import java.awt.Color;
 import java.awt.Font;
@@ -46,6 +48,9 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
 
         // Drawing the menu.
         context.render(menu);
+        
+        // Playing the intro sound.
+        MusicPlayer.getMusiquePlayer().playMusic("intro");
 
         // Managing the menu.
         for (;;) {
@@ -58,12 +63,14 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
                 case DOWN:
                 case S:
                     if (menu.getSelectedIndex() < menu.getNumberOfElements() - 1) {
+                        SoundPlayer.play("menu");
                         menu.setSelectedIndex(menu.getSelectedIndex() + 1);
                     }
                     break;
                 case UP:
                 case Z:
                     if (menu.getSelectedIndex() > 0) {
+                        SoundPlayer.play("menu");
                         menu.setSelectedIndex(menu.getSelectedIndex() - 1);
                     }
                     break;
@@ -71,6 +78,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
                     // Enter.
                     if (menu == this) {
                         // One or two player ?
+                        SoundPlayer.play("menuEnter");
                         numberOfPlayers = menu.getSelectedIndex() + 1;
                         menu = new MenuSelectDifficuly();
                     } else if (menu instanceof MenuSelectDifficuly || menu instanceof MenuVictory) {

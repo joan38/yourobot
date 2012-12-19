@@ -83,7 +83,7 @@ public class SampleWorldFactory {
             areas[2] = new SimpleArea(Settings.getSize() + 60, 450, Color.BLUE); // StartArea P2
             areas[0] = new SimpleArea(Settings.getSize() + 640, 290, Color.GREEN); // EndArea
 
-            World w = new World("Random World", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
+            World w = new World("Random World", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "1");
             World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
             Element e;
@@ -138,7 +138,7 @@ public class SampleWorldFactory {
             areas[2] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 - Settings.getSize() / 2 + 40, Color.BLUE); // StartArea P2
             areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
-            World w = new World("Level 1", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
+            World w = new World("Level 1", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
             World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
             // Adding elements to this world.
@@ -174,7 +174,7 @@ public class SampleWorldFactory {
             areas[2] = new SimpleArea(Settings.getSize() + 100, 520, Color.BLUE); // StartArea P2
             areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), 520, Color.GREEN); // EndArea
 
-            World w = new World("Level 2", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
+            World w = new World("Level 2", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "3");
             World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
             // Adding elements to this world.
@@ -240,7 +240,7 @@ public class SampleWorldFactory {
             areas[2] = new SimpleArea(Settings.getSize() + 30, Settings.getHeight() / 2 - Settings.getSize() / 2 + 170, Color.BLUE); // StartArea P2
             areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
-            World w = new World("Level 3", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas);
+            World w = new World("Level 3", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "4");
             World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
             // Adding elements to this world.

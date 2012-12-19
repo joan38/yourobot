@@ -15,7 +15,7 @@ public class Settings {
     private static int size;
     private static int effectArea;
     private static int detectionArea;
-    private static int leurreDurationBeforeActivation = 8;
+    private static int leurreDurationBeforeActivation = 2;
 
     /**
      * Init the settings of YouRobot.

@@ -11,8 +11,9 @@ import org.jbox2d.dynamics.BodyType;
 
 /**
  * Represent a Robot.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -25,9 +26,9 @@ public abstract class Robot extends Element {
     // JBox2D.
     private final CircleShape dynamicCircle;
 
-    
     /**
      * Create a robot.
+     *
      * @param texture Standard texture to use.
      * @param textureBoost Texture to use when the robot is boosting.
      * @param textureBrake Texture to use when the robot is braking.
@@ -74,6 +75,7 @@ public abstract class Robot extends Element {
 
     /**
      * Does the robot is boosting ?
+     *
      * @return True or false.
      */
     public boolean isIsBoosting() {
@@ -81,22 +83,33 @@ public abstract class Robot extends Element {
     }
 
     /**
+     * Returns the boost force.
+     * 
+     * @return The boost force. (5)
+     */
+    public float getBoostLevel() {
+        return 5;
+    }
+
+    /**
      * Set the boost of the robot.
+     *
      * @param isBoosting true to boost, false to stop.
      */
     public void setIsBoosting(boolean isBoosting) {
         this.isBoosting = isBoosting;
         if (isBoosting == true && getBody() != null) {
-            
-            float forceX = (float) (5 * Math.cos(getBody().getAngle()));
-            float forceY = (float) (5 * Math.sin(getBody().getAngle()));
+
+            float forceX = (float) (getBoostLevel() * Math.cos(getBody().getAngle()));
+            float forceY = (float) (getBoostLevel() * Math.sin(getBody().getAngle()));
 
             getBody().applyForce(new Vec2(forceX, forceY), getBody().getWorldCenter());
         }
     }
-    
+
     /**
      * Is the robot braking ?
+     *
      * @return true if braking, false otherwise.
      */
     public boolean isIsBraking() {
@@ -105,8 +118,9 @@ public abstract class Robot extends Element {
 
     /**
      * Set the robot braking.
+     *
      * @param isBraking true or false.
-     * 
+     *
      * Note: Unused in version 0.1.
      */
     public void setIsBraking(boolean isBraking) {
