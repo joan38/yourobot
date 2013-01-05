@@ -16,8 +16,9 @@ import java.util.Random;
 
 /**
  * Factory that create sampleworlds.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -25,11 +26,11 @@ public class SampleWorldFactory {
 
     /**
      * World set 1.
+     *
      * @return A world set.
      */
     public static WorldSet getWorldSet1() {
         return new WorldSet() {
-
             private int index = -1;
             private final int numberOfWorlds = 4;
 
@@ -67,12 +68,21 @@ public class SampleWorldFactory {
             public void newGame() {
                 index = -1;
             }
+
+            @Override
+            public String getNextHint() {
+                switch (index) {
+                    case 0:
+                        return "Hey sir!\nhere is your fckin mission\nKill everybody and be the best !!!!!";
+                }
+                return null;
+            }
         };
     }
 
     /**
      * Generate a sample world. Elements are placed randomly.
-     * 
+     *
      * @return A sample random world to be played.
      */
     public static World getRandomDummyWorld() {
@@ -118,7 +128,7 @@ public class SampleWorldFactory {
             for (int i = 0; i < 20; i++) {
                 w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true), 400, 280));
             }
-            
+
             return w;
         } catch (IOException ex) {
             System.err.println("Texture not found. " + ex.getMessage());
@@ -128,6 +138,7 @@ public class SampleWorldFactory {
 
     /**
      * Get the world level 1.
+     *
      * @return The world.
      */
     public static World getDummyWorldLevel1() {
@@ -164,6 +175,7 @@ public class SampleWorldFactory {
 
     /**
      * Get the world level 2.
+     *
      * @return The world.
      */
     public static World getDummyWorldLevel2() {
@@ -230,6 +242,7 @@ public class SampleWorldFactory {
 
     /**
      * Get the world level 2.
+     *
      * @return The world.
      */
     public static World getDummyWorldLevel3() {

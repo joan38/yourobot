@@ -18,6 +18,13 @@ public interface WorldSet {
     public World getNextWorld();
     
     /**
+     * Gets the next game hint before launching the world.
+     * 
+     * @return An hint or null if there is not hint to display. 
+     */
+    public String getNextHint();
+    
+    /**
      * Get the current world in order to be replayed.
      * @return The world to be played.
      */

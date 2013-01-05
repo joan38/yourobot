@@ -51,7 +51,7 @@ public class YouRobot {
         SoundPlayer.getPlayer().registerSound("bonusbomb", YouRobot.class.getResource("/sounds/bonusbomb.mp3").getPath());
         SoundPlayer.getPlayer().registerSound("bonusLeurre", YouRobot.class.getResource("/sounds/bonusLeurre.wav").getPath());
         SoundPlayer.getPlayer().registerSound("bonusSnap", YouRobot.class.getResource("/sounds/bonusSnap.wav").getPath());
-
+        SoundPlayer.getPlayer().registerSound("bonusmedipack", YouRobot.class.getResource("/sounds/bonusmedipack.wav").getPath());
 
         // Creation of a robot and player.
         RobotPlayer robot, robot2;

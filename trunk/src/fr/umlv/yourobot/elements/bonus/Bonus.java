@@ -11,13 +11,15 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.annotation.ElementType;
 import java.util.Calendar;
 import java.util.Random;
 
 /**
  * Represent a bonus.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -27,32 +29,41 @@ public abstract class Bonus extends Element {
     private long bonusActivationDate;
     final Integer durationOfBonusInSeconds;
     private BonusState state;
+    private final boolean autoActivation;
 
     /**
      * Current state of the bonus.
      */
     public enum BonusState {
 
-        /** Placed on the world. */
+        /**
+         * Placed on the world.
+         */
         Placed,
-        /** Grabbed by a robot. */
+        /**
+         * Grabbed by a robot.
+         */
         Grabbed,
-        /** Activated by a robot. */
+        /**
+         * Activated by a robot.
+         */
         Activated,
-        /** The bonus is drawn on the world but not active. */
+        /**
+         * The bonus is drawn on the world but not active.
+         */
         DisplayedButNotActive
     }
 
     /**
      * A Bonus.
-     * 
+     *
      * @param typeElement Type of the element.
      * @param texture Texture of the bonus.
      * @param durationOfBonusInSeconds Duration of the bonus.
      * @param x Initial x position of the bonus.
      * @param y Initial y position of the bonus.
      */
-    public Bonus(TypeElementBase typeElement, BufferedImage texture, int durationOfBonusInSeconds, int x, int y) {
+    public Bonus(TypeElementBase typeElement, BufferedImage texture, int durationOfBonusInSeconds, int x, int y, boolean autoActivation) {
         super(typeElement, texture, x, y);
 
         // A bonus do not rotate.
@@ -61,26 +72,31 @@ public abstract class Bonus extends Element {
 
         // A bonus is placed at the beggining.
         this.state = BonusState.Placed;
+
+        // Auto activation.
+        this.autoActivation = autoActivation;
     }
 
     /**
      * Step the bonus, no effect if activateBonus was not activated.
-     * 
+     *
      * Note: The bonus effect will end after the duration of the bonus.
-     * 
-     * @return false is the bonus MUST BE DELETED. Because its effect has finished. true otherwise.
+     *
+     * @return false is the bonus MUST BE DELETED. Because its effect has
+     * finished. true otherwise.
      */
     public abstract boolean stepBonus();
 
     /**
-     * Call this method when a robot is grabbing the bonus.
-     * Disable the box2d rendering and the rendering of the bonus.
-     * 
+     * Call this method when a robot is grabbing the bonus. Disable the box2d
+     * rendering and the rendering of the bonus.
+     *
      * Associate the bonus with a world and a robot.
-     * 
+     *
      * @param robot Robot that activate the bonus.
-     * 
-     * Note: The bonus is not removed from the world, just not visible. Do not forget to remove it when stepBonus return false.
+     *
+     * Note: The bonus is not removed from the world, just not visible. Do not
+     * forget to remove it when stepBonus return false.
      */
     public void grabBonus(Robot robot) {
         this.robot = robot;
@@ -91,7 +107,7 @@ public abstract class Bonus extends Element {
 
     /**
      * Activate the bonus.
-     * 
+     *
      * Note: Call automatically stepBonus.
      */
     public void activateBonus() {
@@ -103,7 +119,7 @@ public abstract class Bonus extends Element {
 
     /**
      * Get the current state of the bonus.
-     * 
+     *
      * @return The state of the bonus.
      */
     public BonusState getState() {
@@ -112,10 +128,11 @@ public abstract class Bonus extends Element {
 
     /**
      * Set the state of the bonus.
-     * 
+     *
      * @param state State of the bonus.
-     * 
-     * Note: Protected because other objects must not change the state of a bonus.
+     *
+     * Note: Protected because other objects must not change the state of a
+     * bonus.
      */
     protected void setState(BonusState state) {
         this.state = state;
@@ -123,7 +140,7 @@ public abstract class Bonus extends Element {
 
     /**
      * Returns the activation date of the bonus.
-     * 
+     *
      * @return The activation date of the bonus.
      */
     protected long getBonusActivationDate() {
@@ -132,12 +149,13 @@ public abstract class Bonus extends Element {
 
     /**
      * Get the robot associated with the bonus.
+     *
      * @return The robot associated.
      */
     protected Robot getRobot() {
         return robot;
     }
-    
+
     // Rendering
     //
     @Override
@@ -165,12 +183,13 @@ public abstract class Bonus extends Element {
     }
 
     /**
-     * This method do a rendering and ignore the bonus logic. (Activated/Placed etc... It render !)
-     * 
+     * This method do a rendering and ignore the bonus logic. (Activated/Placed
+     * etc... It render !)
+     *
      * @param gd Graphic to draw on.
      * @param texture The texture to draw.
-     * 
-     * @see #render(java.awt.Graphics2D) 
+     *
+     * @see #render(java.awt.Graphics2D)
      */
     protected void renderIgnoreBonusLogic(Graphics2D gd, BufferedImage texture) {
         super.render(gd, texture);
@@ -179,12 +198,13 @@ public abstract class Bonus extends Element {
 
     /**
      * Render the duration of the bonus.
+     *
      * @param gd Graphics 2D to draw on.
      */
     protected void renderDuration(Graphics2D gd) {
         String duration = "";
         if (durationOfBonusInSeconds != 0) {
-            duration = " " + durationOfBonusInSeconds.toString();
+            duration = " " + durationOfBonusInSeconds.toString() +"s";
         }
 
         gd.setFont(new Font("Arial", Font.BOLD, 12));
@@ -194,7 +214,11 @@ public abstract class Bonus extends Element {
             int y = (int) (this.getY());
 
             // Drawing the text.
-            gd.drawString(this.getTypeElement() + duration, x, y);
+            if (this.getTypeElement() != TypeElementBase.Unasigned) {
+                gd.drawString(this.getTypeElement() + duration, x, y);
+            } else {
+                gd.drawString(duration, x, y);
+            }
         } else {
             int x = (int) (robot.getX() + Settings.getSize());
             int y = (int) (robot.getY());
@@ -203,11 +227,30 @@ public abstract class Bonus extends Element {
         }
     }
 
+    /**
+     * Render a text next to the bonus.
+     *
+     * @note Does not follow the robot, just draw a text when the bonus is
+     * placed on the map.
+     * @param gd Graphics 2D to draw on.
+     */
+    protected void renderBonusText(Graphics2D gd, String bonusText) {
+        gd.setFont(new Font("Arial", Font.BOLD, 12));
+        gd.setPaint(Color.yellow.darker());
+        if (state == BonusState.Placed) {
+            int x = (int) (this.getX() + Settings.getSize());
+            int y = (int) (this.getY());
+
+            // Drawing the text.
+            gd.drawString(bonusText, x, y);
+        }
+    }
+
     // Factory
     //
     /**
      * Get a new random bonus.
-     * 
+     *
      * @return A bonus.
      */
     public static Bonus getRandomBonus() {
@@ -226,7 +269,7 @@ public abstract class Bonus extends Element {
                 break;
         }
 
-        switch (rand.nextInt(3)) {
+        switch (rand.nextInt(4)) {
             case 0:
                 try {
                     return new BombeMagnetique(typeElement, TextureLoader.loadTexture(Bonus.class.getResource("/textures/bomb.png"), true),
@@ -242,7 +285,17 @@ public abstract class Bonus extends Element {
                             rand.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
                             rand.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize());
                 } catch (IOException ex) {
-                    System.err.println("Error while loading texture : /textures/bomb.png");
+                    System.err.println("Error while loading texture : /textures/snap.png");
+                }
+                break;
+            case 2:
+                try {
+                    return new Medipack(TextureLoader.loadTexture(Bonus.class.getResource("/textures/medipack.png"), true),
+                            rand.nextInt(Settings.getWidth() - (Settings.getSize() * 2)) + Settings.getSize(),
+                            rand.nextInt(Settings.getHeight() - (Settings.getSize() * 2)) + Settings.getSize(),
+                            rand.nextInt(40) + 20);
+                } catch (IOException ex) {
+                    System.err.println("Error while loading texture : /textures/medipack.png");
                 }
                 break;
             default:
@@ -261,5 +314,14 @@ public abstract class Bonus extends Element {
 
         // Should never happen.
         throw new IllegalStateException("This case must not happen. return null");
+    }
+
+    /**
+     * Returns true if the bonus has to be automatically activated.
+     *
+     * @return True if the bonus has to be auto activated.
+     */
+    public boolean isAutoActivation() {
+        return autoActivation;
     }
 }

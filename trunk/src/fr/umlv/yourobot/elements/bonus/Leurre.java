@@ -37,7 +37,7 @@ public class Leurre extends Bonus {
      * @param y Y position of the bonus.
      */
     public Leurre(TypeElementBase typeElement, BufferedImage texture, BufferedImage activatedTexture, BufferedImage beforeActivatedTexture, int durationOfBonusInSeconds, int x, int y) {
-        super(typeElement, texture, durationOfBonusInSeconds, x, y);
+        super(typeElement, texture, durationOfBonusInSeconds, x, y, false);
 
         this.dynamicCircle = new CircleShape();
         this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;
@@ -106,7 +106,7 @@ public class Leurre extends Bonus {
         String duration = "";
         Long durationToDisplay = 0l;
         if (durationOfBonusInSeconds != 0) {
-            duration = " " + durationOfBonusInSeconds.toString();
+            duration = " " + durationOfBonusInSeconds.toString() +"s";
         }
 
         gd.setFont(new Font("Arial", Font.BOLD, 12));
