@@ -10,8 +10,9 @@ import java.util.Objects;
 
 /**
  * Manage the logic of the game.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -21,10 +22,22 @@ public class Manager {
     private final Player[] players;
     private Game renderGame;
     private final Menu renderMenu;
+    private int lastHealth[] = new int[2];
+
+    public void newGame() {
+        worlds.newGame();
+        lastHealth[0] = 100;
+        lastHealth[1] = 100;
+        players[0].getRobot().resetRobot(100);
+        if (players[1] != null) {
+            players[1].getRobot().resetRobot(100);
+        }
+
+    }
 
     /**
-     * Tell which renderer is currently displayed.
-     * Useful to manage the comportment of the application.
+     * Tell which renderer is currently displayed. Useful to manage the
+     * comportment of the application.
      */
     private enum CurrentRenderer {
 
@@ -80,7 +93,7 @@ public class Manager {
 
     /**
      * Game manager.
-     * 
+     *
      * @param worlds Worlds to play.
      * @param players Players of the game. (include settings etc...)
      */
@@ -89,6 +102,9 @@ public class Manager {
         this.players = players;
 
         renderMenu = new Menu(this);
+
+        lastHealth[0] = 100;
+        lastHealth[1] = 100;
     }
 
     /**
@@ -100,28 +116,48 @@ public class Manager {
 
     /**
      * Launch a new game.
-     * 
+     *
      * @param map The map to start the game on.
+     * @param isReplay Set to true if the map is a replay or a new level. (Used
+     * to manage health between levels)
      * @param numberOfHumanPlayer Number of Human player.
-     * @param d Difficulty of the game.
+     * @param d Difficulty of the game. number. (Set to 0 by default)
+     *
      * @return The launched game.
      */
-    public Game newGame(World map, int numberOfHumanPlayer, Difficuly d) {
+    public Game newGame(World map, boolean isReplay, int numberOfHumanPlayer, Difficuly d, int increaseHealthOfPlayer) {
         Objects.requireNonNull(map);
         Objects.requireNonNull(d);
 
         // Create a game.
         Player[] array = new Player[2];
         array[0] = players[0];
+
+        // Health management.
+        if (isReplay == true) {
+            // Reseting the health because we are replaying.
+            players[0].getRobot().resetRobot(lastHealth[0]);
+            if (numberOfHumanPlayer > 1) {
+                players[1].getRobot().resetRobot(lastHealth[1]);
+            }
+        } else {
+            // Storing the health because we are playing a new level.
+            lastHealth[0] = players[0].getRobot().getHealth();
+            if (numberOfHumanPlayer > 1) {
+                lastHealth[1] = players[1].getRobot().getHealth();
+            }
+        }
+        players[0].getRobot().applyDamage(-increaseHealthOfPlayer); // Giving a life boost for newbies.
         if (numberOfHumanPlayer > 1) {
             array[1] = players[1];
+            players[1].getRobot().applyDamage(-increaseHealthOfPlayer); // Giving a life boost for newbies.
         }
 
         // Setting the speed of RobotIA.
         for (RobotIA iA : map.getRobotIAs()) {
             iA.setSpeed(d.robotIASpeed);
         }
-        
+
         // Starting the music.
         MusicPlayer.getMusiquePlayer().playMusic(map.getMusique());
 
@@ -131,6 +167,7 @@ public class Manager {
 
     /**
      * Get maps that the manager is holding.
+     *
      * @return Maps to play.
      */
     public WorldSet getMaps() {

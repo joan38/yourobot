@@ -31,7 +31,7 @@ public class BombeMagnetique extends Bonus {
      * @param y Y position of the bomb.
      */
     public BombeMagnetique(TypeElementBase typeElement, BufferedImage texture, int x, int y) {
-        super(typeElement, texture, 0, x, y);
+        super(typeElement, texture, 0, x, y, false);
 
         this.dynamicCircle = new CircleShape();
         this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;

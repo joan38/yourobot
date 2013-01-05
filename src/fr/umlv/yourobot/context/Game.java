@@ -4,10 +4,10 @@ import fr.umlv.yourobot.Player;
 import fr.umlv.yourobot.RobotKeyAction;
 import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.SoundPlayer;
-import fr.umlv.yourobot.elements.robot.Robot;
+import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.bonus.Bonus;
-import fr.umlv.yourobot.elements.*;
+import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.robot.RobotIA;
 import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import fr.umlv.zen.*;
@@ -102,7 +102,6 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         for (int i = 0; i < 2; i++) {
             Player p = players[i];
             if (p != null) {
-                p.getRobot().resetRobot();
                 p.getRobot().setX(world.getAreas()[i + 1].getX());
                 p.getRobot().setY(world.getAreas()[i + 1].getY());
             }
@@ -274,24 +273,40 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
             if (bodyB.getUserData() instanceof RobotPlayer && bodyA.getUserData() instanceof Bonus) {
                 // Woot, a bonus.
                 if (((Bonus) bodyA.getUserData()).getState() == Bonus.BonusState.Placed) {
-                    // Grabing it.
+                    Bonus bonus = (Bonus) bodyA.getUserData();
                     int playerIndex = (bodyB.getUserData().equals(players[0].getRobot()) ? 0 : 1);
 
-                    playersBonus[playerIndex] = (Bonus) bodyA.getUserData();
-                    playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
-                    SoundPlayer.play("bonuspickup");
-                    numberOfBonus--;
+                    if (bonus.isAutoActivation()) {
+                        // If autoactivating, launching it.
+                        bonus.grabBonus(players[playerIndex].getRobot());
+                        bonus.activateBonus();
+                        runningBonus.add(bonus);
+                    } else {
+                        // Grabing it.
+                        playersBonus[playerIndex] = bonus;
+                        playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
+                        SoundPlayer.play("bonuspickup");
+                        numberOfBonus--;
+                    }
                 }
             } else if (bodyA.getUserData() instanceof RobotPlayer && bodyB.getUserData() instanceof Bonus) {
                 // Woot, a bonus.
                 if (((Bonus) bodyB.getUserData()).getState() == Bonus.BonusState.Placed) {
-                    // Grabing it.
+                    Bonus bonus = (Bonus) bodyB.getUserData();
                     int playerIndex = (bodyA.getUserData().equals(players[0].getRobot()) ? 0 : 1);
 
-                    playersBonus[playerIndex] = (Bonus) bodyB.getUserData();
-                    playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
-                    SoundPlayer.play("bonuspickup");
-                    numberOfBonus--;
+                    if (bonus.isAutoActivation()) {
+                        // If autoactivating, launching it.
+                        bonus.grabBonus(players[playerIndex].getRobot());
+                        bonus.activateBonus();
+                        runningBonus.add(bonus);
+                    } else {
+                        // Grabing it.
+                        playersBonus[playerIndex] = bonus;
+                        playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
+                        SoundPlayer.play("bonuspickup");
+                        numberOfBonus--;
+                    }
                 }
             }
         }

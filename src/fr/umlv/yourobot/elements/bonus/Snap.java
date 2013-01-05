@@ -36,7 +36,7 @@ public class Snap extends Bonus {
      * @param y Y position of the bonus.
      */
     public Snap(TypeElementBase typeElement, BufferedImage texture, int durationOfBonusInSeconds, int x, int y) {
-        super(typeElement, texture, durationOfBonusInSeconds, x, y);
+        super(typeElement, texture, durationOfBonusInSeconds, x, y, false);
 
         this.dynamicCircle = new CircleShape();
         this.dynamicCircle.m_radius = (float) Settings.getSize() / 2.0f;

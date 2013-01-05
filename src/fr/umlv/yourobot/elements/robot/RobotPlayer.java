@@ -9,8 +9,9 @@ import java.awt.image.BufferedImage;
 
 /**
  * Represent an human robot.
- * 
+ *
  * License: GNU Public license v3.
+ *
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
@@ -20,7 +21,7 @@ public class RobotPlayer extends Robot {
 
     /**
      * Create a new robot for a player.
-     * 
+     *
      * @param health Health of the robot. (Usually 100)
      * @param texture Texture of robot.
      * @param textureBoost Texture of the robot while boosting.
@@ -35,6 +36,7 @@ public class RobotPlayer extends Robot {
 
     /**
      * Is the robot dead ?
+     *
      * @return True if the robot is dead.
      */
     public boolean isDead() {
@@ -67,16 +69,19 @@ public class RobotPlayer extends Robot {
 
     /**
      * Apply damages to the robot.
-     * 
-     * @param damage Damage of the robot. (Set negative damage to apply a life boost!)
+     *
+     * @param damage Damage of the robot. (Set negative damage to apply a life
+     * boost!)
      */
     public void applyDamage(int damage) {
-        if (health > 0) {
-            health -= damage;
+        health -= damage;
+        if (health > 100) {
+            health = 100;
+        }
 
-            if (health <= 0) {
-                setIsBoosting(false);
-            }
+        if (health <= 0) {
+            health = 0;
+            setIsBoosting(false);
         }
     }
 
@@ -88,7 +93,16 @@ public class RobotPlayer extends Robot {
     /**
      * Reset the entire life of the robot.
      */
-    public void resetRobot() {
-        health = 100;
+    public void resetRobot(int newHealth) {
+        health = newHealth;
+        if (health > 100) {
+            health = 100;
+        } else if (health < 0) {
+            health = 0;
+        }
+    }
+
+    public Integer getHealth() {
+        return health;
     }
 }
