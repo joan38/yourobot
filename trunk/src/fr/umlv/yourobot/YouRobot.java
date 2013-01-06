@@ -1,5 +1,6 @@
 package fr.umlv.yourobot;
 
+import fr.umlv.yourobot.elements.GameWorlds;
 import fr.umlv.yourobot.elements.SampleWorldFactory;
 import fr.umlv.yourobot.elements.TextureLoader;
 import fr.umlv.yourobot.elements.robot.RobotPlayer;
@@ -26,13 +27,15 @@ public class YouRobot {
         final int SIZE = 20;
         final int EFFECT_AREA = 100;
         final int DETECTION_AREA = 200;
+        final int GRID_X = 40;
+        final int GRID_Y = 30;
 
         // Banner
         System.out.println("YouRobot version " + versionMajor + "." + versionMinor + " - Licensed under GNU GPLv3.");
         System.out.println("Damien Girard and Joan Goyeau.");
 
         // Setting YouRobot settings.
-        Settings.setYouRobotSetting(WIDTH, HEIGHT, SIZE, EFFECT_AREA, DETECTION_AREA);
+        Settings.setYouRobotSetting(WIDTH, HEIGHT, SIZE, EFFECT_AREA, DETECTION_AREA, GRID_X, GRID_Y);
 
         // Registering musics.
         MusicPlayer.getMusiquePlayer().registerMusic("intro", YouRobot.class.getResource("/sounds/music/00-quake-iii-arena-intro.mp3").getPath());
@@ -78,7 +81,7 @@ public class YouRobot {
         players[1].setKeyBinding(RobotKeyAction.Turn_Left, KeyEvent.VK_LEFT);
         players[1].setKeyBinding(RobotKeyAction.Turn_Right, KeyEvent.VK_RIGHT);
 
-        Manager manager = new Manager(SampleWorldFactory.getWorldSet1(), players);  // Launching the application manager.
+        Manager manager = new Manager(new GameWorlds(), players);  // Launching the application manager.
         manager.run();
     }
 }
