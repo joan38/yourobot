@@ -15,13 +15,10 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.io.IOException;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -123,22 +120,38 @@ public class Menu implements MenuManager, ApplicationCode, ApplicationRenderer {
 
                 // If a game was loaded, then I launch it.
                 if (game != null) {
-                    game.run(core); // Launching the game.
+                    boolean restartGame = true;
+                    while (restartGame == true) {
+                        restartGame = false;
+                        game.run(core); // Launching the game.
 
-                    // Game ended, what is the result ?
-                    if (game.getVictoriousPlayer() == 0) {
-                        menu = new MenuVictory(game.getVictoriousPlayer());
-                    } else {
-                        // No more map.
-                        if (manager.getMaps().hasMoreWorld() == false) {
-                            menu = new MenuGameOver();
-                        } else {
-                            // If there is a game hint and I win, I show it.
-                            if (manager.getMaps().getNextHint() == null || game.getVictoriousPlayer() == 0) {
+                        // Game ended, what is the result ?
+                        switch (game.getVictoriousPlayer()) {
+                            case 0:
                                 menu = new MenuVictory(game.getVictoriousPlayer());
-                            } else {
-                                menu = new MenuGameHint(manager.getMaps().getNextHint());
-                            }
+                                break;
+                            case -1:
+                                // Restart.
+                                restartGame = true;
+                                game = manager.newGame(manager.getMaps().getReplayWorld(), true, numberOfPlayers, difficuly, 0);
+                                break;
+                            case -2:
+                                // Quit.
+                                menu = this;
+                                break;
+                            default:
+                                if (manager.getMaps().hasMoreWorld() == false) {
+                                    // No more map.
+                                    menu = new MenuGameOver();
+                                } else {
+                                    // If there is a game hint and I win, I show it.
+                                    if (manager.getMaps().getNextHint() == null || game.getVictoriousPlayer() == 0) {
+                                        menu = new MenuVictory(game.getVictoriousPlayer());
+                                    } else {
+                                        menu = new MenuGameHint(manager.getMaps().getNextHint());
+                                    }
+                                }
+                                break;
                         }
                     }
                 }

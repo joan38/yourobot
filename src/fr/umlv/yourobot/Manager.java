@@ -5,13 +5,7 @@ import fr.umlv.yourobot.context.Menu;
 import fr.umlv.yourobot.context.WorldSet;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.robot.RobotIA;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.Objects;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  * Manage the logic of the game.
@@ -189,4 +183,10 @@ public class Manager {
     public WorldSet getMaps() {
         return worlds;
     }
+
+    public Player[] getPlayers() {
+        return players;
+    }
+    
+    
 }
