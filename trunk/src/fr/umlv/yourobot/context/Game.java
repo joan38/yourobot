@@ -14,6 +14,7 @@ import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.robot.RobotIA;
 import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -140,7 +141,7 @@ public class Game implements ApplicationCode, ApplicationRenderer {
             }
 
             int nStepsClamped = Math.min(nSteps, MAX_STEPS);
-            
+
             for (int i = 0; i < nStepsClamped; ++i) {
                 // Bonus iteration
                 Iterator<Bonus> bonusIt = runningBonus.iterator();
@@ -202,6 +203,23 @@ public class Game implements ApplicationCode, ApplicationRenderer {
                     continue;
                 }
                 atLeastOnePlayerIsAlive = true;
+
+                // Handling escape key and pause menu.
+                if (core.isPressedAndEat(KeyEvent.VK_ESCAPE)) {
+                    MenuPause menuPause = new MenuPause();
+                    menuPause.run(core);
+                    // Handling the result of the menu.
+                    switch (menuPause.getMenuResult()) {
+                        case RETRY:
+                            victoriousPlayer = -1;
+                            return;
+                        case QUIT:
+                            victoriousPlayer = -2;
+                            return;
+                    }
+                    // Reseting physics timers.
+                    milliseconds = System.currentTimeMillis();
+                }
 
                 // Handling player actions.
                 if (core.isPressed(p.getActionKeyBinding(RobotKeyAction.Boost))) {
