@@ -1,5 +1,8 @@
 package fr.umlv.yourobot.context;
 
+import fr.umlv.yourobot.ApplicationCode;
+import fr.umlv.yourobot.ApplicationCore;
+import fr.umlv.yourobot.ApplicationRenderer;
 import fr.umlv.yourobot.Player;
 import fr.umlv.yourobot.RobotKeyAction;
 import fr.umlv.yourobot.Settings;
@@ -10,10 +13,7 @@ import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.robot.RobotIA;
 import fr.umlv.yourobot.elements.robot.RobotPlayer;
-import fr.umlv.zen.*;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -34,11 +34,10 @@ import org.jbox2d.dynamics.contacts.Contact;
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public class Game implements ApplicationCode, ApplicationRenderCode {
+public class Game implements ApplicationCode, ApplicationRenderer {
 
     private final Player[] players;
     private final World world; // World of the game.
-    private BufferedImage bi; // Double buffer.
     // Game Logic variables.
     //
     // Bonus
@@ -80,8 +79,6 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
         this.world = world;
         this.players = players;
 
-        this.bi = new BufferedImage(Settings.getWidth(), Settings.getHeight(), BufferedImage.TYPE_INT_RGB);
-
         this.world.addElement(players[0].getRobot());
         if (players.length > 1 && players[1] != null) {
             this.world.addElement(players[1].getRobot());
@@ -114,30 +111,56 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
      * @param context Context.
      */
     @Override
-    public void run(ApplicationContext context) {
+    public void run(ApplicationCore core) {
         // JBox2D.
-        final float timeStep = 1.0f / 60.0f;
+        final float FIXED_TIMESTEP = 1.0f / 60.0f;
         final int velocityIteration = 6;
         final int positioniteration = 2;
 
-        // Drawing the game.
-        context.render(this);
+        // Fixed time step.
+        double fixedTimestepAccumulator = 0;
+        final int MAX_STEPS = 5;
+        world.getjbox2DWorld().setAutoClearForces(false);
+        long milliseconds = System.currentTimeMillis();
 
-        // Managing the menu.
+        // Drawing the game.
+        core.render(this);
+
+        // Managing the game.
         for (;;) {
-            // Bonus iteration
-            Iterator<Bonus> bonusIt = runningBonus.iterator();
-            while (bonusIt.hasNext()) {
-                Bonus b = bonusIt.next();
-                if (b.stepBonus() == false) { // If stepBonus return false, I must remove ended the bonus.
-                    bonusIt.remove(); // Removing the bonus from the bonus list.
-                    world.removeElement(b); // Removing the bonus from the world.
+            // Calculating the last timespan.
+            float dt = (System.currentTimeMillis() - milliseconds) / 1000.0f;
+            milliseconds = System.currentTimeMillis();
+
+            // Fixed time step code.
+            fixedTimestepAccumulator += dt;
+            int nSteps = (int) Math.floor(fixedTimestepAccumulator / FIXED_TIMESTEP);
+            if (nSteps > 0) {
+                fixedTimestepAccumulator -= nSteps * FIXED_TIMESTEP;
+            }
+
+            int nStepsClamped = Math.min(nSteps, MAX_STEPS);
+            
+            for (int i = 0; i < nStepsClamped; ++i) {
+                // Bonus iteration
+                Iterator<Bonus> bonusIt = runningBonus.iterator();
+                while (bonusIt.hasNext()) {
+                    Bonus b = bonusIt.next();
+                    if (b.stepBonus() == false) { // If stepBonus return false, I must remove ended the bonus.
+                        bonusIt.remove(); // Removing the bonus from the bonus list.
+                        world.removeElement(b); // Removing the bonus from the world.
+                    }
                 }
+                // RobotIA iteration
+                for (RobotIA r : world.getRobotIAs()) {
+                    r.stepIA();
+                }
+
+                // JBox2D Iteration.
+                world.getjbox2DWorld().step(FIXED_TIMESTEP, velocityIteration, positioniteration);
             }
-            // RobotIA iteration
-            for (RobotIA r : world.getRobotIAs()) {
-                r.stepIA();
-            }
+            world.getjbox2DWorld().clearForces();
+
             // Adding/Removing bonus.
             if (numberOfBonus >= maxNumberOfBonus) {
                 lastBonnusPlacement = Calendar.getInstance().getTimeInMillis();
@@ -151,10 +174,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 numberOfBonus++;
                 world.addElement(b);
             }
-
-            // JBox2D Iteration.
-            world.getjbox2DWorld().step(timeStep, velocityIteration, positioniteration);
-            context.render(this);
+            core.render(this);
 
             // Victory !
             if (victoriousPlayer != 0) {
@@ -167,24 +187,11 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 return; // A player have won.
             }
 
-            // A little sleep.
+            // A little sleep to prevent overheating of the CPU.
             try {
-                Thread.sleep(10);
+                Thread.sleep(10 - (nStepsClamped * 2)); // If too much frame are drop, I simply don't wait.
             } catch (InterruptedException ex) {
                 throw new IllegalStateException("Unexpected thread interruption", ex);
-            }
-
-            // Managing keyboard.
-            final KeyboardEvent event = context.pollKeyboard();
-            if (event == null) {
-                for (Player p : players) {
-                    if (p == null) {
-                        continue;
-                    }
-                    // Applying the boost.
-                    p.getRobot().setIsBoosting(p.getRobot().isIsBoosting());
-                }
-                continue;
             }
 
             // Managing player keybindings.
@@ -196,34 +203,28 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
                 }
                 atLeastOnePlayerIsAlive = true;
 
-                RobotKeyAction action = p.getKeyBinding(event.getKey());
-                if (action != null) { // if null, the key is not associated to an action.
-                    switch (action) {
-                        case Boost:
-                            p.getRobot().setIsBoosting(!p.getRobot().isIsBoosting());
-                            //System.out.println("Boost");
-                            break;
-                        case Take:
-                            // If the player hold a bonus, I activate it.
-                            if (playersBonus[i] != null) {
-                                // Activating the bonus.
-                                playersBonus[i].activateBonus();
-                                runningBonus.add(playersBonus[i]);
-                                // The player do not hold anymore a bonus.
-                                playersBonus[i] = null;
-                            } else {
-                                SoundPlayer.play("nobonus");
-                            }
-                            break;
-                        case Turn_Left:
-                            p.getRobot().turnLeft();
-                            //System.out.println("Left");
-                            break;
-                        case Turn_Right:
-                            p.getRobot().turnRight();
-                            //System.out.println("Right");
-                            break;
+                // Handling player actions.
+                if (core.isPressed(p.getActionKeyBinding(RobotKeyAction.Boost))) {
+                    p.getRobot().setIsBoosting(true);
+                } else {
+                    p.getRobot().setIsBoosting(false);
+                }
+                if (core.isPressedAndEat(p.getActionKeyBinding(RobotKeyAction.Take))) {
+                    // If the player hold a bonus, I activate it.
+                    if (playersBonus[i] != null) {
+                        // Activating the bonus.
+                        playersBonus[i].activateBonus();
+                        runningBonus.add(playersBonus[i]);
+                        // The player do not hold anymore a bonus.
+                        playersBonus[i] = null;
+                    } else {
+                        SoundPlayer.play("nobonus");
                     }
+                }
+                if (core.isPressed(p.getActionKeyBinding(RobotKeyAction.Turn_Left))) {
+                    p.getRobot().turnLeft();
+                } else if (core.isPressed(p.getActionKeyBinding(RobotKeyAction.Turn_Right))) {
+                    p.getRobot().turnRight();
                 }
             }
             // Managing victory or death of all players.
@@ -249,14 +250,7 @@ public class Game implements ApplicationCode, ApplicationRenderCode {
      */
     @Override
     public void render(Graphics2D gd) {
-        // Double buffer.
-        Graphics2D g2bi = (Graphics2D) bi.getGraphics();
-        g2bi.setRenderingHint(RenderingHints.KEY_ANTIALIASING, // Anti-alias!
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-        world.render(g2bi);
-
-        gd.drawImage(bi, 0, 0, null);
+        world.render(gd);
     }
 
     /**

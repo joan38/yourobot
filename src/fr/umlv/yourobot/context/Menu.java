@@ -1,22 +1,27 @@
 package fr.umlv.yourobot.context;
 
+import fr.umlv.yourobot.ApplicationCode;
+import fr.umlv.yourobot.ApplicationCore;
+import fr.umlv.yourobot.ApplicationRenderer;
 import fr.umlv.yourobot.Manager;
 import fr.umlv.yourobot.MusicPlayer;
 import fr.umlv.yourobot.Settings;
 import fr.umlv.yourobot.SoundPlayer;
 import fr.umlv.yourobot.YouRobot;
-import fr.umlv.zen.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.io.IOException;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -27,7 +32,7 @@ import javax.imageio.ImageIO;
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager {
+public class Menu implements MenuManager, ApplicationCode, ApplicationRenderer {
 
     private final Manager manager;
 
@@ -41,7 +46,7 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
     }
 
     @Override
-    public void run(ApplicationContext context) {
+    public void run(ApplicationCore core) {
         // Current menu displayed.
         MenuManager menu = this;
 
@@ -52,107 +57,100 @@ public class Menu implements ApplicationCode, ApplicationRenderCode, MenuManager
         Game game = null;
 
         // Drawing the menu.
-        context.render(menu);
+        core.render(menu);
 
         // Playing the intro sound.
         MusicPlayer.getMusiquePlayer().playMusic("intro");
 
         // Managing the menu.
         for (;;) {
-            final KeyboardEvent event = context.waitKeyboard();
-            if (event == null) {
-                return;
-            }
-
-            switch (event.getKey()) {
-                case DOWN:
-                case S:
-                    if (menu.getSelectedIndex() < menu.getNumberOfElements() - 1) {
-                        SoundPlayer.play("menu");
-                        menu.setSelectedIndex(menu.getSelectedIndex() + 1);
-                    }
-                    break;
-                case UP:
-                case Z:
-                    if (menu.getSelectedIndex() > 0) {
-                        SoundPlayer.play("menu");
-                        menu.setSelectedIndex(menu.getSelectedIndex() - 1);
-                    }
-                    break;
-                case UNDEFINED:
-                    // Enter.
-                    if (menu == this) {
-                        // One or two player screen (Main screen) ?
-                        SoundPlayer.play("menuEnter");
-                        numberOfPlayers = menu.getSelectedIndex() + 1;
-                        menu = new MenuSelectDifficuly();
-                        game = null;
-                    } else if (menu instanceof MenuSelectDifficuly) {
-                        // New game.
-                        difficuly = Manager.Difficuly.values()[menu.getSelectedIndex()];
-                        currentMapIndex = 0;
-                        manager.newGame();
-                        game = manager.newGame(manager.getMaps().getNextWorld(), false, numberOfPlayers, difficuly, 0);
-                    } else if (menu instanceof MenuVictory) {
-                        // Victory or loosing menu.
-                        if (game.getVictoriousPlayer() == 0) {
-                            switch (menu.getSelectedIndex()) {
-                                case 0:
-                                    // Retry
-                                    game = manager.newGame(manager.getMaps().getReplayWorld(), true, numberOfPlayers, difficuly, 0);
-                                    break;
-                                case 1:
-                                    // Retry with life boost
-                                    game = manager.newGame(manager.getMaps().getReplayWorld(), true, numberOfPlayers, difficuly, 50);
-                                    break;
-                                default:
-                                    // Exit.
-                                    // Go back to menu.
-                                    game = null;
-                                    menu = this;
-                            }
-                        } else {
-                            // Next Level
-                            currentMapIndex++;
-                            game = manager.newGame(manager.getMaps().getNextWorld(), false, numberOfPlayers, difficuly, 0);
+            if (core.isPressedAndEat(KeyEvent.VK_DOWN) || core.isPressedAndEat(KeyEvent.VK_S)) {
+                if (menu.getSelectedIndex() < menu.getNumberOfElements() - 1) {
+                    SoundPlayer.play("menu");
+                    menu.setSelectedIndex(menu.getSelectedIndex() + 1);
+                }
+            } else if (core.isPressedAndEat(KeyEvent.VK_UP) || core.isPressedAndEat(KeyEvent.VK_Z)) {
+                if (menu.getSelectedIndex() > 0) {
+                    SoundPlayer.play("menu");
+                    menu.setSelectedIndex(menu.getSelectedIndex() - 1);
+                }
+            } else if (core.isPressedAndEat(KeyEvent.VK_ENTER)) {
+                // Enter.
+                if (menu == this) {
+                    // One or two player screen (Main screen) ?
+                    SoundPlayer.play("menuEnter");
+                    numberOfPlayers = menu.getSelectedIndex() + 1;
+                    menu = new MenuSelectDifficuly();
+                    game = null;
+                } else if (menu instanceof MenuSelectDifficuly) {
+                    // New game.
+                    difficuly = Manager.Difficuly.values()[menu.getSelectedIndex()];
+                    currentMapIndex = 0;
+                    manager.newGame();
+                    game = manager.newGame(manager.getMaps().getNextWorld(), false, numberOfPlayers, difficuly, 0);
+                } else if (menu instanceof MenuVictory) {
+                    // Victory or loosing menu.
+                    if (game.getVictoriousPlayer() == 0) {
+                        switch (menu.getSelectedIndex()) {
+                            case 0:
+                                // Retry
+                                game = manager.newGame(manager.getMaps().getReplayWorld(), true, numberOfPlayers, difficuly, 0);
+                                break;
+                            case 1:
+                                // Retry with life boost
+                                game = manager.newGame(manager.getMaps().getReplayWorld(), true, numberOfPlayers, difficuly, 50);
+                                break;
+                            default:
+                                // Exit.
+                                // Go back to menu.
+                                game = null;
+                                menu = this;
                         }
-                    } else if (menu instanceof MenuGameHint) {
+                    } else {
                         // Next Level
                         currentMapIndex++;
                         game = manager.newGame(manager.getMaps().getNextWorld(), false, numberOfPlayers, difficuly, 0);
-                    } else if (menu instanceof MenuGameOver) {
-                        // Game over menu. Go back to menu.
-                        menu = this;
-                        game = null;
                     }
+                } else if (menu instanceof MenuGameHint) {
+                    // Next Level
+                    currentMapIndex++;
+                    game = manager.newGame(manager.getMaps().getNextWorld(), false, numberOfPlayers, difficuly, 0);
+                } else if (menu instanceof MenuGameOver) {
+                    // Game over menu. Go back to menu.
+                    menu = this;
+                    game = null;
+                }
 
-                    // If a game was loaded, then I launch it.
-                    if (game != null) {
-                        game.run(context); // Launching the game.
+                // If a game was loaded, then I launch it.
+                if (game != null) {
+                    game.run(core); // Launching the game.
 
-                        // Game ended, what is the result ?
-                        if (game.getVictoriousPlayer() == 0) {
-                            menu = new MenuVictory(game.getVictoriousPlayer());
+                    // Game ended, what is the result ?
+                    if (game.getVictoriousPlayer() == 0) {
+                        menu = new MenuVictory(game.getVictoriousPlayer());
+                    } else {
+                        // No more map.
+                        if (manager.getMaps().hasMoreWorld() == false) {
+                            menu = new MenuGameOver();
                         } else {
-                            // No more map.
-                            if (manager.getMaps().hasMoreWorld() == false) {
-                                menu = new MenuGameOver();
+                            // If there is a game hint and I win, I show it.
+                            if (manager.getMaps().getNextHint() == null || game.getVictoriousPlayer() == 0) {
+                                menu = new MenuVictory(game.getVictoriousPlayer());
                             } else {
-                                // If there is a game hint and I win, I show it.
-                                if (manager.getMaps().getNextHint() == null || game.getVictoriousPlayer() == 0) {
-                                    menu = new MenuVictory(game.getVictoriousPlayer());
-                                } else {
-                                    menu = new MenuGameHint(manager.getMaps().getNextHint());
-                                }
+                                menu = new MenuGameHint(manager.getMaps().getNextHint());
                             }
                         }
                     }
-
-                    break;
+                }
+            } else if (core.isPressedAndEat(KeyEvent.VK_ESCAPE)) {
+                if (menu instanceof MenuSelectDifficuly) {
+                    menu = this;
+                    SoundPlayer.play("menuExit");
+                }
             }
 
             // Rendering the menu.
-            context.render(menu);
+            core.render(menu);
         }
     }
 
