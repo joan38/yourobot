@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.context;
 
-import fr.umlv.zen.ApplicationRenderCode;
+import fr.umlv.yourobot.ApplicationRenderer;
 
 /**
  * Manage the logic of a menu.
@@ -9,7 +9,7 @@ import fr.umlv.zen.ApplicationRenderCode;
  * @author Damien Girard <dgirard@nativesoft.fr>
  * @author Joan Goyeau <joan.goyeau@gmail.com>
  */
-public interface MenuManager extends ApplicationRenderCode {
+public interface MenuManager extends ApplicationRenderer {
 
     /**
      * Gets the currently selected index in the menu.

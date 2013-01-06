@@ -3,7 +3,7 @@ package fr.umlv.yourobot;
 import fr.umlv.yourobot.elements.SampleWorldFactory;
 import fr.umlv.yourobot.elements.TextureLoader;
 import fr.umlv.yourobot.elements.robot.RobotPlayer;
-import fr.umlv.zen.KeyboardKey;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 /**
@@ -46,6 +46,7 @@ public class YouRobot {
         // Registering sounds.
         SoundPlayer.getPlayer().registerSound("menu", YouRobot.class.getResource("/sounds/menu.wav").getPath());
         SoundPlayer.getPlayer().registerSound("menuEnter", YouRobot.class.getResource("/sounds/menuEnter.wav").getPath());
+        SoundPlayer.getPlayer().registerSound("menuExit", YouRobot.class.getResource("/sounds/menuExit.wav").getPath());
         SoundPlayer.getPlayer().registerSound("nobonus", YouRobot.class.getResource("/sounds/nobonus.wav").getPath());
         SoundPlayer.getPlayer().registerSound("bonuspickup", YouRobot.class.getResource("/sounds/bonuspickup.wav").getPath());
         SoundPlayer.getPlayer().registerSound("bonusbomb", YouRobot.class.getResource("/sounds/bonusbomb.mp3").getPath());
@@ -72,10 +73,10 @@ public class YouRobot {
         players[1] = new Player(robot2);
 
         // Setting the default key of second player.
-        players[1].setKeyBinding(RobotKeyAction.Boost, KeyboardKey.UP);
-        players[1].setKeyBinding(RobotKeyAction.Take, KeyboardKey.SHIFT);
-        players[1].setKeyBinding(RobotKeyAction.Turn_Left, KeyboardKey.LEFT);
-        players[1].setKeyBinding(RobotKeyAction.Turn_Right, KeyboardKey.RIGHT);
+        players[1].setKeyBinding(RobotKeyAction.Boost, KeyEvent.VK_UP);
+        players[1].setKeyBinding(RobotKeyAction.Take, KeyEvent.VK_SHIFT);
+        players[1].setKeyBinding(RobotKeyAction.Turn_Left, KeyEvent.VK_LEFT);
+        players[1].setKeyBinding(RobotKeyAction.Turn_Right, KeyEvent.VK_RIGHT);
 
         Manager manager = new Manager(SampleWorldFactory.getWorldSet1(), players);  // Launching the application manager.
         manager.run();

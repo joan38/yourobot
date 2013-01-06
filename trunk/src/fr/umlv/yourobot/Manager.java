@@ -5,8 +5,13 @@ import fr.umlv.yourobot.context.Menu;
 import fr.umlv.yourobot.context.WorldSet;
 import fr.umlv.yourobot.elements.*;
 import fr.umlv.yourobot.elements.robot.RobotIA;
-import fr.umlv.zen.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Manage the logic of the game.
@@ -111,7 +116,18 @@ public class Manager {
      * Run the application.
      */
     public void run() {
-        Application.run("YouRobot", Settings.getWidth(), Settings.getHeight(), new MainManager());
+        // Launching the application core.
+        final ApplicationCore core = new ApplicationCore("YouRobot", Settings.getWidth(), Settings.getHeight());
+
+        // Launching the application code.
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                renderMenu.run(core);
+            }
+        });
+        
+        t.start();
     }
 
     /**
@@ -172,20 +188,5 @@ public class Manager {
      */
     public WorldSet getMaps() {
         return worlds;
-    }
-
-    /**
-     * Zen application code.
-     */
-    private class MainManager implements ApplicationCode {
-
-        @Override
-        public void run(ApplicationContext context) {
-            // Drawing the menu.
-            context.render(renderMenu);
-
-            // Managing the menu.
-            renderMenu.run(context);
-        }
     }
 }
