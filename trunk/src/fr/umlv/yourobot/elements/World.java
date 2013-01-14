@@ -1,12 +1,11 @@
 package fr.umlv.yourobot.elements;
 
-import fr.umlv.yourobot.elements.wall.Barres;
-import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.Settings;
+import fr.umlv.yourobot.elements.area.Area;
 import fr.umlv.yourobot.elements.robot.Robot;
 import fr.umlv.yourobot.elements.robot.RobotIA;
+import fr.umlv.yourobot.elements.wall.Barres;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
