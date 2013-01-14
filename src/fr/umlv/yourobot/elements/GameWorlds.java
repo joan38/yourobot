@@ -75,6 +75,7 @@ public class GameWorlds implements WorldSet {
         // Grid_X is 40
         // Grid_Y is 30
         try {
+            worldIndex = 8;
             switch (worldIndex) {
                 case 0: {
                     // Start and end areas.
@@ -786,53 +787,41 @@ public class GameWorlds implements WorldSet {
 
                     for (int i = 0; i < 15; i++) {
                         w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
-                                15 * Settings.getSize(),
+                                17 * Settings.getSize(),
                                 i * Settings.getSize()));
                     }
 
-                    for (int i = 15; i < 29; i++) {
-                        w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true),
-                                14 * Settings.getSize(),
-                                i * Settings.getSize()));
-                    }
-                    
-                    for (int i = 15; i < 29; i++) {
-                        w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true),
-                                15 * Settings.getSize(),
-                                i * Settings.getSize()));
-                    }
-                    
                     for (int i = 15; i < 29; i++) {
                         w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true),
                                 16 * Settings.getSize(),
                                 i * Settings.getSize()));
                     }
-                    
-                    for (int i = 0; i < 13; i++) {
+
+                    for (int i = 15; i < 29; i++) {
+                        w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true),
+                                17 * Settings.getSize(),
+                                i * Settings.getSize()));
+                    }
+
+                    for (int i = 15; i < 29; i++) {
+                        w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true),
+                                18 * Settings.getSize(),
+                                i * Settings.getSize()));
+                    }
+
+                    for (int i = 0; i < 20; i++) {
                         w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
                                 23 * Settings.getSize(),
-                                (16 + i) * Settings.getSize()));
+                                (9 + i) * Settings.getSize()));
                     }
 
-                    for (int i = 0; i < 9; i++) {
+                    for (int i = 0; i < 20; i++) {
                         w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
-                                (19 + i) * Settings.getSize(),
-                                10 * Settings.getSize()));
+                                27 * Settings.getSize(),
+                                i * Settings.getSize()));
                     }
 
-                    for (int i = 0; i < 11; i++) {
-                        w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
-                                28 * Settings.getSize(),
-                                (10 + i) * Settings.getSize()));
-                    }
-
-                    for (int i = 0; i < 9; i++) {
-                        w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
-                                (24 + i) * Settings.getSize(),
-                                5 * Settings.getSize()));
-                    }
-
-                    for (int i = 0; i < 24; i++) {
+                    for (int i = 0; i < 20; i++) {
                         w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
                                 33 * Settings.getSize(),
                                 (5 + i) * Settings.getSize()));
@@ -843,9 +832,9 @@ public class GameWorlds implements WorldSet {
                             17 * Settings.getSize(),
                             3 * Settings.getSize()));
 
-                    w.addElement(new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture(Bonus.class.getResource("/textures/bomb.png"), true),
-                            17 * Settings.getSize(),
-                            27 * Settings.getSize()));
+                    w.addElement(new Snap(TypeElementBase.Stone, TextureLoader.loadTexture(Bonus.class.getResource("/textures/snap.png"), true), 5,
+                            13 * Settings.getSize(),
+                            14 * Settings.getSize()));
 
                     // Placing IA.
                     w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
@@ -871,6 +860,82 @@ public class GameWorlds implements WorldSet {
                     w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
                             12 * Settings.getSize(),
                             22 * Settings.getSize()));
+
+                    // Level created.
+                    return w;
+                }
+                case 8: {
+                    // Start and end areas.
+                    Area[] areas = new Area[3];
+                    areas[1] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 - Settings.getSize() / 2 - 40, Color.BLUE); // StartArea P1
+                    areas[2] = new SimpleArea(Settings.getSize() + 40, Settings.getHeight() / 2 - Settings.getSize() / 2 + 40, Color.BLUE); // StartArea P2
+                    areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
+
+                    // Creation of the world.
+                    World w = new World("Level 9", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
+                    World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
+
+                    // Placing elements.
+                    w.addElement(new Leurre(TypeElementBase.Unasigned, TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre.png"), true),
+                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_activated.png"), true),
+                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_before_activated.png"), true),
+                            20,
+                            5 * Settings.getSize(),
+                            5 * Settings.getSize()));
+
+                    w.addElement(new Leurre(TypeElementBase.Unasigned, TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre.png"), true),
+                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_activated.png"), true),
+                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_before_activated.png"), true),
+                            20,
+                            5 * Settings.getSize(),
+                            25 * Settings.getSize()));
+
+                    // Walls
+                    for (int i = 0; i < 11; i++) {
+                        w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
+                                7 * Settings.getSize(),
+                                i * Settings.getSize()));
+                    }
+
+                    for (int i = 0; i < 11; i++) {
+                        w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
+                                7 * Settings.getSize(),
+                                (i + 18) * Settings.getSize()));
+                    }
+
+                    for (int i = 0; i < 13; i++) {
+                        w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
+                                (21 + i) * Settings.getSize(),
+                                10 * Settings.getSize()));
+                    }
+
+                    for (int i = 0; i < 13; i++) {
+                        w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
+                                (21 + i) * Settings.getSize(),
+                                19 * Settings.getSize()));
+                    }
+
+                    // Placing bonus.
+                    w.addElement(new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture(Bonus.class.getResource("/textures/bomb.png"), true),
+                            17 * Settings.getSize(),
+                            3 * Settings.getSize()));
+
+                    w.addElement(new Snap(TypeElementBase.Stone, TextureLoader.loadTexture(Bonus.class.getResource("/textures/snap.png"), true), 5,
+                            13 * Settings.getSize(),
+                            14 * Settings.getSize()));
+
+                    // Placing IA.
+                    for (int i = 10; i < 17; i++) {
+                        w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
+                                i * Settings.getSize(),
+                                10 * Settings.getSize()));
+                    }
+                    
+                    for (int i = 10; i < 17; i++) {
+                        w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
+                                i * Settings.getSize(),
+                                19 * Settings.getSize()));
+                    }
 
                     // Level created.
                     return w;
