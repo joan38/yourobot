@@ -1,7 +1,10 @@
 package fr.umlv.yourobot;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Objects;
@@ -26,7 +29,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  */
 public class MusicPlayer {
 
-    private final HashMap<String, File> mediaMap = new HashMap<>();
+    private final HashMap<String, ByteArrayOutputStream> mediaMap = new HashMap<>();
     private final static MusicPlayer PLAYER = new MusicPlayer();
     private Thread musicThread;
     private final AtomicBoolean stopMusic = new AtomicBoolean(false);
@@ -49,10 +52,19 @@ public class MusicPlayer {
      * @param name Name of the music.
      * @param url URL of the music.
      */
-    public void registerMusic(String name, String fileName) {
+    public void registerMusic(String name, InputStream input) throws IOException {
         Objects.requireNonNull(name);
-        Objects.requireNonNull(fileName);
-        mediaMap.put(name, new File(fileName));
+        Objects.requireNonNull(input);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = input.read(buffer)) > -1) {
+            baos.write(buffer, 0, len);
+        }
+        baos.flush();
+
+        mediaMap.put(name, baos);
     }
 
     /**
@@ -71,7 +83,7 @@ public class MusicPlayer {
             }
         }
 
-        final File mediaFile = mediaMap.get(name);
+        final ByteArrayOutputStream mediaFile = mediaMap.get(name);
         if (mediaFile == null) {
             System.err.println("Music not registered: " + name);
             return;
@@ -83,7 +95,7 @@ public class MusicPlayer {
             public void run() {
                 try {
                     while (!stopMusic.get()) {
-                        AudioInputStream in = AudioSystem.getAudioInputStream(mediaFile);
+                        AudioInputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(mediaFile.toByteArray()));
                         AudioInputStream din = null;
                         AudioFormat baseFormat = in.getFormat();
                         AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
