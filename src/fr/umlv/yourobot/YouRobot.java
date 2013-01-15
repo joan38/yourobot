@@ -18,7 +18,7 @@ import java.io.IOException;
 public class YouRobot {
 
     public final static int versionMajor = 0;
-    public final static int versionMinor = 1;
+    public final static int versionMinor = 5;
 
     public static void main(String[] args) throws IOException {
         // Constant.
@@ -31,7 +31,7 @@ public class YouRobot {
         final int GRID_Y = 30;
 
         // Banner
-        System.out.println("YouRobot version " + versionMajor + "." + versionMinor + " - Licensed under GNU GPLv3.");
+        System.out.println("Dr. SLIDE version " + versionMajor + "." + versionMinor + " - Licensed under GNU GPLv3.");
         System.out.println("Damien Girard and Joan Goyeau.");
 
         // Setting YouRobot settings.

@@ -16,6 +16,7 @@ import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Objects;
@@ -89,6 +90,7 @@ public class Game implements ApplicationCode, ApplicationRenderer {
         this.maxNumberOfBonus = numberOfBonus;
         this.delayBeforeCreateABonus = delayBeforeCreateABonus * 1000;
         this.numberOfBonus = 0;
+        Arrays.fill(playersBonus, null);
 
         // Contact management.
         this.world.getjbox2DWorld().setContactListener(new RobotContactListener());
@@ -295,10 +297,12 @@ public class Game implements ApplicationCode, ApplicationRenderer {
                         runningBonus.add(bonus);
                     } else {
                         // Grabing it.
-                        playersBonus[playerIndex] = bonus;
-                        playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
-                        SoundPlayer.play("bonuspickup");
-                        numberOfBonus--;
+                        if (playersBonus[playerIndex] == null) {
+                            playersBonus[playerIndex] = bonus;
+                            playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
+                            SoundPlayer.play("bonuspickup");
+                            numberOfBonus--;
+                        }
                     }
                 }
             } else if (bodyA.getUserData() instanceof RobotPlayer && bodyB.getUserData() instanceof Bonus) {
@@ -314,10 +318,12 @@ public class Game implements ApplicationCode, ApplicationRenderer {
                         runningBonus.add(bonus);
                     } else {
                         // Grabing it.
-                        playersBonus[playerIndex] = bonus;
-                        playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
-                        SoundPlayer.play("bonuspickup");
-                        numberOfBonus--;
+                        if (playersBonus[playerIndex] == null) {
+                            playersBonus[playerIndex] = bonus;
+                            playersBonus[playerIndex].grabBonus(players[playerIndex].getRobot()); // I mark the bonus as grabbed.
+                            SoundPlayer.play("bonuspickup");
+                            numberOfBonus--;
+                        }
                     }
                 }
             }

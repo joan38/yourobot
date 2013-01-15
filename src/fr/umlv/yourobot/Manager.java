@@ -111,7 +111,7 @@ public class Manager {
      */
     public void run() {
         // Launching the application core.
-        final ApplicationCore core = new ApplicationCore("YouRobot", Settings.getWidth(), Settings.getHeight());
+        final ApplicationCore core = new ApplicationCore("DR. SLIDE VS MR. MAD", Settings.getWidth(), Settings.getHeight());
 
         // Launching the application code.
         Thread t = new Thread(new Runnable() {

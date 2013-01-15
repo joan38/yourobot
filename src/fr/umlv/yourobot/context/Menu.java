@@ -181,7 +181,7 @@ public class Menu implements MenuManager, ApplicationCode, ApplicationRenderer {
     public void setSelectedIndex(int i) {
         selectedIndex = i;
     }
-    private final String gameTitle = "HOOVER MAN";
+    private final String gameTitle = "DR. SLIDE";
     private final String gameSubTitle = "AGAINST MR. MAD";
     private final Font fontTitle = new Font("arial", Font.BOLD, 80);
     private final Font fontSubTitle1 = new Font("arial", Font.BOLD, 40);
