@@ -5,7 +5,9 @@ import fr.umlv.yourobot.elements.SampleWorldFactory;
 import fr.umlv.yourobot.elements.TextureLoader;
 import fr.umlv.yourobot.elements.robot.RobotPlayer;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Entry point of the application.
@@ -20,7 +22,7 @@ public class YouRobot {
     public final static int versionMajor = 0;
     public final static int versionMinor = 5;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
         // Constant.
         final int WIDTH = 800;
         final int HEIGHT = 600;
@@ -38,24 +40,24 @@ public class YouRobot {
         Settings.setYouRobotSetting(WIDTH, HEIGHT, SIZE, EFFECT_AREA, DETECTION_AREA, GRID_X, GRID_Y);
 
         // Registering musics.
-        MusicPlayer.getMusiquePlayer().registerMusic("intro", YouRobot.class.getResource("/sounds/music/00-quake-iii-arena-intro.mp3").getPath());
-        MusicPlayer.getMusiquePlayer().registerMusic("1", YouRobot.class.getResource("/sounds/music/01-quake-iii-arena.mp3").getPath());
-        MusicPlayer.getMusiquePlayer().registerMusic("2", YouRobot.class.getResource("/sounds/music/02-quake-iii-arena.mp3").getPath());
-        MusicPlayer.getMusiquePlayer().registerMusic("3", YouRobot.class.getResource("/sounds/music/03-quake-iii-arena.mp3").getPath());
-        MusicPlayer.getMusiquePlayer().registerMusic("4", YouRobot.class.getResource("/sounds/music/04-quake-iii-arena.mp3").getPath());
-        MusicPlayer.getMusiquePlayer().registerMusic("5", YouRobot.class.getResource("/sounds/music/05-quake-iii-arena.mp3").getPath());
-        MusicPlayer.getMusiquePlayer().registerMusic("6", YouRobot.class.getResource("/sounds/music/06-quake-iii-arena.mp3").getPath());
+        MusicPlayer.getMusiquePlayer().registerMusic("intro", YouRobot.class.getResourceAsStream("/sounds/music/00-quake-iii-arena-intro.mp3"));
+        MusicPlayer.getMusiquePlayer().registerMusic("1", YouRobot.class.getResourceAsStream("/sounds/music/01-quake-iii-arena.mp3"));
+        MusicPlayer.getMusiquePlayer().registerMusic("2", YouRobot.class.getResourceAsStream("/sounds/music/02-quake-iii-arena.mp3"));
+        MusicPlayer.getMusiquePlayer().registerMusic("3", YouRobot.class.getResourceAsStream("/sounds/music/03-quake-iii-arena.mp3"));
+        MusicPlayer.getMusiquePlayer().registerMusic("4", YouRobot.class.getResourceAsStream("/sounds/music/04-quake-iii-arena.mp3"));
+        MusicPlayer.getMusiquePlayer().registerMusic("5", YouRobot.class.getResourceAsStream("/sounds/music/05-quake-iii-arena.mp3"));
+        MusicPlayer.getMusiquePlayer().registerMusic("6", YouRobot.class.getResourceAsStream("/sounds/music/06-quake-iii-arena.mp3"));
 
         // Registering sounds.
-        SoundPlayer.getPlayer().registerSound("menu", YouRobot.class.getResource("/sounds/menu.wav").getPath());
-        SoundPlayer.getPlayer().registerSound("menuEnter", YouRobot.class.getResource("/sounds/menuEnter.wav").getPath());
-        SoundPlayer.getPlayer().registerSound("menuExit", YouRobot.class.getResource("/sounds/menuExit.wav").getPath());
-        SoundPlayer.getPlayer().registerSound("nobonus", YouRobot.class.getResource("/sounds/nobonus.wav").getPath());
-        SoundPlayer.getPlayer().registerSound("bonuspickup", YouRobot.class.getResource("/sounds/bonuspickup.wav").getPath());
-        SoundPlayer.getPlayer().registerSound("bonusbomb", YouRobot.class.getResource("/sounds/bonusbomb.mp3").getPath());
-        SoundPlayer.getPlayer().registerSound("bonusLeurre", YouRobot.class.getResource("/sounds/bonusLeurre.wav").getPath());
-        SoundPlayer.getPlayer().registerSound("bonusSnap", YouRobot.class.getResource("/sounds/bonusSnap.wav").getPath());
-        SoundPlayer.getPlayer().registerSound("bonusmedipack", YouRobot.class.getResource("/sounds/bonusmedipack.wav").getPath());
+        SoundPlayer.getPlayer().registerSound("menu", YouRobot.class.getResourceAsStream("/sounds/menu.wav"));
+        SoundPlayer.getPlayer().registerSound("menuEnter", YouRobot.class.getResourceAsStream("/sounds/menuEnter.wav"));
+        SoundPlayer.getPlayer().registerSound("menuExit", YouRobot.class.getResourceAsStream("/sounds/menuExit.wav"));
+        SoundPlayer.getPlayer().registerSound("nobonus", YouRobot.class.getResourceAsStream("/sounds/nobonus.wav"));
+        SoundPlayer.getPlayer().registerSound("bonuspickup", YouRobot.class.getResourceAsStream("/sounds/bonuspickup.wav"));
+        SoundPlayer.getPlayer().registerSound("bonusbomb", YouRobot.class.getResourceAsStream("/sounds/bonusbomb.mp3"));
+        SoundPlayer.getPlayer().registerSound("bonusLeurre", YouRobot.class.getResourceAsStream("/sounds/bonusLeurre.wav"));
+        SoundPlayer.getPlayer().registerSound("bonusSnap", YouRobot.class.getResourceAsStream("/sounds/bonusSnap.wav"));
+        SoundPlayer.getPlayer().registerSound("bonusmedipack", YouRobot.class.getResourceAsStream("/sounds/bonusmedipack.wav"));
 
         // Creation of a robot and player.
         RobotPlayer robot, robot2;

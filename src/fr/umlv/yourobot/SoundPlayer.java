@@ -1,7 +1,13 @@
 package fr.umlv.yourobot;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -26,14 +32,13 @@ public class SoundPlayer {
 
     /**
      * Plays the sound name.
-     * 
+     *
      * @param name Sound to play.
      */
     public static void play(String name) {
         SoundPlayer.getPlayer().playSound(name);
     }
-
-    private final HashMap<String, File> mediaMap = new HashMap<>();
+    private final HashMap<String, ByteArrayOutputStream> mediaMap = new HashMap<>();
     private final static SoundPlayer PLAYER = new SoundPlayer();
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
@@ -55,10 +60,30 @@ public class SoundPlayer {
      * @param name Name of the music.
      * @param url URL of the music.
      */
-    public void registerSound(String name, String fileName) {
+    public void registerSound(String name, InputStream input) throws IOException {
         Objects.requireNonNull(name);
-        Objects.requireNonNull(fileName);
-        mediaMap.put(name, new File(fileName));
+        Objects.requireNonNull(input);
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = input.read(buffer)) > -1) {
+            baos.write(buffer, 0, len);
+        }
+        baos.flush();
+        
+        mediaMap.put(name, baos);
+    }
+
+    public static int copy(InputStream input, OutputStream output) throws IOException {
+        byte[] buffer = new byte[4096];
+        int count = 0;
+        int n = 0;
+        while (-1 != (n = input.read(buffer))) {
+            output.write(buffer, 0, n);
+            count += n;
+        }
+        return count;
     }
 
     /**
@@ -69,17 +94,17 @@ public class SoundPlayer {
      * @see #registerMusic(java.lang.String, java.net.URL)
      */
     public void playSound(final String name) {
-        final File mediaFile = mediaMap.get(name);
+        final ByteArrayOutputStream mediaFile = mediaMap.get(name);
         if (mediaFile == null) {
             System.err.println("Music not registered: " + name);
             return;
         }
-        
+
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    AudioInputStream in = AudioSystem.getAudioInputStream(mediaFile);
+                    AudioInputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(mediaFile.toByteArray()));
                     AudioInputStream din = null;
                     AudioFormat baseFormat = in.getFormat();
                     AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
