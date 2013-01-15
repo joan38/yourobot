@@ -63,7 +63,7 @@ public class GameWorlds implements WorldSet {
 
     @Override
     public boolean hasMoreWorld() {
-        return worldIndex < 7;
+        return worldIndex < 8;
     }
 
     @Override
@@ -75,7 +75,6 @@ public class GameWorlds implements WorldSet {
         // Grid_X is 40
         // Grid_Y is 30
         try {
-            worldIndex = 8;
             switch (worldIndex) {
                 case 0: {
                     // Start and end areas.
@@ -85,7 +84,7 @@ public class GameWorlds implements WorldSet {
                     areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
                     // Creation of the world.
-                    World w = new World("Level 1", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
+                    World w = new World("Level 1", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "3");
                     World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
                     // Placing elements.
@@ -116,7 +115,7 @@ public class GameWorlds implements WorldSet {
                     areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
                     // Creation of the world.
-                    World w = new World("Level 2", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
+                    World w = new World("Level 2", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "5");
                     World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
                     // Placing elements.
@@ -204,7 +203,7 @@ public class GameWorlds implements WorldSet {
                     areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
                     // Creation of the world.
-                    World w = new World("Level 3", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
+                    World w = new World("Level 3", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "1");
                     World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
                     // Placing elements.
@@ -283,7 +282,7 @@ public class GameWorlds implements WorldSet {
                     areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
                     // Creation of the world.
-                    World w = new World("Level 4", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
+                    World w = new World("Level 4", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "4");
                     World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
                     // Placing elements.
@@ -390,7 +389,7 @@ public class GameWorlds implements WorldSet {
                     areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
                     // Creation of the world.
-                    World w = new World("Level 5", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
+                    World w = new World("Level 5", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "6");
                     World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
                     // Placing elements.
@@ -636,7 +635,7 @@ public class GameWorlds implements WorldSet {
                     areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
                     // Creation of the world.
-                    World w = new World("Level 7", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
+                    World w = new World("Level 7", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "4");
                     World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
                     // Placing elements.
@@ -758,7 +757,7 @@ public class GameWorlds implements WorldSet {
                     World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
                     // Placing elements.
-                    w.addElement(new Leurre(TypeElementBase.Unasigned, TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre.png"), true),
+                    /*w.addElement(new Leurre(TypeElementBase.Unasigned, TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre.png"), true),
                             TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_activated.png"), true),
                             TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_before_activated.png"), true),
                             20,
@@ -779,11 +778,11 @@ public class GameWorlds implements WorldSet {
                                 i * Settings.getSize()));
                     }
 
-                    for (int i = 0; i < 11; i++) {
+                    /*for (int i = 0; i < 11; i++) {
                         w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
                                 10 * Settings.getSize(),
                                 (i + 18) * Settings.getSize()));
-                    }
+                    }*/
 
                     for (int i = 0; i < 15; i++) {
                         w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
@@ -829,12 +828,12 @@ public class GameWorlds implements WorldSet {
 
                     // Placing bonus.
                     w.addElement(new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture(Bonus.class.getResource("/textures/bomb.png"), true),
-                            17 * Settings.getSize(),
-                            3 * Settings.getSize()));
+                            10 * Settings.getSize(),
+                            5 * Settings.getSize()));
 
                     w.addElement(new Snap(TypeElementBase.Stone, TextureLoader.loadTexture(Bonus.class.getResource("/textures/snap.png"), true), 5,
-                            13 * Settings.getSize(),
-                            14 * Settings.getSize()));
+                            10 * Settings.getSize(),
+                            8 * Settings.getSize()));
 
                     // Placing IA.
                     w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
@@ -860,6 +859,13 @@ public class GameWorlds implements WorldSet {
                     w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
                             12 * Settings.getSize(),
                             22 * Settings.getSize()));
+                    
+                    w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
+                            23 * Settings.getSize(),
+                            3 * Settings.getSize()));
+                     w.addRobotIA(new RobotIA(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/robot_enemie.png"), true),
+                            24 * Settings.getSize(),
+                            3 * Settings.getSize()));
 
                     // Level created.
                     return w;
@@ -872,23 +878,10 @@ public class GameWorlds implements WorldSet {
                     areas[0] = new SimpleArea(Settings.getWidth() - (Settings.getSize() + 50), Settings.getHeight() / 2 - Settings.getSize() / 2, Color.GREEN); // EndArea
 
                     // Creation of the world.
-                    World w = new World("Level 9", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "2");
+                    World w = new World("Level 9", TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/metal_floor.jpg"), false), areas, "intro");
                     World.fillBorder(w, SampleWorldFactory.class.getResource("/textures/tube_texture.png"));
 
                     // Placing elements.
-                    w.addElement(new Leurre(TypeElementBase.Unasigned, TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre.png"), true),
-                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_activated.png"), true),
-                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_before_activated.png"), true),
-                            20,
-                            5 * Settings.getSize(),
-                            5 * Settings.getSize()));
-
-                    w.addElement(new Leurre(TypeElementBase.Unasigned, TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre.png"), true),
-                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_activated.png"), true),
-                            TextureLoader.loadTexture(Bonus.class.getResource("/textures/leurre_before_activated.png"), true),
-                            20,
-                            5 * Settings.getSize(),
-                            25 * Settings.getSize()));
 
                     // Walls
                     for (int i = 0; i < 11; i++) {
@@ -904,16 +897,16 @@ public class GameWorlds implements WorldSet {
                     }
 
                     for (int i = 0; i < 13; i++) {
-                        w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
+                        w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true),
                                 (21 + i) * Settings.getSize(),
                                 10 * Settings.getSize()));
-                    }
-
-                    for (int i = 0; i < 13; i++) {
-                        w.addElement(new Barres(TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/tube_texture.png"), true),
+                        
+                        w.addElement(new Wall(TypeElementBase.Stone, TextureLoader.loadTexture(SampleWorldFactory.class.getResource("/textures/texture-brique-blanche.jpg"), true),
                                 (21 + i) * Settings.getSize(),
                                 19 * Settings.getSize()));
                     }
+
+            
 
                     // Placing bonus.
                     w.addElement(new BombeMagnetique(TypeElementBase.Stone, TextureLoader.loadTexture(Bonus.class.getResource("/textures/bomb.png"), true),
